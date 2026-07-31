@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicole工作台 · 下载安装</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5f9 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        .container {
+            background: white; border-radius: 24px; padding: 40px 30px; max-width: 420px; width: 100%;
+            box-shadow: 0 10px 40px rgba(255, 182, 217, 0.3); text-align: center;
+        }
+        .logo {
+            width: 80px; height: 80px; border-radius: 20px; background: #ff6b9d; margin: 0 auto 16px;
+            display: flex; align-items: center; justify-content: center; font-size: 44px;
+            font-weight: bold; color: white; font-family: Arial;
+        }
+        .title { font-size: 26px; color: #ff6b9d; font-weight: bold; margin-bottom: 6px; }
+        .subtitle { font-size: 13px; color: #999; margin-bottom: 30px; }
+        .qr-box {
+            background: #fff8fb; border-radius: 16px; padding: 20px; margin-bottom: 24px;
+            border: 2px dashed #ffb6d9;
+        }
+        .qr-box canvas { display: block; margin: 0 auto; }
+        .qr-tip { font-size: 12px; color: #999; margin-top: 12px; }
+        .section { text-align: left; margin-bottom: 20px; }
+        .section-title { font-size: 14px; color: #ff6b9d; font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .step-list { list-style: none; }
+        .step-list li {
+            font-size: 13px; color: #555; line-height: 1.7; padding: 6px 0; padding-left: 24px; position: relative;
+        }
+        .step-list li::before {
+            content: counter(step); counter-increment: step; position: absolute; left: 0; top: 6px;
+            width: 18px; height: 18px; background: #ff6b9d; color: white; border-radius: 50%;
+            font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold;
+        }
+        .step-list { counter-reset: step; }
+        .btn-install {
+            display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #ff6b9d 0%, #ffa07a 100%);
+            color: white; text-decoration: none; border-radius: 25px; font-size: 16px; font-weight: bold;
+            margin-top: 16px; transition: transform 0.3s;
+        }
+        .btn-install:active { transform: scale(0.97); }
+        .divider { height: 1px; background: #f0f0f0; margin: 20px 0; }
+        .note { font-size: 11px; color: #ccc; margin-top: 16px; line-height: 1.6; }
+        .hidden { display: none; }
+        .install-prompt {
+            background: #e8f5e9; border-radius: 12px; padding: 12px; margin-top: 16px;
+            font-size: 13px; color: #2e7d32; display: none;
+        }
+        .install-prompt.show { display: block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">N</div>
+    <div class="title">Nicole工作台</div>
+    <div class="subtitle">自考英语13000备考 · 个人管理</div>
+
+    <div class="qr-box">
+        <canvas id="qrcode"></canvas>
+        <div class="qr-tip">扫码在手机打开 → 然后按下方步骤安装</div>
+    </div>
+
+    <a href="../" class="btn-install" id="openApp">立即打开 Nicole工作台</a>
+
+    <div class="install-prompt" id="installPrompt">
+        <strong>📱 检测到可安装！</strong><br>
+        点击下方按钮即可安装到桌面 ↓
+        <button class="btn-install" id="installBtn" style="margin-top:10px;">安装到桌面</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+        <div class="section-title">📱 安卓手机安装</div>
+        <ol class="step-list">
+            <li>用 Chrome 浏览器打开 Nicole工作台</li>
+            <li>点浏览器右上角 ⋮ 菜单</li>
+            <li>选"添加到主屏幕"或"安装应用"</li>
+            <li>桌面出现 N 图标，点开即可全屏使用</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🍎 iPhone 安装</div>
+        <ol class="step-list">
+            <li>用 Safari 打开 Nicole工作台</li>
+            <li>点底部中间的分享按钮 ↑</li>
+            <li>选"添加到主屏幕"</li>
+            <li>点"添加"，桌面出现 N 图标</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <div class="section-title">💻 电脑安装</div>
+        <ol class="step-list">
+            <li>用 Chrome 或 Edge 打开 Nicole工作台</li>
+            <li>点地址栏右侧的安装图标 ⊕</li>
+            <li>选"安装"，桌面生成快捷方式</li>
+        </ol>
+    </div>
+
+    <div class="note">
+        Nicole工作台 是 PWA 应用，安装后可离线使用。<br>
+        数据存在本设备+云端（需配置Supabase），不会丢失。
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+// 生成二维码（指向应用首页）
+const currentUrl = location.href.replace('/download.html', '/');
+new QRCode(document.getElementById('qrcode'), {
+    text: currentUrl,
+    width: 200, height: 200,
+    colorDark: '#ff6b9d', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+});
+
+// PWA 安装提示（安卓 Chrome）
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installPrompt').classList.add('show');
+});
+document.getElementById('installBtn')?.addEventListener('click', async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        document.getElementById('installPrompt').classList.remove('show');
+    }
+});
+
+// 检测iOS引导
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent);
+if (isIOS && isSafari) {
+    // 已在Safari中，正常显示引导即可
+} else if (isIOS && !isSafari) {
+    // 在iOS但非Safari，提示换Safari
+    document.querySelector('.section-title').nextElementSibling.innerHTML =
+        '<li style="color:#f44336;">⚠️ 请在 Safari 浏览器中打开此页面</li><li>复制上方链接到Safari打开</li>';
+}
+</script>
+</body>
+</html>

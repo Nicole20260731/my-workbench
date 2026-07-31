@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nicole工作台 · 自考英语13000备考</title>
+    <!-- PWA / iOS 主屏幕支持 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Nicole工作台">
+    <meta name="theme-color" content="#ff6b9d">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- 内嵌 SVG 图标（无需额外文件，部署最简单） -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23ff6b9d'/><text x='90' y='128' font-size='80' font-weight='bold' text-anchor='middle' fill='white' font-family='Arial'>N</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ff6b9d'/><text x='16' y='24' font-size='18' font-weight='bold' text-anchor='middle' fill='white' font-family='Arial'>N</text></svg>">
+    <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;Nicole工作台&quot;,&quot;short_name&quot;:&quot;Nicole&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;orientation&quot;:&quot;portrait&quot;,&quot;background_color&quot;:&quot;#ffeef8&quot;,&quot;theme_color&quot;:&quot;#ff6b9d&quot;,&quot;description&quot;:&quot;Nicole的个人备考与生活管理工作台&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%23ff6b9d'/><text x='96' y='135' font-size='80' font-weight='bold' text-anchor='middle' fill='white' font-family='Arial'>N</text></svg>&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any maskable&quot;}]}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5f9 100%);
+            min-height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 80px; background: linear-gradient(180deg, #ffb6d9 0%, #ffc0cb 100%);
+            padding: 20px 0; display: flex; flex-direction: column; align-items: center;
+            box-shadow: 2px 0 10px rgba(255,182,217,0.3); overflow-y: auto; flex-shrink: 0;
+        }
+        .nav-item {
+            width: 60px; height: 60px; margin: 10px 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; border-radius: 15px; cursor: pointer;
+            transition: all 0.3s; background: rgba(255,255,255,0.3);
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.8); transform: scale(1.1); }
+        .nav-icon { font-size: 24px; margin-bottom: 5px; }
+        .nav-text { font-size: 10px; color: #ff6b9d; text-align: center; }
+        .main-content { flex: 1; padding: 20px; overflow-y: auto; max-width: 1000px; }
+        .page { display: none; } .page.active { display: block; }
+        .page-title { font-size: 24px; color: #ff6b9d; margin-bottom: 20px; }
+        .toast {
+            position: fixed; top: 30px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa07a 100%); color: white;
+            padding: 12px 28px; border-radius: 25px; box-shadow: 0 5px 20px rgba(255,107,157,0.4);
+            z-index: 9999; opacity: 0; transition: all 0.4s; font-size: 15px; pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .card {
+            background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(255,182,217,0.2);
+        }
+        .section-label { font-size: 14px; color: #ff6b9d; margin-bottom: 12px; font-weight: bold; }
+
+        /* 倒计时 */
+        .countdown-card { text-align: center; background: linear-gradient(135deg,#fff 0%,#fff0f6 100%); }
+        .countdown-num { font-size: 56px; color: #ff6b9d; font-weight: bold; line-height: 1.2; }
+        .countdown-label { font-size: 14px; color: #999; margin-top: 5px; }
+        .countdown-date { font-size: 13px; color: #ff6b9d; margin-top: 10px; }
+        .time-display { text-align: center; margin-bottom: 20px; padding: 15px; background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(255,182,217,0.2); }
+        .time { font-size: 36px; color: #ff6b9d; font-weight: bold; }
+        .date { font-size: 14px; color: #999; margin-top: 8px; }
+
+        /* 每日任务 */
+        .task-item {
+            display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #f5f5f5;
+        }
+        .task-item:last-child { border-bottom: none; }
+        .task-check {
+            width: 22px; height: 22px; border: 2px solid #ffb6d9; border-radius: 50%;
+            margin-right: 12px; cursor: pointer; flex-shrink: 0; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; color: white;
+        }
+        .task-check.done { background: #ff6b9d; border-color: #ff6b9d; }
+        .task-check.done::after { content: '✓'; font-size: 14px; }
+        .task-content { flex: 1; }
+        .task-name { font-size: 15px; color: #333; }
+        .task-meta { font-size: 12px; color: #999; margin-top: 3px; }
+        .task-tag {
+            font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #fff0f6; color: #ff6b9d; margin-left: 8px;
+        }
+        .task-progress-bar {
+            height: 8px; background: #f0f0f0; border-radius: 4px; margin-top: 15px; overflow: hidden;
+        }
+        .task-progress-fill {
+            height: 100%; background: linear-gradient(90deg,#ff6b9d,#ffa07a); transition: width 0.5s;
+        }
+        .stat-row { display: flex; justify-content: space-around; margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0; }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 22px; color: #ff6b9d; font-weight: bold; }
+        .stat-label { font-size: 11px; color: #999; margin-top: 4px; }
+
+        /* 真题模块 */
+        .exam-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .exam-tab {
+            padding: 8px 16px; border: 2px solid #ffd6e7; border-radius: 20px; cursor: pointer;
+            font-size: 13px; color: #ff6b9d; background: white; transition: all 0.3s;
+        }
+        .exam-tab.active { background: #ff6b9d; color: white; border-color: #ff6b9d; }
+        .question-item { margin-bottom: 20px; }
+        .question-text { font-size: 15px; color: #333; line-height: 1.6; margin-bottom: 12px; }
+        .question-num { color: #ff6b9d; font-weight: bold; margin-right: 5px; }
+        .option-list { display: flex; flex-direction: column; gap: 8px; }
+        .option-item {
+            padding: 10px 14px; border: 2px solid #f0f0f0; border-radius: 12px; cursor: pointer;
+            font-size: 14px; color: #333; transition: all 0.2s;
+        }
+        .option-item:hover { border-color: #ffb6d9; background: #fff8fb; }
+        .option-item.selected { border-color: #ff6b9d; background: #fff0f6; }
+        .option-item.correct { border-color: #4caf50; background: #e8f5e9; color: #2e7d32; }
+        .option-item.wrong { border-color: #f44336; background: #ffebee; color: #c62828; }
+        .option-label { font-weight: bold; margin-right: 8px; }
+        .question-explain {
+            margin-top: 10px; padding: 12px; background: #fffbe6; border-radius: 10px;
+            font-size: 13px; color: #666; line-height: 1.6; display: none; border-left: 3px solid #ffc107;
+        }
+        .question-explain.show { display: block; }
+        .exam-result {
+            margin-top: 20px; padding: 15px; background: #fff0f6; border-radius: 12px; text-align: center;
+            display: none;
+        }
+        .exam-result.show { display: block; }
+        .exam-score { font-size: 28px; color: #ff6b9d; font-weight: bold; }
+        .btn {
+            padding: 10px 24px; border: none; border-radius: 20px; cursor: pointer; font-size: 14px;
+            transition: all 0.3s; color: white; background: #ff6b9d;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .btn-outline { background: white; color: #ff6b9d; border: 2px solid #ff6b9d; }
+        .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+        /* 衣橱 */
+        .weather-card { display: flex; align-items: center; gap: 20px; }
+        .weather-icon { font-size: 48px; }
+        .weather-temp { font-size: 36px; color: #ff6b9d; font-weight: bold; }
+        .weather-desc { font-size: 14px; color: #999; }
+        .weather-detail { font-size: 12px; color: #ccc; margin-top: 5px; }
+        .upload-area {
+            border: 2px dashed #ffb6d9; border-radius: 16px; padding: 25px; text-align: center;
+            cursor: pointer; transition: all 0.3s; background: #fff8fb;
+        }
+        .upload-area:hover { border-color: #ff6b9d; background: #fff0f6; }
+        .closet-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px; margin-top: 15px;
+        }
+        .closet-item {
+            position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer;
+        }
+        .closet-item img { width: 100%; height: 100%; object-fit: cover; }
+        .closet-item .remove-btn {
+            position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(0,0,0,0.5); color: white; border: none; cursor: pointer; font-size: 14px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .closet-item .item-tag {
+            position: absolute; bottom: 0; left: 0; right: 0; padding: 4px 6px; font-size: 10px;
+            color: white; background: linear-gradient(transparent, rgba(0,0,0,0.6));
+        }
+        .closet-tabs { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .closet-tab {
+            padding: 6px 14px; border-radius: 16px; cursor: pointer; font-size: 13px;
+            border: 2px solid #ffd6e7; color: #ff6b9d; background: white;
+        }
+        .closet-tab.active { background: #ff6b9d; color: white; border-color: #ff6b9d; }
+        .outfit-result-card {
+            background: white; border-radius: 16px; padding: 18px; margin-bottom: 12px;
+            box-shadow: 0 5px 15px rgba(255,182,217,0.2); border-left: 4px solid #ff6b9d;
+        }
+        .outfit-images { display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
+        .outfit-img-box {
+            width: 70px; height: 70px; border-radius: 10px; overflow: hidden; position: relative;
+            border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .outfit-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .outfit-img-box .role-label {
+            position: absolute; bottom: 0; left: 0; right: 0; font-size: 9px; color: white;
+            background: rgba(255,107,157,0.85); text-align: center; padding: 1px;
+        }
+        .outfit-tags { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+        .outfit-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #fff0f6; color: #ff6b9d; }
+        .outfit-desc { font-size: 14px; color: #333; line-height: 1.6; }
+        .outfit-tip { font-size: 12px; color: #999; margin-top: 6px; font-style: italic; }
+        .form-row { display: flex; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+        .form-group { flex: 1; min-width: 140px; }
+        .form-label { display: block; font-size: 13px; color: #ff6b9d; margin-bottom: 6px; font-weight: bold; }
+        .form-select {
+            width: 100%; padding: 10px 12px; border: 2px solid #ffd6e7; border-radius: 12px;
+            font-size: 14px; color: #333; background: white; cursor: pointer;
+        }
+        .form-select:focus { outline: none; border-color: #ff6b9d; }
+        .empty-hint { text-align: center; color: #ccc; padding: 30px; font-size: 14px; }
+        .category-select-row { display: flex; gap: 10px; margin-top: 10px; }
+        .category-select-row select { flex: 1; }
+
+        /* 在线状态指示器 */
+        .sync-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 4px 12px; font-size: 11px; text-align: center;
+            transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .sync-bar.online { background: #4caf50; color: white; }
+        .sync-bar.offline { background: #ff9800; color: white; }
+        .sync-bar.syncing { background: #2196f3; color: white; }
+        .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: white; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        /* 新增内容模块样式 */
+        .input-area {
+            width: 100%; padding: 10px 12px; border: 2px solid #ffd6e7; border-radius: 12px;
+            font-size: 14px; font-family: inherit; resize: vertical; transition: border-color 0.3s;
+        }
+        .input-area:focus { outline: none; border-color: #ff6b9d; }
+        .save-indicator {
+            font-size: 11px; color: #999; text-align: right; margin-top: 4px; min-height: 16px;
+        }
+        .save-indicator.saved { color: #4caf50; }
+        .save-indicator.saving { color: #2196f3; }
+        .list-item-card {
+            background: white; border-radius: 14px; padding: 14px; margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(255,182,217,0.15); transition: all 0.2s;
+            cursor: pointer; border-left: 3px solid #ff6b9d;
+        }
+        .list-item-card:hover { transform: translateX(2px); box-shadow: 0 4px 12px rgba(255,182,217,0.3); }
+        .list-item-title { font-size: 15px; color: #333; font-weight: bold; margin-bottom: 4px; }
+        .list-item-meta { font-size: 12px; color: #999; }
+        .list-item-preview { font-size: 13px; color: #666; margin-top: 6px; line-height: 1.5;
+            overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .mood-emoji { font-size: 24px; cursor: pointer; padding: 4px; border-radius: 8px; transition: all 0.2s; }
+        .mood-emoji.selected { background: #fff0f6; transform: scale(1.2); }
+        .book-status {
+            font-size: 11px; padding: 2px 8px; border-radius: 10px; display: inline-block;
+        }
+        .book-status.want { background: #fff3e0; color: #ff9800; }
+        .book-status.reading { background: #e3f2fd; color: #2196f3; }
+        .book-status.done { background: #e8f5e9; color: #4caf50; }
+        .star-rating { color: #ffc107; font-size: 14px; cursor: pointer; }
+        .star-rating .star { padding: 0 1px; }
+        .star-rating .star.active { color: #ffc107; }
+        .star-rating .star.inactive { color: #ddd; }
+        .delete-btn-small {
+            background: none; border: none; color: #f44336; cursor: pointer; font-size: 16px; padding: 4px;
+        }
+        .body-content { padding-top: 28px; }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 60px; }
+            .nav-item { width: 50px; height: 50px; }
+            .nav-icon { font-size: 20px; }
+            .nav-text { font-size: 9px; }
+            .time { font-size: 28px; }
+            .countdown-num { font-size: 42px; }
+            .main-content { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+<div class="sync-bar offline" id="syncBar"><span class="sync-dot"></span><span id="syncText">📱 仅本地（离线）</span></div>
+<div class="toast" id="toast"></div>
+
+<div class="sidebar">
+    <div class="nav-item active" data-page="home"><div class="nav-icon">🏠</div><div class="nav-text">备考首页</div></div>
+    <div class="nav-item" data-page="exam"><div class="nav-icon">📝</div><div class="nav-text">真题演练</div></div>
+    <div class="nav-item" data-page="wordbook"><div class="nav-icon">📖</div><div class="nav-text">错题生词</div></div>
+    <div class="nav-item" data-page="diary"><div class="nav-icon">📔</div><div class="nav-text">日记</div></div>
+    <div class="nav-item" data-page="review"><div class="nav-icon">🔍</div><div class="nav-text">每日复盘</div></div>
+    <div class="nav-item" data-page="notes"><div class="nav-icon">📓</div><div class="nav-text">自由笔记</div></div>
+    <div class="nav-item" data-page="books"><div class="nav-icon">📚</div><div class="nav-text">待读书单</div></div>
+    <div class="nav-item" data-page="closet"><div class="nav-icon">👗</div><div class="nav-text">AI衣橱</div></div>
+    <div class="nav-item" data-page="tarot"><div class="nav-icon">🔮</div><div class="nav-text">塔罗占卜</div></div>
+    <div class="nav-item" data-page="bazi"><div class="nav-icon">🎋</div><div class="nav-text">八字命理</div></div>
+</div>
+
+<div class="main-content">
+    <!-- 备考首页 -->
+    <div class="page active" id="home">
+        <div class="time-display">
+            <div class="time" id="currentTime">00:00:00</div>
+            <div class="date" id="currentDate"></div>
+        </div>
+
+        <div class="card countdown-card">
+            <div class="countdown-num" id="countdownNum">--</div>
+            <div class="countdown-label">距离自考英语13000考试还有（天）</div>
+            <div class="countdown-date" id="examDateStr"></div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">📋 今日学习任务（2-3小时）</div>
+            <div id="taskList"></div>
+            <div class="task-progress-bar"><div class="task-progress-fill" id="taskProgressFill" style="width:0%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:#999;">
+                <span>今日完成率</span><span id="taskProgressText">0%</span>
+            </div>
+            <div class="stat-row">
+                <div class="stat-item"><div class="stat-number" id="continuousStreak">0</div><div class="stat-label">连续打卡</div></div>
+                <div class="stat-item"><div class="stat-number" id="totalDays">0</div><div class="stat-label">累计打卡</div></div>
+                <div class="stat-item"><div class="stat-number" id="totalTasks">0</div><div class="stat-label">完成任务</div></div>
+                <div class="stat-item"><div class="stat-number" id="examProgress">0%</div><div class="stat-label">备考进度</div></div>
+            </div>
+            <button class="btn" id="checkinBtn" style="width:100%;margin-top:15px;">今日打卡</button>
+        </div>
+
+        <div class="card">
+            <div class="section-label">🌅 每日激励</div>
+            <div style="font-size:16px;color:#333;line-height:1.6;margin-bottom:8px;" id="motivationText"></div>
+            <div style="font-size:13px;color:#999;font-style:italic;" id="motivationTranslation"></div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">📊 备考阶段计划（自考13000）</div>
+            <div style="font-size:13px;color:#666;line-height:1.8;">
+                <strong style="color:#ff6b9d;">阶段一（8月）：词汇+阅读筑基</strong><br>
+                3500核心词每日40个 + 6种阅读题型入门 + 基础语法补漏<br><br>
+                <strong style="color:#ff6b9d;">阶段二（9月）：7题型专项+作文模板</strong><br>
+                阅读判断→阅读选择→概括补全→填句→填词→完形，逐个攻破；背诵3-5篇作文模板<br><br>
+                <strong style="color:#ff6b9d;">阶段三（10月）：真题模拟+作文实战</strong><br>
+                3套真题150分钟限时模拟 + 错题二刷 + 作文限时训练<br><br>
+                <strong style="color:#ff6b9d;">13000分值分布（满分100/60合格）：</strong><br>
+                阅读判断10分 | 阅读选择10分 | 概括段落+补全句子10分<br>
+                填句补文10分 | 填词补文15分 | 完形补文15分 | <strong>短文写作30分</strong><br><br>
+                <strong style="color:#ff6b9d;">作文占30分，零基础必须背模板！</strong>这是过线的关键。
+            </div>
+        </div>
+    </div>
+
+    <!-- 真题演练 -->
+    <div class="page" id="exam">
+        <h2 class="page-title">📝 真题演练（13000题型）</h2>
+        <div class="card" style="background:#fffbe6;border-left:4px solid #ffc107;">
+            <div class="section-label">📋 13000题型与分值</div>
+            <div style="font-size:12px;color:#666;line-height:1.7;">
+                阅读判断10分(10题) | 阅读选择10分(5题) | 概括段落+补全句子10分(10题)<br>
+                填句补文10分(5题) | 填词补文15分(10题) | 完形补文15分(10题) | <strong>短文写作30分</strong><br>
+                <span style="color:#ff6b9d;">满分100 · 60合格 · 考试150分钟</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="exam-tabs" id="examTabs"></div>
+            <div id="examContent"></div>
+            <div class="exam-result" id="examResult"></div>
+            <div style="margin-top:15px;text-align:center;" id="examActions">
+                <button class="btn" id="submitExam">提交评分</button>
+                <button class="btn btn-outline" id="resetExam">重新作答</button>
+                <button class="btn btn-outline" id="showAllExplain">显示全部解析</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="section-label">✍️ 作文模板库（30分大头 · 零基础必背）</div>
+            <div id="essayTemplates"></div>
+        </div>
+    </div>
+
+    <!-- 错题生词本 -->
+    <div class="page" id="wordbook">
+        <h2 class="page-title">📖 错题 & 生词本</h2>
+        <div class="card">
+            <div class="section-label">做错的真题（自动收集）</div>
+            <div id="wrongQuestions"></div>
+        </div>
+        <div class="card">
+            <div class="section-label">生词本（来自真题不认识的词）</div>
+            <div id="wordbookList"></div>
+        </div>
+    </div>
+
+    <!-- AI衣橱 -->
+    <div class="page" id="closet">
+        <h2 class="page-title">👗 AI 个性化衣橱</h2>
+
+        <div class="card" id="weatherCard">
+            <div class="section-label">🌤️ 无锡实时天气</div>
+            <div class="weather-card">
+                <div class="weather-icon" id="weatherIcon">⏳</div>
+                <div>
+                    <div class="weather-temp" id="weatherTemp">--°C</div>
+                    <div class="weather-desc" id="weatherDesc">加载中...</div>
+                    <div class="weather-detail" id="weatherDetail"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">📸 上传我的衣服</div>
+            <div class="upload-area" id="uploadArea">
+                <div style="font-size:32px;">📷</div>
+                <div style="color:#ff6b9d;margin-top:8px;">点击或拖拽上传衣服照片</div>
+                <div style="font-size:12px;color:#999;margin-top:4px;">支持 JPG/PNG，存储在本地浏览器</div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
+            <div class="category-select-row" id="uploadCategoryRow" style="display:none;">
+                <select id="uploadCategory" class="form-select">
+                    <option value="top">上装</option>
+                    <option value="bottom">下装</option>
+                    <option value="outer">外套</option>
+                    <option value="shoes">鞋</option>
+                    <option value="acc">配饰</option>
+                </select>
+                <button class="btn btn-sm" id="confirmCategory">确认分类</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">👚 我的衣橱（<span id="closetCount">0</span>件）</div>
+            <div class="closet-tabs" id="closetTabs">
+                <div class="closet-tab active" data-cat="all">全部</div>
+                <div class="closet-tab" data-cat="top">上装</div>
+                <div class="closet-tab" data-cat="bottom">下装</div>
+                <div class="closet-tab" data-cat="outer">外套</div>
+                <div class="closet-tab" data-cat="shoes">鞋</div>
+                <div class="closet-tab" data-cat="acc">配饰</div>
+            </div>
+            <div class="closet-grid" id="closetGrid"></div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">✨ AI 智能搭配</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">场合</label>
+                    <select class="form-select" id="occasionSelect">
+                        <option value="commute">通勤</option>
+                        <option value="casual">休闲</option>
+                        <option value="date">约会</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">风格偏好</label>
+                    <select class="form-select" id="styleSelect">
+                        <option value="any">不限</option>
+                        <option value="fresh">清新</option>
+                        <option value="cool">酷飒</option>
+                        <option value="elegant">优雅</option>
+                        <option value="cute">可爱</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" id="generateOutfit" style="width:100%;">根据天气+审美生成搭配</button>
+            <div id="outfitResult" style="margin-top:15px;"></div>
+        </div>
+    </div>
+
+    <!-- 塔罗占卜 -->
+    <div class="page" id="tarot">
+        <h2 class="page-title">🔮 韦特塔罗占卜</h2>
+
+        <!-- 步骤1：提问 -->
+        <div class="card" id="tarotStep1">
+            <div class="section-label">第一步 · 请描述你的问题</div>
+            <div style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6;">
+                欢迎来到塔罗占卜。请认真思考你想问的问题，将它聚焦为一个明确的提问。<br>
+                塔罗不替你做决定，而是照亮你看不见的层面。
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+                <label class="form-label">问题类型</label>
+                <select class="form-select" id="tarotQuestionType">
+                    <option value="simple">简单问题（时间流）</option>
+                    <option value="love">感情问题（关系牌阵）</option>
+                    <option value="decision">决策问题（二选一）</option>
+                    <option value="general">综合运势（凯尔特十字）</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+                <label class="form-label">你的具体问题</label>
+                <textarea id="tarotQuestion" placeholder="例：我和ta的关系接下来会怎样发展？" style="width:100%;padding:10px;border:2px solid #ffd6e7;border-radius:12px;font-size:14px;min-height:60px;resize:vertical;font-family:inherit;"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">星座（选填）</label>
+                    <input type="text" id="tarotSign" placeholder="例：天蝎座" class="form-select" style="padding:10px 12px;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">MBTI（选填）</label>
+                    <input type="text" id="tarotMbti" placeholder="例：INFP" class="form-select" style="padding:10px 12px;">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">当前状态（选填）</label>
+                    <input type="text" id="tarotStatus" placeholder="简述近况" class="form-select" style="padding:10px 12px;">
+                </div>
+            </div>
+            <button class="btn" id="tarotConfirmQ" style="width:100%;">确认问题，进入抽牌</button>
+        </div>
+
+        <!-- 步骤2：牌阵说明 + 抽牌 -->
+        <div class="card" id="tarotStep2" style="display:none;">
+            <div class="section-label" id="tarotSpreadTitle">第二步 · 抽牌</div>
+            <div id="tarotSpreadDesc" style="font-size:13px;color:#666;line-height:1.7;margin-bottom:15px;padding:12px;background:#fff8fb;border-radius:12px;"></div>
+            <div style="font-size:14px;color:#ff6b9d;margin-bottom:10px;text-align:center;">
+                请闭上眼睛，深呼吸三次，默念你的问题……<br>然后在心中想 <strong id="tarotNumCount">3</strong> 个 1-78 之间的数字
+            </div>
+            <div id="tarotNumInputs" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:15px;"></div>
+            <button class="btn" id="tarotDraw" style="width:100%;">抽牌解读</button>
+        </div>
+
+        <!-- 步骤3：解读结果 -->
+        <div id="tarotStep3" style="display:none;"></div>
+    </div>
+
+    <!-- 八字命理 -->
+    <div class="page" id="bazi">
+        <h2 class="page-title">🎋 子平八字排盘</h2>
+
+        <div class="card">
+            <div class="section-label">输入出生信息</div>
+            <div style="font-size:13px;color:#666;margin-bottom:12px;line-height:1.6;">
+                依据《渊海子平》《滴天髓》《子平真诠》《三命通会》《穷通宝鉴》排盘。<br>
+                节气以近似日期判断，精确排盘请用专业软件二次校验。
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">出生年（公历）</label>
+                    <input type="number" id="baziYear" class="form-select" style="padding:10px 12px;" placeholder="1990" min="1900" max="2100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">月</label>
+                    <select id="baziMonth" class="form-select"></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">日</label>
+                    <select id="baziDay" class="form-select"></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">时辰</label>
+                    <select id="baziHour" class="form-select">
+                        <option value="0">子时 23:00-01:00</option>
+                        <option value="1">丑时 01:00-03:00</option>
+                        <option value="2">寅时 03:00-05:00</option>
+                        <option value="3">卯时 05:00-07:00</option>
+                        <option value="4">辰时 07:00-09:00</option>
+                        <option value="5">巳时 09:00-11:00</option>
+                        <option value="6" selected>午时 11:00-13:00</option>
+                        <option value="7">未时 13:00-15:00</option>
+                        <option value="8">申时 15:00-17:00</option>
+                        <option value="9">酉时 17:00-19:00</option>
+                        <option value="10">戌时 19:00-21:00</option>
+                        <option value="11">亥时 21:00-23:00</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">性别</label>
+                    <select id="baziGender" class="form-select">
+                        <option value="male">男</option>
+                        <option value="female">女</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" id="baziSubmit" style="width:100%;">排盘推命</button>
+        </div>
+
+        <div id="baziResult"></div>
+    </div>
+
+    <!-- 日记 -->
+    <div class="page" id="diary">
+        <h2 class="page-title">📔 日记</h2>
+        <div class="card">
+            <div class="section-label">写日记</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+                <input type="date" id="diaryDate" class="input-area" style="width:auto;flex:1;">
+            </div>
+            <div style="margin-bottom:10px;">
+                <span style="font-size:13px;color:#ff6b9d;margin-right:8px;">心情：</span>
+                <span class="mood-emoji" data-mood="😊">😊</span>
+                <span class="mood-emoji" data-mood="😐">😐</span>
+                <span class="mood-emoji" data-mood="😢">😢</span>
+                <span class="mood-emoji" data-mood="😡">😡</span>
+                <span class="mood-emoji" data-mood="😴">😴</span>
+                <span class="mood-emoji" data-mood="🥰">🥰</span>
+            </div>
+            <textarea id="diaryContent" class="input-area" rows="6" placeholder="今天发生了什么？记录下来..." style="min-height:120px;"></textarea>
+            <div class="save-indicator" id="diarySaveStatus">✓ 已保存</div>
+        </div>
+        <div class="card">
+            <div class="section-label">历史日记</div>
+            <div id="diaryList"></div>
+        </div>
+    </div>
+
+    <!-- 每日复盘 -->
+    <div class="page" id="review">
+        <h2 class="page-title">🔍 每日复盘</h2>
+        <div class="card">
+            <div class="section-label">今日复盘</div>
+            <input type="date" id="reviewDate" class="input-area" style="width:auto;margin-bottom:12px;">
+            <div style="margin-bottom:12px;">
+                <label class="form-label">✅ 今日收获</label>
+                <textarea id="reviewGain" class="input-area" rows="3" placeholder="今天学到了什么？做对了什么？"></textarea>
+            </div>
+            <div style="margin-bottom:12px;">
+                <label class="form-label">❌ 不足之处</label>
+                <textarea id="reviewLack" class="input-area" rows="3" placeholder="哪里做得不好？什么没完成？"></textarea>
+            </div>
+            <div style="margin-bottom:12px;">
+                <label class="form-label">🔧 明日改进</label>
+                <textarea id="reviewImprove" class="input-area" rows="3" placeholder="明天打算怎么改进？"></textarea>
+            </div>
+            <div class="save-indicator" id="reviewSaveStatus">✓ 已保存</div>
+        </div>
+        <div class="card">
+            <div class="section-label">历史复盘</div>
+            <div id="reviewList"></div>
+        </div>
+    </div>
+
+    <!-- 自由笔记 -->
+    <div class="page" id="notes">
+        <h2 class="page-title">📓 自由笔记</h2>
+        <div class="card">
+            <div class="section-label">新建笔记</div>
+            <input type="text" id="noteTitle" class="input-area" placeholder="标题" style="margin-bottom:8px;">
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+                <input type="text" id="noteTag" class="input-area" placeholder="分类标签（如：英语/生活/灵感）" style="flex:1;">
+            </div>
+            <textarea id="noteContent" class="input-area" rows="6" placeholder="写点什么..." style="min-height:120px;"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+                <button class="btn" id="noteSave" style="flex:1;">保存笔记</button>
+                <button class="btn btn-outline" id="noteClear" style="flex:1;">清空</button>
+            </div>
+            <div class="save-indicator" id="noteSaveStatus"></div>
+        </div>
+        <div class="card">
+            <div class="section-label">我的笔记（<span id="noteCount">0</span>条）</div>
+            <div id="noteList"></div>
+        </div>
+    </div>
+
+    <!-- 待读书单 -->
+    <div class="page" id="books">
+        <h2 class="page-title">📚 待读书单</h2>
+        <div class="card">
+            <div class="section-label">添加书籍</div>
+            <div class="form-row">
+                <div class="form-group"><input type="text" id="bookTitle" class="input-area" placeholder="书名"></div>
+                <div class="form-group"><input type="text" id="bookAuthor" class="input-area" placeholder="作者"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <select id="bookStatus" class="form-select">
+                        <option value="want">想读</option>
+                        <option value="reading">在读</option>
+                        <option value="done">已读</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select id="bookRating" class="form-select">
+                        <option value="0">未评分</option>
+                        <option value="1">⭐ 1星</option>
+                        <option value="2">⭐⭐ 2星</option>
+                        <option value="3">⭐⭐⭐ 3星</option>
+                        <option value="4">⭐⭐⭐⭐ 4星</option>
+                        <option value="5">⭐⭐⭐⭐⭐ 5星</option>
+                    </select>
+                </div>
+            </div>
+            <textarea id="bookNote" class="input-area" rows="2" placeholder="读书笔记（选填）" style="margin-bottom:8px;"></textarea>
+            <button class="btn" id="bookAdd" style="width:100%;">加入书单</button>
+        </div>
+        <div class="card">
+            <div class="section-label">书单（<span id="bookCount">0</span>本）</div>
+            <div class="closet-tabs" id="bookFilter">
+                <div class="closet-tab active" data-filter="all">全部</div>
+                <div class="closet-tab" data-filter="want">想读</div>
+                <div class="closet-tab" data-filter="reading">在读</div>
+                <div class="closet-tab" data-filter="done">已读</div>
+            </div>
+            <div id="bookList"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ============ 通用工具 ============ */
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._timer); t._timer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+function getTodayKey() { return new Date().toDateString(); }
+function getDaysBetween(d1Str, d2Str) {
+    return Math.round((new Date(d2Str) - new Date(d1Str)) / 86400000);
+}
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function todayISO() { return new Date().toISOString().slice(0, 10); }
+
+/* ============ Supabase 配置（填入你的密钥后开启云同步）============ */
+const SUPABASE_URL = '';  // 填你的 Supabase Project URL
+const SUPABASE_KEY = '';  // 填你的 Supabase anon public key
+const USER_ID = localStorage.getItem('wb_user_id') || (() => {
+    const id = 'u_' + genId();
+    localStorage.setItem('wb_user_id', id);
+    return id;
+})();
+let supabaseReady = false;
+
+/* ============ 统一数据层（本地优先 + 云同步）============ */
+const DB = {
+    get(module) {
+        try { return JSON.parse(localStorage.getItem('db_' + module) || '[]'); }
+        catch(e) { return []; }
+    },
+    save(module, data) {
+        localStorage.setItem('db_' + module, JSON.stringify(data));
+        this.syncPush(module, data);
+    },
+    upsert(module, item) {
+        const list = this.get(module);
+        const idx = list.findIndex(x => x.id === item.id);
+        if (idx >= 0) list[idx] = item; else list.unshift(item);
+        this.save(module, list);
+        return item;
+    },
+    remove(module, id) {
+        const list = this.get(module).filter(x => x.id !== id);
+        this.save(module, list);
+    },
+    async syncPush(module, data) {
+        if (!supabaseReady) return;
+        // 只推送变化的数据（简化：全量推送该模块）
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/user_data?user_id=eq.${USER_ID}&module=eq.${module}`, {
+                method: 'DELETE',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            // 批量插入
+            const items = data.map(d => ({
+                user_id: USER_ID, module, item_id: d.id || genId(), data: d, updated_at: new Date().toISOString()
+            }));
+            if (items.length > 0) {
+                await fetch(`${SUPABASE_URL}/rest/v1/user_data`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates'
+                    },
+                    body: JSON.stringify(items)
+                });
+            }
+        } catch(e) { console.warn('sync push failed', e); }
+    },
+    async syncPull(module) {
+        if (!supabaseReady) return null;
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/user_data?user_id=eq.${USER_ID}&module=eq.${module}&order=updated_at.desc`, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const rows = await res.json();
+            if (rows && rows.length > 0) {
+                const cloudData = rows.map(r => r.data);
+                const localData = this.get(module);
+                // 合并：云端为准但保留本地新增
+                const merged = [...cloudData];
+                localData.forEach(lc => {
+                    if (!cloudData.find(c => c.id === lc.id)) merged.push(lc);
+                });
+                localStorage.setItem('db_' + module, JSON.stringify(merged));
+                return merged;
+            }
+        } catch(e) { console.warn('sync pull failed', e); }
+        return null;
+    }
+};
+
+/* ============ 在线状态管理 ============ */
+async function checkSupabaseConnection() {
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
+        updateSyncStatus('offline');
+        return;
+    }
+    const bar = document.getElementById('syncBar');
+    const text = document.getElementById('syncText');
+    bar.className = 'sync-bar syncing';
+    text.textContent = '🔄 连接云端中...';
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/user_data?limit=1`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        if (res.ok) {
+            supabaseReady = true;
+            updateSyncStatus('online');
+            // 连上后拉取所有模块数据
+            ['diary','review','notes','books','checkin','tasks'].forEach(m => DB.syncPull(m));
+        } else { updateSyncStatus('offline'); }
+    } catch(e) { updateSyncStatus('offline'); }
+}
+
+function updateSyncStatus(status) {
+    const bar = document.getElementById('syncBar');
+    const text = document.getElementById('syncText');
+    if (status === 'online') {
+        bar.className = 'sync-bar online';
+        text.textContent = '☁️ 已连接云端 · 数据同步中';
+    } else if (status === 'offline') {
+        bar.className = 'sync-bar offline';
+        text.textContent = '📱 仅本地（离线）· 数据已保存到本设备';
+    } else if (status === 'syncing') {
+        bar.className = 'sync-bar syncing';
+        text.textContent = '🔄 正在同步...';
+    }
+}
+
+window.addEventListener('online', () => checkSupabaseConnection());
+window.addEventListener('offline', () => updateSyncStatus('offline'));
+
+const motivations = [
+    { zh: '每天进步一点点，考试就不慌。', en: 'A little progress every day keeps the exam fear away.' },
+    { zh: '70分不是终点，是你努力的见证。', en: '70 points is not the end, but proof of your effort.' },
+    { zh: '今天的单词，是明天的分数。', en: 'Today\'s words are tomorrow\'s scores.' },
+    { zh: '基础薄弱不可怕，可怕的是不去补。', en: 'Weak foundations can be fixed; not trying cannot.' },
+    { zh: '做错的题，是考试前最好的礼物。', en: 'Mistakes before the exam are the best gifts.' },
+    { zh: '坚持每天2小时，10月你就是70+。', en: '2 hours a day makes 70+ in October.' },
+    { zh: '语法不难，难的是你没梳理。', en: 'Grammar isn\'t hard; not organizing it is.' },
+    { zh: '真题刷三遍，考场稳如山。', en: 'Three rounds of past papers, steady as a mountain.' },
+    { zh: '别怕阅读长，一句句啃就懂了。', en: 'Don\'t fear long passages; bite off one sentence at a time.' },
+    { zh: '翻译不行？那是因为还没练够。', en: 'Translation weak? You just haven\'t practiced enough.' },
+    { zh: '今天偷的懒，考后流的泪。', en: 'Laziness today, tears after the exam.' },
+    { zh: '词汇是地基，地基不牢楼会塌。', en: 'Vocabulary is the foundation; weak foundation, falling building.' },
+    { zh: '每一个不确定的选项，都是提分点。', en: 'Every uncertain option is a chance to score.' },
+    { zh: '慢慢来，比较快——真题也是。', en: 'Slow is fast — even for past papers.' },
+    { zh: '你现在坚持的样子，很美。', en: 'The way you persist now is beautiful.' }
+];
+
+/* ============ 时间与倒计时 ============ */
+const EXAM_DATE = new Date('2026-10-18T14:30:00+08:00'); // 自考10月通常10月第三周周末，下午14:30开考
+function updateTime() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById('currentTime').textContent = `${h}:${m}:${s}`;
+    const wd = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    document.getElementById('currentDate').textContent =
+        `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${wd[now.getDay()]}`;
+    const days = Math.max(0, Math.ceil((EXAM_DATE - now) / 86400000));
+    document.getElementById('countdownNum').textContent = days;
+    document.getElementById('examDateStr').textContent = `考试日期：2026年10月18日（星期日）下午14:30`;
+}
+function updateMotivation() {
+    const today = getTodayKey();
+    if (localStorage.getItem('lastMotivationDate') !== today) {
+        const idx = Math.floor(Math.random() * motivations.length);
+        localStorage.setItem('todayMotivation', JSON.stringify(motivations[idx]));
+        localStorage.setItem('lastMotivationDate', today);
+    }
+    const m = JSON.parse(localStorage.getItem('todayMotivation') || 'null');
+    if (m) { document.getElementById('motivationText').textContent = m.zh; document.getElementById('motivationTranslation').textContent = m.en; }
+}
+
+/* ============ 备考任务系统（自考13000七大题型）============ */
+// 基础薄弱+2-3小时/天，按13000题型轮换侧重
+const taskTemplates = [
+    // 周一：词汇+阅读判断
+    [
+        { name: '词汇背诵（新词40个+复习）', meta: '40分钟 · 3500核心词', tag: '词汇' },
+        { name: '阅读判断专项 ×2篇（True/False/NG）', meta: '40分钟 · 10分题型', tag: '阅读判断' },
+        { name: '精读1篇 + 生词记录', meta: '40分钟 · 培养语感', tag: '阅读' },
+        { name: '基础语法：时态与语态', meta: '30分钟 · 完形填空要用', tag: '语法' }
+    ],
+    // 周二：阅读选择+概括补全
+    [
+        { name: '词汇复习（昨日40个）', meta: '30分钟 · 抗遗忘', tag: '词汇' },
+        { name: '阅读选择 ×2篇（限时）', meta: '40分钟 · 10分题型', tag: '阅读选择' },
+        { name: '概括段落大意+补全句子 ×1套', meta: '45分钟 · 10分题型', tag: '概括补全' },
+        { name: '错题回顾', meta: '20分钟', tag: '复盘' }
+    ],
+    // 周三：填句补文+填词补文
+    [
+        { name: '词汇背诵（新词40个+复习）', meta: '40分钟', tag: '词汇' },
+        { name: '填句补文 ×2篇（找逻辑关系）', meta: '40分钟 · 10分题型', tag: '填句补文' },
+        { name: '填词补文 ×2篇（判断词性）', meta: '45分钟 · 15分题型', tag: '填词补文' },
+        { name: '阅读精读1篇', meta: '25分钟', tag: '阅读' }
+    ],
+    // 周四：完形补文+作文模板
+    [
+        { name: '词汇复习', meta: '30分钟', tag: '词汇' },
+        { name: '完形补文 ×2篇（词形变换）', meta: '45分钟 · 15分题型', tag: '完形补文' },
+        { name: '背诵作文模板1篇（书信/议论文）', meta: '45分钟 · 30分大头', tag: '作文' },
+        { name: '默写作文模板1遍', meta: '30分钟 · 烂熟于心', tag: '作文' }
+    ],
+    // 周五：真题半套+作文
+    [
+        { name: '真题半套（阅读判断+阅读选择+概括）', meta: '60分钟 · 限时', tag: '真题' },
+        { name: '对答案+整理错题', meta: '40分钟', tag: '复盘' },
+        { name: '高频词汇突击 ×50', meta: '30分钟', tag: '词汇' },
+        { name: '作文模板默写+仿写1段', meta: '30分钟', tag: '作文' }
+    ],
+    // 周六：全套模拟
+    [
+        { name: '真题全真模拟（全套150分钟）', meta: '150分钟 · 严格限时', tag: '模拟' },
+        { name: '对答案+错题分析', meta: '60分钟', tag: '复盘' },
+        { name: '薄弱题型补强', meta: '40分钟', tag: '补弱' }
+    ],
+    // 周日：复习+作文实战
+    [
+        { name: '本周错题二刷', meta: '60分钟', tag: '复盘' },
+        { name: '生词本复习全部', meta: '40分钟', tag: '词汇' },
+        { name: '作文限时写1篇（150词/30分钟）', meta: '40分钟 · 实战', tag: '作文' },
+        { name: '机动：补未完成任务', meta: '40分钟', tag: '机动' }
+    ]
+];
+
+function getTodayTasks() {
+    const day = new Date().getDay();
+    return taskTemplates[day];
+}
+
+function renderTasks() {
+    const today = getTodayKey();
+    const tasks = getTodayTasks();
+    const doneStatus = JSON.parse(localStorage.getItem('taskStatus_' + today) || '[]');
+
+    const list = document.getElementById('taskList');
+    list.innerHTML = tasks.map((t, i) => `
+        <div class="task-item">
+            <div class="task-check ${doneStatus[i] ? 'done' : ''}" data-idx="${i}"></div>
+            <div class="task-content">
+                <div class="task-name">${t.name}<span class="task-tag">${t.tag}</span></div>
+                <div class="task-meta">${t.meta}</div>
+            </div>
+        </div>
+    `).join('');
+
+    list.querySelectorAll('.task-check').forEach(el => {
+        el.addEventListener('click', function() {
+            const idx = parseInt(this.dataset.idx);
+            const arr = JSON.parse(localStorage.getItem('taskStatus_' + today) || '[]');
+            arr[idx] = !arr[idx];
+            localStorage.setItem('taskStatus_' + today, JSON.stringify(arr));
+            this.classList.toggle('done');
+            updateTaskProgress();
+            if (arr[idx]) showToast('任务完成，继续加油！💪');
+        });
+    });
+    updateTaskProgress();
+}
+
+function updateTaskProgress() {
+    const today = getTodayKey();
+    const tasks = getTodayTasks();
+    const arr = JSON.parse(localStorage.getItem('taskStatus_' + today) || '[]');
+    const done = arr.filter(x => x).length;
+    const total = tasks.length;
+    const pct = Math.round(done / total * 100);
+    document.getElementById('taskProgressFill').style.width = pct + '%';
+    document.getElementById('taskProgressText').textContent = pct + '%';
+}
+
+function initCheckin() {
+    const today = getTodayKey();
+    const lastCheckin = localStorage.getItem('lastCheckinDate');
+    const totalDays = parseInt(localStorage.getItem('totalCheckinDays') || '0');
+    let continuousStreak = parseInt(localStorage.getItem('continuousStreak') || '0');
+
+    if (lastCheckin) {
+        const diff = getDaysBetween(lastCheckin, today);
+        if (diff > 1) { continuousStreak = 0; localStorage.setItem('continuousStreak', '0'); }
+    }
+
+    const btn = document.getElementById('checkinBtn');
+    if (lastCheckin === today) {
+        btn.textContent = '今日已打卡 ✓'; btn.disabled = true;
+    }
+    document.getElementById('continuousStreak').textContent = continuousStreak;
+    document.getElementById('totalDays').textContent = totalDays;
+
+    // 总完成任务数
+    let totalTasks = parseInt(localStorage.getItem('totalTasksDone') || '0');
+    document.getElementById('totalTasks').textContent = totalTasks;
+
+    // 备考进度（8月1日起算到10月18日，约78天）
+    const startDay = new Date('2026-08-01');
+    const now = new Date();
+    const totalPeriod = (EXAM_DATE - startDay) / 86400000;
+    const passed = Math.max(0, (now - startDay) / 86400000);
+    const progress = Math.min(100, Math.round(passed / totalPeriod * 100));
+    document.getElementById('examProgress').textContent = progress + '%';
+
+    btn.addEventListener('click', function() {
+        if (lastCheckin === today) return;
+        const newTotal = totalDays + 1;
+        let newStreak = continuousStreak;
+        if (lastCheckin && getDaysBetween(lastCheckin, today) === 1) newStreak += 1;
+        else newStreak = 1;
+        localStorage.setItem('lastCheckinDate', today);
+        localStorage.setItem('totalCheckinDays', newTotal);
+        localStorage.setItem('continuousStreak', newStreak);
+        // 同步今日完成任务数
+        const arr = JSON.parse(localStorage.getItem('taskStatus_' + today) || '[]');
+        const todayDone = arr.filter(x => x).length;
+        localStorage.setItem('totalTasksDone', totalTasks + todayDone);
+        document.getElementById('continuousStreak').textContent = newStreak;
+        document.getElementById('totalDays').textContent = newTotal;
+        document.getElementById('totalTasks').textContent = totalTasks + todayDone;
+        btn.textContent = '今日已打卡 ✓'; btn.disabled = true;
+        showToast(`打卡成功！连续 ${newStreak} 天，10月必胜！🎯`);
+    });
+}
+
+/* ============ 真题题库（自考13000七大题型）============ */
+const examBank = {
+    'set1': {
+        name: '第1套 · 阅读判断+阅读选择',
+        questions: [
+            { type:'阅读判断', q:'(判断题) 题目: The author thinks learning English is easy.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:1,
+              explain:'阅读判断是13000第一题，10题共10分。需严格按原文判断，不能主观臆断。原文未说easy则不能选True。' },
+            { type:'阅读判断', q:'(判断题) 题目: Only children can learn a new language well.', opts:['True','False','Not Given'], ans:1,
+              explain:'这种绝对词（only）出现时，通常选False。原文若说adults也能学，则直接判False。' },
+            { type:'阅读判断', q:'(判断题) 题目: The writer mentions his experience in France.', opts:['True','False','Not Given'], ans:2,
+              explain:'Not Given是13000特有选项。原文没提到France就选NG，不能凭常识猜。这是最易错的选项。' },
+            { type:'阅读选择', q:'(选择题) What is the main idea of the passage?', opts:['How to learn vocabulary','The importance of reading','English grammar rules','Travel experiences'], ans:1,
+              explain:'阅读选择5题共10分。主旨题要找各段topic sentence，不能只看开头。选项A太窄，B概括全文。' },
+            { type:'阅读选择', q:'(选择题) The word "frustrated" in paragraph 2 most probably means ___.', opts:['excited','discouraged','happy','angry'], ans:1,
+              explain:'词义题靠上下文猜词义。frustrated=沮丧的，选discouraged。注意区分frustrated(人感到)和frustrating(事物令人)。' },
+            { type:'阅读选择', q:'(选择题) According to the passage, which of the following is TRUE?', opts:['Reading is not important','Vocabulary is the only key','Practice makes perfect','Grammar is useless'], ans:2,
+              explain:'细节题要找到原文对应句逐字比对。排除法最快捷：A/B/D明显与原文矛盾。' },
+            { type:'阅读判断', q:'(判断题) 题目: The passage suggests that practice is more important than talent.', opts:['True','False','Not Given'], ans:0,
+              explain:'suggests是推断词，原文若有"hard work matters more than natural ability"类表述则选True。' },
+            { type:'阅读选择', q:'(选择题) The author\'s attitude towards memorizing words is ___.', opts:['negative','positive','neutral','unclear'], ans:1,
+              explain:'态度题。注意作者用词：important/useful/helpful是正面，useless/waste是负面。' },
+            { type:'阅读判断', q:'(判断题) 题目: Everyone who reads a lot can write well.', opts:['True','False','Not Given'], ans:1,
+              explain:'everyone/all这类绝对词出现时，通常选False。原文多半说"helps"而非"guarantees"。' },
+            { type:'阅读选择', q:'(选择题) What does the author recommend doing first?', opts:['Reading aloud','Learning grammar','Memorizing words','Writing essays'], ans:0,
+              explain:'细节定位题。题干first是关键词，回原文找顺序词firstly/first/begin with对应。' }
+        ]
+    },
+    'set2': {
+        name: '第2套 · 填词补文+完形补文',
+        questions: [
+            { type:'填词补文', q:'(填词) The weather was so ___ that we decided to stay at home. (terrible)', opts:['terrible','terribly','terribleness','terrify'], ans:0,
+              explain:'填词补文10题共15分。so+形容词，空格需形容词，填terrible原形。注意13000是给词变形不是选词。' },
+            { type:'填词补文', q:'(填词) She speaks English ___ than her brother. (fluently)', opts:['more fluently','fluently','most fluently','fluent'], ans:0,
+              explain:'than提示比较级，fluently是多音节副词，前加more。填词补文要会判断词性+比较级。' },
+            { type:'填词补文', q:'(填词) The ___ of computers has changed our lives. (develop)', opts:['development','developing','developed','develop'], ans:0,
+              explain:'the+名词+of结构，空格需名词，填development。这是高频变形：动词→名词。' },
+            { type:'填词补文', q:'(填词) He is one of the most ___ students in our class. (success)', opts:['successful','successfully','succeed','success'], ans:0,
+              explain:'one of the most+形容词，空格需形容词，填successful。success名词→successful形容词。' },
+            { type:'填词补文', q:'(填词) I found the book ___. (interest)', opts:['interesting','interested','interest','interestingly'], ans:0,
+              explain:'find+宾语+形容词作宾补。书令人感兴趣用interesting（事物用-ing）。人感到兴趣用interested。' },
+            { type:'完形补文', q:'(完形变形) He ___ (go) to school every day. 填入正确形式', opts:['goes','went','gone','going'], ans:0,
+              explain:'完形补文10题共15分。every day提示一般现在时，主语三单，填goes。这是基础时态题。' },
+            { type:'完形补文', q:'(完形变形) The book ___ (write) by him last year. 填入正确形式', opts:['was written','wrote','is written','writes'], ans:0,
+              explain:'last year过去时，book与write被动，填was written。被动语态+过去时是高频考点。' },
+            { type:'完形补文', q:'(完形变形) She ___ (be) to Beijing twice. 填入正确形式', opts:['has been','went','goes','had been'], ans:0,
+              explain:'twice+到现在为止的经历，用现在完成时has been。have been to=去过（已回），have gone to=去了（未回）。' },
+            { type:'完形补文', q:'(完形变形) If it ___ (rain) tomorrow, I will stay home. 填入正确形式', opts:['rains','rained','will rain','rain'], ans:0,
+              explain:'主将从现：主句will stay将来时，if从句用一般现在时表将来。填rains。高频虚拟/条件句考点。' },
+            { type:'完形补文', q:'(完形变形) The ___ (child) are playing in the garden. 填入正确形式', opts:['children','child','childs','childes'], ans:0,
+              explain:'child的复数是不规则变形children。完形补文常考不规则复数。' }
+        ]
+    },
+    'set3': {
+        name: '第3套 · 综合（填句补文+概括补全）',
+        questions: [
+            { type:'填句补文', q:'(填句) 文段空格处应填: Many people think reading is boring. ___. Actually, it opens a new world.', opts:['But it is not true','They prefer watching TV','Books are expensive','Reading takes time'], ans:0,
+              explain:'填句补文5题共10分。空格后Actually是转折，前句应是被反驳的观点。选A"But it is not true"衔接最顺。' },
+            { type:'填句补文', q:'(填句) 空格处应填: He studied hard every day. ___. Finally, he passed the exam.', opts:['But he failed','As a result','However','On the contrary'], ans:1,
+              explain:'后句Finally表结果，前句应填原因/过程衔接。选B"As a result"表因果。注意逻辑关系词是解题钥匙。' },
+            { type:'填句补文', q:'(填句) 空格处应填: The city is beautiful. ___, the traffic is terrible.', opts:['In addition','However','Therefore','For example'], ans:1,
+              explain:'前后是转折关系（美vs糟糕），填However。转折/因果/并列词是填句补文的解题关键。' },
+            { type:'概括补全', q:'(段落大意) 段落: Reading helps you learn new words and understand different cultures. It also improves your thinking ability.', opts:['Benefits of reading','How to read fast','Types of books','Reading difficulties'], ans:0,
+              explain:'概括段落大意5题共10分（+补全句子5题）。段落讲阅读的好处，选A。抓topic sentence（通常在段首）。' },
+            { type:'概括补全', q:'(段落大意) 段落: Modern technology has changed the way we communicate. Emails and messages have replaced letters.', opts:['History of letters','Modern communication','How to write emails','Technology problems'], ans:1,
+              explain:'段落主题是现代科技改变沟通方式，选B。注意概括题要选最贴切的，不能太窄（C）也不能太宽。' },
+            { type:'填句补文', q:'(填句) 空格处应填: The test was very difficult. ___, I managed to finish it on time.', opts:['Therefore','Fortunately','However','Because'], ans:1,
+              explain:'前难后能完成，是转折+侥幸，填Fortunately"幸运的是"。注意语义而不只是语法衔接。' },
+            { type:'概括补全', q:'(段落大意) 段落: Exercise is important for health. It strengthens your heart and helps you sleep better.', opts:['Health problems','Importance of exercise','Sleeping tips','Heart diseases'], ans:1,
+              explain:'段落讲运动对健康的重要性，选B。topic句在段首：Exercise is important。' },
+            { type:'填句补文', q:'(填句) 空格处应填: She wanted to buy the dress. ___, she didn\'t have enough money.', opts:['So','Because','However','Therefore'], ans:2,
+              explain:'想买vs没钱，转折关系，填However。注意However后通常加逗号。' },
+            { type:'概括补全', q:'(补全句子) The main idea of the passage is that ___.', opts:['reading is difficult','practice leads to improvement','English is easy','exams are useless'], ans:1,
+              explain:'补全句子题。原文若有"the more you practice, the better you become"类表述，选B。' },
+            { type:'填句补文', q:'(填句) 空格处应填: First, you should read the question carefully. ___, think about what you already know.', opts:['Then','Because','Although','But'], ans:0,
+              explain:'First...Then...是顺序词，填Then。逻辑顺序题要找firstly/secondly/finally这类词。' }
+        ]
+    }
+};
+
+/* ============ 作文模板库（零基础必备）============ */
+const essayTemplates = [
+    {
+        type: '议论文模板',
+        topic: '万能议论文（观点对比类）',
+        template: `Nowadays, there is a heated debate on whether we should ___(主题). Some people believe that ___(观点A). They argue that ___(理由A). However, others hold the opposite view. They think that ___(观点B) because ___(理由B).
+
+In my opinion, I agree with the latter/view that ___(你的观点). There are several reasons. First, ___(理由1). Second, ___(理由2). What's more, ___(理由3).
+
+In conclusion, we should ___(总结建议). Only in this way can we ___(美好愿景).`,
+        tip: '适用：观点对比、是否应该类题目。填空即可凑150词。'
+    },
+    {
+        type: '议论文模板',
+        topic: '问题解决类',
+        template: `Recently, the problem of ___(问题) has aroused wide concern. It has brought many negative effects to our life. For example, ___(危害1). Besides, ___(危害2).
+
+How to solve this problem? Here are some suggestions. First, the government should ___(措施1). Second, we individuals should ___(措施2). Third, schools and parents should ___(措施3).
+
+In a word, only when we work together can we solve this problem. I believe our life will become better and better.`,
+        tip: '适用：环境、交通、网络等社会问题。'
+    },
+    {
+        type: '书信模板',
+        topic: '邀请信/感谢信/道歉信',
+        template: `Dear ___(称呼),
+
+I am writing to ___(写信目的: invite you to / express my thanks for / apologize for). I would like to tell you something about it.
+
+First, ___(内容1: 时间地点/感谢原因/道歉理由). Second, ___(内容2). In addition, ___(补充信息).
+
+I am looking forward to your reply. If you have any questions, please feel free to contact me.
+
+Yours sincerely,
+___(你的名字)`,
+        tip: '书信格式固定，背一篇即可应对邀请/感谢/道歉/咨询各类。'
+    },
+    {
+        type: '记叙文模板',
+        topic: '一件事/一次经历',
+        template: `I will never forget the day when ___(事件). It happened on ___(时间). I was ___(当时状态) when ___(事件发生).
+
+At first, I felt ___(感受1: nervous/excited). Then, ___(经过1). To my surprise, ___(经过2: 转折). Finally, ___(结果).
+
+This experience taught me that ___(感悟). I will always remember it because it changed me a lot. I believe ___(未来展望).`,
+        tip: '适用：难忘经历、有意义的事、改变你的事。'
+    },
+    {
+        type: '图表描述模板',
+        topic: '数据描述类',
+        template: `As is shown in the chart, we can see that ___(图表主题). The number of ___(项目1) increased from ___(数字) to ___(数字) during ___(时间). Meanwhile, the number of ___(项目2) decreased from ___ to ___.
+
+There are several reasons for this change. First, ___(原因1). Second, ___(原因2). Third, ___(原因3).
+
+In conclusion, this trend shows that ___(总结趋势). I believe this trend will continue in the future.`,
+        tip: '适用：柱状图/饼图/折线图描述题。'
+    }
+];
+
+let currentExam = 'set1';
+let userAnswers = {};
+
+function renderExamTabs() {
+    document.getElementById('examTabs').innerHTML = Object.keys(examBank).map(k => `
+        <div class="exam-tab ${k === currentExam ? 'active' : ''}" data-exam="${k}">${examBank[k].name}</div>
+    `).join('');
+    document.querySelectorAll('.exam-tab').forEach(el => {
+        el.addEventListener('click', function() {
+            currentExam = this.dataset.exam;
+            userAnswers = {};
+            renderExamTabs(); renderExam();
+        });
+    });
+}
+
+function renderExam() {
+    const exam = examBank[currentExam];
+    document.getElementById('examContent').innerHTML = exam.questions.map((q, i) => `
+        <div class="question-item">
+            <div class="question-text"><span class="question-num">${i+1}.</span>[${q.type}] ${q.q}</div>
+            <div class="option-list">
+                ${q.opts.map((o, j) => `
+                    <div class="option-item" data-q="${i}" data-o="${j}">
+                        <span class="option-label">${String.fromCharCode(65+j)}.</span>${o}
+                    </div>
+                `).join('')}
+            </div>
+            <div class="question-explain" id="explain-${i}">💡 ${q.explain}</div>
+        </div>
+    `).join('');
+
+    document.querySelectorAll('.option-item').forEach(el => {
+        el.addEventListener('click', function() {
+            const qi = parseInt(this.dataset.q);
+            const oi = parseInt(this.dataset.o);
+            userAnswers[qi] = oi;
+            // 清除该题其他选中
+            document.querySelectorAll(`.option-item[data-q="${qi}"]`).forEach(e => e.classList.remove('selected','correct','wrong'));
+            this.classList.add('selected');
+        });
+    });
+    document.getElementById('examResult').classList.remove('show');
+    document.querySelectorAll('.question-explain').forEach(e => e.classList.remove('show'));
+}
+
+function submitExam() {
+    const exam = examBank[currentExam];
+    let correct = 0;
+    const wrongList = [];
+    exam.questions.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const opts = document.querySelectorAll(`.option-item[data-q="${i}"]`);
+        opts.forEach(e => e.classList.remove('selected','correct','wrong'));
+        if (userAns === q.ans) {
+            opts[q.ans].classList.add('correct');
+            correct++;
+        } else {
+            if (userAns !== undefined) opts[userAns].classList.add('wrong');
+            opts[q.ans].classList.add('correct');
+            wrongList.push({ exam: currentExam, qIdx: i, q: q.q, userAns: userAns, correctAns: q.ans, opts: q.opts, explain: q.explain, type: q.type });
+        }
+    });
+    // 显示解析
+    document.querySelectorAll('.question-explain').forEach(e => e.classList.add('show'));
+    // 保存错题
+    saveWrongQuestions(wrongList);
+    // 显示成绩
+    const total = exam.questions.length;
+    const score = Math.round(correct / total * 100);
+    const result = document.getElementById('examResult');
+    result.innerHTML = `
+        <div class="exam-score">${correct} / ${total} · 估分 ${score}分</div>
+        <div style="font-size:13px;color:#999;margin-top:8px;">${score >= 70 ? '🎉 已达70分线，保持状态！' : '💪 还差'+(70-score)+'分，继续刷题！'}</div>
+        <div style="font-size:12px;color:#ff6b9d;margin-top:5px;">错题已自动加入错题本</div>
+    `;
+    result.classList.add('show');
+    showToast(`本次得分 ${score} 分，${score>=70?'已达线！':'继续努力！'}`);
+}
+
+function saveWrongQuestions(list) {
+    const all = JSON.parse(localStorage.getItem('wrongQuestions') || '[]');
+    // 去重：按exam+qIdx
+    list.forEach(w => {
+        if (!all.find(x => x.exam === w.exam && x.qIdx === w.qIdx)) {
+            all.push(w);
+        }
+    });
+    localStorage.setItem('wrongQuestions', JSON.stringify(all));
+    renderWrongQuestions();
+}
+
+function renderWrongQuestions() {
+    const all = JSON.parse(localStorage.getItem('wrongQuestions') || '[]');
+    const el = document.getElementById('wrongQuestions');
+    if (all.length === 0) {
+        el.innerHTML = '<div class="empty-hint">还没有错题，去做真题吧~</div>';
+        return;
+    }
+    el.innerHTML = all.map((w, i) => `
+        <div class="task-item" style="display:block;padding:12px 0;">
+            <div style="font-size:13px;color:#333;margin-bottom:6px;"><strong>[${w.type}]</strong> ${w.q}</div>
+            <div style="font-size:12px;color:#999;">你的答案：<span style="color:#f44336;">${w.userAns !== undefined ? String.fromCharCode(65+w.userAns)+'. '+w.opts[w.userAns] : '未作答'}</span></div>
+            <div style="font-size:12px;color:#999;">正确答案：<span style="color:#4caf50;">${String.fromCharCode(65+w.correctAns)}. ${w.opts[w.correctAns]}</span></div>
+            <div style="font-size:12px;color:#666;margin-top:4px;background:#fffbe6;padding:8px;border-radius:8px;">💡 ${w.explain}</div>
+            <button class="btn btn-sm btn-outline" style="margin-top:6px;" data-idx="${i}">已掌握，移除</button>
+        </div>
+    `).join('');
+    el.querySelectorAll('button').forEach(b => {
+        b.addEventListener('click', function() {
+            const idx = parseInt(this.dataset.idx);
+            const arr = JSON.parse(localStorage.getItem('wrongQuestions') || '[]');
+            arr.splice(idx, 1);
+            localStorage.setItem('wrongQuestions', JSON.stringify(arr));
+            renderWrongQuestions();
+            showToast('错题已移除 ✓');
+        });
+    });
+}
+
+/* ============ 生词本 ============ */
+function getWordbook() { return JSON.parse(localStorage.getItem('wordbook') || '[]'); }
+function saveWordbook(b) { localStorage.setItem('wordbook', JSON.stringify(b)); }
+function renderWordbook() {
+    const book = getWordbook();
+    const el = document.getElementById('wordbookList');
+    if (book.length === 0) {
+        el.innerHTML = '<div class="empty-hint">还没有生词，真题中遇到的生词可以手动加入</div>';
+        return;
+    }
+    el.innerHTML = `
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <input type="text" id="newWord" placeholder="单词" style="flex:1;padding:8px;border:2px solid #ffd6e7;border-radius:10px;">
+            <input type="text" id="newMeaning" placeholder="释义" style="flex:2;padding:8px;border:2px solid #ffd6e7;border-radius:10px;">
+            <button class="btn btn-sm" id="addWord">添加</button>
+        </div>
+        <div>${book.map((w,i) => `
+            <div class="task-item" style="display:flex;justify-content:space-between;align-items:center;">
+                <div><strong>${w.en}</strong> <span style="color:#999;font-size:13px;"> ${w.meaning}</span></div>
+                <button class="btn btn-sm btn-outline" data-en="${w.en}">×</button>
+            </div>
+        `).join('')}</div>
+    `;
+    document.getElementById('addWord').addEventListener('click', function() {
+        const en = document.getElementById('newWord').value.trim();
+        const m = document.getElementById('newMeaning').value.trim();
+        if (!en || !m) { showToast('请填写单词和释义'); return; }
+        const arr = getWordbook();
+        if (!arr.find(x => x.en === en)) { arr.push({en, meaning: m}); saveWordbook(arr); }
+        renderWordbook();
+        showToast('生词已添加 📖');
+    });
+    el.querySelectorAll('button[data-en]').forEach(b => {
+        b.addEventListener('click', function() {
+            const en = this.dataset.en;
+            saveWordbook(getWordbook().filter(x => x.en !== en));
+            renderWordbook();
+        });
+    });
+}
+
+/* ============ 天气获取（无锡新吴区 31.49°N 120.31°E）============ */
+// WMO 天气代码映射
+const wmoCodeMap = {
+    0:['晴','☀️'], 1:['少云','🌤️'], 2:['多云','☁️'], 3:['阴','☁️'],
+    45:['有雾','🌫️'], 48:['雾凇','🌫️'],
+    51:['小毛毛雨','🌦️'], 53:['毛毛雨','🌦️'], 55:['大毛毛雨','🌦️'],
+    56:['冻毛毛雨','🌧️'],57:['大冻毛毛雨','🌧️'],
+    61:['小雨','🌧️'], 63:['中雨','🌧️'], 65:['大雨','🌧️'],
+    66:['冻雨','🌧️'],67:['大冻雨','🌧️'],
+    71:['小雪','🌨️'], 73:['中雪','🌨️'], 75:['大雪','❄️'],
+    77:['冰粒','🌨️'],
+    80:['阵雨','🌦️'], 81:['中阵雨','🌧️'], 82:['大阵雨','⛈️'],
+    85:['阵雪','🌨️'], 86:['大阵雪','❄️'],
+    95:['雷暴','⛈️'], 96:['雷暴伴冰雹','⛈️'], 99:['大雷暴伴冰雹','⛈️']
+};
+
+async function fetchWeather() {
+    try {
+        const url = 'https://api.open-meteo.com/v1/forecast?latitude=31.49&longitude=120.31&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,apparent_temperature&timezone=Asia/Shanghai';
+        const res = await fetch(url);
+        const data = await res.json();
+        const c = data.current;
+        const temp = Math.round(c.temperature_2m);
+        const feel = Math.round(c.apparent_temperature);
+        const humidity = c.relative_humidity_2m;
+        const wind = Math.round(c.wind_speed_10m);
+        const code = c.weather_code;
+        const [desc, icon] = wmoCodeMap[code] || ['未知','❓'];
+
+        document.getElementById('weatherIcon').textContent = icon;
+        document.getElementById('weatherTemp').textContent = temp + '°C';
+        document.getElementById('weatherDesc').textContent = desc + '（体感 ' + feel + '°C）';
+        document.getElementById('weatherDetail').textContent = `湿度 ${humidity}% · 风速 ${wind}km/h · 无锡新吴区`;
+        // 存储当前天气供搭配使用
+        window._currentWeather = { temp, feel, desc, humidity, wind, code };
+    } catch (e) {
+        document.getElementById('weatherDesc').textContent = '天气获取失败，可手动选择温度';
+        // 备用：让用户手动选温度档
+        window._currentWeather = null;
+    }
+}
+
+/* ============ 衣橱系统 ============ */
+const categoryNames = { top:'上装', bottom:'下装', outer:'外套', shoes:'鞋', acc:'配饰' };
+
+function getCloset() { return JSON.parse(localStorage.getItem('myCloset') || '[]'); }
+function saveCloset(c) { localStorage.setItem('myCloset', JSON.stringify(c)); }
+
+let pendingUploads = []; // 待分类的图片
+let currentClosetCat = 'all';
+
+function renderCloset() {
+    const all = getCloset();
+    const filtered = currentClosetCat === 'all' ? all : all.filter(x => x.cat === currentClosetCat);
+    document.getElementById('closetCount').textContent = all.length;
+    const grid = document.getElementById('closetGrid');
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="empty-hint" style="grid-column:1/-1;">还没有衣服，快去上传吧~</div>';
+        return;
+    }
+    grid.innerHTML = filtered.map((item, i) => `
+        <div class="closet-item" data-id="${item.id}">
+            <img src="${item.img}" >
+            <button class="remove-btn" data-id="${item.id}">×</button>
+            <div class="item-tag">${categoryNames[item.cat] || item.cat}</div>
+        </div>
+    `).join('');
+    grid.querySelectorAll('.remove-btn').forEach(b => {
+        b.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.dataset.id;
+            saveCloset(getCloset().filter(x => x.id !== id));
+            renderCloset();
+            showToast('已移除');
+        });
+    });
+}
+
+function handleFiles(files) {
+    pendingUploads = [];
+    const row = document.getElementById('uploadCategoryRow');
+    let processed = 0;
+    Array.from(files).forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            pendingUploads.push(e.target.result);
+            processed++;
+            if (processed === files.length) {
+                row.style.display = 'flex';
+                showToast(`已读取 ${pendingUploads.length} 张图片，请选择分类后确认`);
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function initCloset() {
+    // 上传
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.style.borderColor = '#ff6b9d'; });
+    uploadArea.addEventListener('dragleave', e => { uploadArea.style.borderColor = '#ffb6d9'; });
+    uploadArea.addEventListener('drop', e => {
+        e.preventDefault(); uploadArea.style.borderColor = '#ffb6d9';
+        handleFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+    document.getElementById('confirmCategory').addEventListener('click', function() {
+        const cat = document.getElementById('uploadCategory').value;
+        const closet = getCloset();
+        pendingUploads.forEach(img => {
+            closet.push({ id: 'c' + Date.now() + Math.random().toString(36).slice(2,6), img, cat });
+        });
+        saveCloset(closet);
+        pendingUploads = [];
+        document.getElementById('uploadCategoryRow').style.display = 'none';
+        fileInput.value = '';
+        renderCloset();
+        showToast('衣服已加入衣橱 👗');
+    });
+
+    // 分类切换
+    document.querySelectorAll('.closet-tab').forEach(t => {
+        t.addEventListener('click', function() {
+            document.querySelectorAll('.closet-tab').forEach(x => x.classList.remove('active'));
+            this.classList.add('active');
+            currentClosetCat = this.dataset.cat;
+            renderCloset();
+        });
+    });
+
+    // AI 搭配
+    document.getElementById('generateOutfit').addEventListener('click', generateOutfit);
+}
+
+/* ============ AI 搭配引擎 ============ */
+function getTempLevel(temp) {
+    if (temp < 5) return 0;      // 寒冷
+    if (temp < 15) return 1;     // 凉
+    if (temp < 25) return 2;     // 舒适
+    return 3;                    // 炎热
+}
+
+function pickRandom(arr, n) {
+    const cp = [...arr]; const res = [];
+    while (cp.length && res.length < n) {
+        const idx = Math.floor(Math.random() * cp.length);
+        res.push(cp.splice(idx, 1)[0]);
+    }
+    return res;
+}
+
+function generateOutfit() {
+    const closet = getCloset();
+    const result = document.getElementById('outfitResult');
+    if (closet.length === 0) {
+        result.innerHTML = '<div class="empty-hint">衣橱还是空的，先上传衣服吧~</div>';
+        return;
+    }
+    const weather = window._currentWeather;
+    if (!weather) { result.innerHTML = '<div class="empty-hint">天气数据加载中，稍后再试</div>'; return; }
+
+    const occasion = document.getElementById('occasionSelect').value;
+    const style = document.getElementById('styleSelect').value;
+    const tempLevel = getTempLevel(weather.temp);
+
+    // 按类别分组
+    const byCat = { top:[], bottom:[], outer:[], shoes:[], acc:[] };
+    closet.forEach(item => { if (byCat[item.cat]) byCat[item.cat].push(item); });
+
+    // 搭配逻辑：根据温度决定是否需要外套
+    const outfit = {};
+    outfit.top = pickRandom(byCat.top, 1);
+    outfit.bottom = pickRandom(byCat.bottom, 1);
+    if (byCat.shoes.length) outfit.shoes = pickRandom(byCat.shoes, 1);
+    // 温度低于15需要外套
+    if (tempLevel <= 1 && byCat.outer.length) outfit.outer = pickRandom(byCat.outer, 1);
+    if (byCat.acc.length) outfit.acc = pickRandom(byCat.acc, 1);
+
+    // 生成理由
+    const tempDesc = ['寒冷','偏凉','舒适','炎热'][tempLevel];
+    const occasionDesc = { commute:'通勤干练', casual:'休闲舒适', date:'约会精致' }[occasion];
+    const styleDesc = { any:'百搭', fresh:'清新', cool:'酷飒', elegant:'优雅', cute:'可爱' }[style];
+
+    let tip = '';
+    if (tempLevel === 0) tip = '🧣 注意保暖，围巾手套都安排上，别感冒影响备考！';
+    else if (tempLevel === 1) tip = '🧥 早晚温差大，外套方便穿脱最实用。';
+    else if (tempLevel === 2) tip = '🌸 温度宜人，穿搭自由度最高，好好享受。';
+    else tip = '🧊 注意防晒透气，浅色系更清爽。';
+    // 雨雪判断用 WMO code
+    const isRain = [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(weather.code);
+    const isSnow = [71,73,75,77,85,86].includes(weather.code);
+    if (isRain) tip += ' 🌧️ 有雨，记得带伞+防水鞋！';
+    if (isSnow) tip += ' ❄️ 有雪，注意防滑保暖！';
+    if (weather.wind > 20) tip += ' 💨 风大，避免穿太蓬松的衣物。';
+
+    // 渲染
+    const imgs = [];
+    ['top','bottom','outer','shoes','acc'].forEach(role => {
+        if (outfit[role] && outfit[role].length) {
+            outfit[role].forEach(item => imgs.push({ img: item.img, role: categoryNames[role] }));
+        }
+    });
+
+    if (imgs.length === 0) {
+        result.innerHTML = '<div class="empty-hint">衣服分类不足，至少需要上装和下装</div>';
+        return;
+    }
+
+    result.innerHTML = `
+        <div class="outfit-result-card">
+            <div class="outfit-tags">
+                <span class="outfit-tag">${tempDesc}</span>
+                <span class="outfit-tag">${occasionDesc}</span>
+                <span class="outfit-tag">${styleDesc}</span>
+            </div>
+            <div class="outfit-desc">从你的衣橱里挑了这套，基于无锡当前 ${weather.temp}°C 和你的场合需求：</div>
+            <div class="outfit-images">
+                ${imgs.map(x => `<div class="outfit-img-box"><img src="${x.img}"><div class="role-label">${x.role}</div></div>`).join('')}
+            </div>
+            <div class="outfit-tip">${tip}</div>
+            <button class="btn btn-sm" id="regenerateOutfit" style="margin-top:10px;">↻ 不喜欢？重新搭配</button>
+        </div>
+    `;
+    document.getElementById('regenerateOutfit').addEventListener('click', generateOutfit);
+    showToast('AI 已为你生成搭配 ✨');
+}
+
+/* ============ 导航 ============ */
+function initNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.page');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            navItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            const pageId = this.getAttribute('data-page');
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        });
+    });
+}
+
+/* ============ 真题按钮事件 ============ */
+function initExamActions() {
+    document.getElementById('submitExam').addEventListener('click', submitExam);
+    document.getElementById('resetExam').addEventListener('click', () => {
+        userAnswers = {}; renderExam(); showToast('已重置，重新作答');
+    });
+    document.getElementById('showAllExplain').addEventListener('click', () => {
+        const explains = document.querySelectorAll('.question-explain');
+        const anyShown = Array.from(explains).some(e => e.classList.contains('show'));
+        explains.forEach(e => anyShown ? e.classList.remove('show') : e.classList.add('show'));
+    });
+}
+
+/* ============ 作文模板渲染 ============ */
+function renderEssayTemplates() {
+    const el = document.getElementById('essayTemplates');
+    if (!el) return;
+    el.innerHTML = essayTemplates.map((t, i) => `
+        <div class="task-item" style="display:block;padding:15px 0;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div>
+                    <span style="font-size:11px;color:#ff6b9d;background:#fff0f6;padding:2px 8px;border-radius:10px;">${t.type}</span>
+                    <strong style="margin-left:8px;color:#333;">${t.topic}</strong>
+                </div>
+                <button class="btn btn-sm btn-outline" data-idx="${i}">展开/收起</button>
+            </div>
+            <div style="font-size:12px;color:#999;margin-bottom:8px;">💡 ${t.tip}</div>
+            <pre class="essay-content" data-idx="${i}" style="display:none;font-size:13px;color:#333;line-height:1.8;background:#fff8fb;padding:12px;border-radius:10px;white-space:pre-wrap;font-family:inherit;overflow-x:auto;">${t.template}</pre>
+        </div>
+    `).join('');
+
+    el.querySelectorAll('button[data-idx]').forEach(b => {
+        b.addEventListener('click', function() {
+            const idx = this.dataset.idx;
+            const pre = el.querySelector(`pre[data-idx="${idx}"]`);
+            pre.style.display = pre.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+}
+
+/* ============ 日记模块 ============ */
+let diaryMood = '😊';
+function initDiary() {
+    const dateInput = document.getElementById('diaryDate');
+    dateInput.value = todayISO();
+    // 心情选择
+    document.querySelectorAll('.mood-emoji').forEach(el => {
+        el.addEventListener('click', function() {
+            document.querySelectorAll('.mood-emoji').forEach(e => e.classList.remove('selected'));
+            this.classList.add('selected');
+            diaryMood = this.dataset.mood;
+            autoSaveDiary();
+        });
+    });
+    // 自动保存（输入后1秒自动存）
+    let diaryTimer;
+    document.getElementById('diaryContent').addEventListener('input', () => {
+        document.getElementById('diarySaveStatus').textContent = '⏳ 输入中...';
+        document.getElementById('diarySaveStatus').className = 'save-indicator saving';
+        clearTimeout(diaryTimer);
+        diaryTimer = setTimeout(autoSaveDiary, 800);
+    });
+    dateInput.addEventListener('change', () => { loadDiaryByDate(dateInput.value); });
+    loadDiaryByDate(todayISO());
+    renderDiaryList();
+}
+
+function autoSaveDiary() {
+    const date = document.getElementById('diaryDate').value;
+    const content = document.getElementById('diaryContent').value;
+    const list = DB.get('diary');
+    const idx = list.findIndex(x => x.date === date);
+    const item = { id: idx >= 0 ? list[idx].id : genId(), date, mood: diaryMood, content, updatedAt: new Date().toISOString() };
+    if (idx >= 0) list[idx] = item; else list.unshift(item);
+    DB.save('diary', list);
+    document.getElementById('diarySaveStatus').textContent = '✓ 已保存';
+    document.getElementById('diarySaveStatus').className = 'save-indicator saved';
+    renderDiaryList();
+}
+
+function loadDiaryByDate(date) {
+    const list = DB.get('diary');
+    const item = list.find(x => x.date === date);
+    const contentEl = document.getElementById('diaryContent');
+    contentEl.value = item ? item.content : '';
+    diaryMood = item ? item.mood : '😊';
+    document.querySelectorAll('.mood-emoji').forEach(e => {
+        e.classList.toggle('selected', e.dataset.mood === diaryMood);
+    });
+    document.getElementById('diarySaveStatus').textContent = '✓ 已保存';
+    document.getElementById('diarySaveStatus').className = 'save-indicator saved';
+}
+
+function renderDiaryList() {
+    const list = DB.get('diary').sort((a,b) => b.date.localeCompare(a.date));
+    const el = document.getElementById('diaryList');
+    if (list.length === 0) { el.innerHTML = '<div class="empty-hint">还没有日记，开始写第一篇吧~</div>'; return; }
+    el.innerHTML = list.map(d => `
+        <div class="list-item-card" data-date="${d.date}">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span class="list-item-title">${d.mood} ${d.date}</span>
+                <button class="delete-btn-small" data-id="${d.id}">×</button>
+            </div>
+            <div class="list-item-preview">${(d.content || '').substring(0, 80) || '(空)'}</div>
+        </div>
+    `).join('');
+    el.querySelectorAll('.list-item-card').forEach(c => {
+        c.addEventListener('click', e => {
+            if (e.target.tagName === 'BUTTON') return;
+            const date = c.dataset.date;
+            document.getElementById('diaryDate').value = date;
+            loadDiaryByDate(date);
+        });
+    });
+    el.querySelectorAll('.delete-btn-small').forEach(b => {
+        b.addEventListener('click', e => {
+            e.stopPropagation();
+            DB.remove('diary', b.dataset.id);
+            renderDiaryList();
+            if (document.getElementById('diaryDate').value === list.find(x=>x.id===b.dataset.id)?.date) {
+                loadDiaryByDate(document.getElementById('diaryDate').value);
+            }
+            showToast('日记已删除');
+        });
+    });
+}
+
+/* ============ 每日复盘模块 ============ */
+function initReview() {
+    document.getElementById('reviewDate').value = todayISO();
+    let reviewTimer;
+    ['reviewGain','reviewLack','reviewImprove'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+            document.getElementById('reviewSaveStatus').textContent = '⏳ 输入中...';
+            document.getElementById('reviewSaveStatus').className = 'save-indicator saving';
+            clearTimeout(reviewTimer);
+            reviewTimer = setTimeout(autoSaveReview, 800);
+        });
+    });
+    document.getElementById('reviewDate').addEventListener('change', () => loadReviewByDate(document.getElementById('reviewDate').value));
+    loadReviewByDate(todayISO());
+    renderReviewList();
+}
+
+function autoSaveReview() {
+    const date = document.getElementById('reviewDate').value;
+    const gain = document.getElementById('reviewGain').value;
+    const lack = document.getElementById('reviewLack').value;
+    const improve = document.getElementById('reviewImprove').value;
+    const list = DB.get('review');
+    const idx = list.findIndex(x => x.date === date);
+    const item = { id: idx >= 0 ? list[idx].id : genId(), date, gain, lack, improve, updatedAt: new Date().toISOString() };
+    if (idx >= 0) list[idx] = item; else list.unshift(item);
+    DB.save('review', list);
+    document.getElementById('reviewSaveStatus').textContent = '✓ 已保存';
+    document.getElementById('reviewSaveStatus').className = 'save-indicator saved';
+    renderReviewList();
+}
+
+function loadReviewByDate(date) {
+    const list = DB.get('review');
+    const item = list.find(x => x.date === date);
+    document.getElementById('reviewGain').value = item ? item.gain : '';
+    document.getElementById('reviewLack').value = item ? item.lack : '';
+    document.getElementById('reviewImprove').value = item ? item.improve : '';
+    document.getElementById('reviewSaveStatus').textContent = '✓ 已保存';
+    document.getElementById('reviewSaveStatus').className = 'save-indicator saved';
+}
+
+function renderReviewList() {
+    const list = DB.get('review').sort((a,b) => b.date.localeCompare(a.date));
+    const el = document.getElementById('reviewList');
+    if (list.length === 0) { el.innerHTML = '<div class="empty-hint">还没有复盘记录</div>'; return; }
+    el.innerHTML = list.map(r => `
+        <div class="list-item-card" data-date="${r.date}">
+            <div class="list-item-title">🔍 ${r.date}</div>
+            <div class="list-item-preview">✅ ${((r.gain||'').substring(0,40)) || '未填'}</div>
+        </div>
+    `).join('');
+    el.querySelectorAll('.list-item-card').forEach(c => {
+        c.addEventListener('click', () => {
+            const date = c.dataset.date;
+            document.getElementById('reviewDate').value = date;
+            loadReviewByDate(date);
+        });
+    });
+}
+
+/* ============ 自由笔记模块 ============ */
+function initNotes() {
+    document.getElementById('noteSave').addEventListener('click', () => {
+        const title = document.getElementById('noteTitle').value.trim();
+        const content = document.getElementById('noteContent').value.trim();
+        if (!title && !content) { showToast('请输入标题或内容'); return; }
+        const item = {
+            id: genId(), title: title || '无标题', tag: document.getElementById('noteTag').value.trim() || '未分类',
+            content, createdAt: new Date().toISOString()
+        };
+        DB.upsert('notes', item);
+        document.getElementById('noteTitle').value = '';
+        document.getElementById('noteTag').value = '';
+        document.getElementById('noteContent').value = '';
+        document.getElementById('noteSaveStatus').textContent = '✓ 已保存';
+        document.getElementById('noteSaveStatus').className = 'save-indicator saved';
+        renderNoteList();
+        showToast('笔记已保存 📓');
+    });
+    document.getElementById('noteClear').addEventListener('click', () => {
+        document.getElementById('noteTitle').value = '';
+        document.getElementById('noteTag').value = '';
+        document.getElementById('noteContent').value = '';
+    });
+    renderNoteList();
+}
+
+function renderNoteList() {
+    const list = DB.get('notes');
+    document.getElementById('noteCount').textContent = list.length;
+    const el = document.getElementById('noteList');
+    if (list.length === 0) { el.innerHTML = '<div class="empty-hint">还没有笔记</div>'; return; }
+    el.innerHTML = list.map(n => `
+        <div class="list-item-card" data-id="${n.id}">
+            <div style="display:flex;justify-content:space-between;align-items:start;">
+                <div style="flex:1;">
+                    <div class="list-item-title">${n.title}</div>
+                    <div class="list-item-meta"><span class="outfit-tag">${n.tag}</span> · ${(n.createdAt||'').slice(0,10)}</div>
+                    <div class="list-item-preview">${(n.content||'').substring(0, 80)}</div>
+                </div>
+                <button class="delete-btn-small" data-id="${n.id}">×</button>
+            </div>
+        </div>
+    `).join('');
+    el.querySelectorAll('.list-item-card').forEach(c => {
+        c.addEventListener('click', e => {
+            if (e.target.tagName === 'BUTTON') return;
+            const n = list.find(x => x.id === c.dataset.id);
+            if (n) {
+                document.getElementById('noteTitle').value = n.title;
+                document.getElementById('noteTag').value = n.tag;
+                document.getElementById('noteContent').value = n.content;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    });
+    el.querySelectorAll('.delete-btn-small').forEach(b => {
+        b.addEventListener('click', e => {
+            e.stopPropagation();
+            DB.remove('notes', b.dataset.id);
+            renderNoteList();
+            showToast('笔记已删除');
+        });
+    });
+}
+
+/* ============ 待读书单模块 ============ */
+let bookFilter = 'all';
+function initBooks() {
+    document.getElementById('bookAdd').addEventListener('click', () => {
+        const title = document.getElementById('bookTitle').value.trim();
+        if (!title) { showToast('请输入书名'); return; }
+        const item = {
+            id: genId(),
+            title,
+            author: document.getElementById('bookAuthor').value.trim(),
+            status: document.getElementById('bookStatus').value,
+            rating: parseInt(document.getElementById('bookRating').value),
+            note: document.getElementById('bookNote').value.trim(),
+            addedAt: new Date().toISOString()
+        };
+        DB.upsert('books', item);
+        document.getElementById('bookTitle').value = '';
+        document.getElementById('bookAuthor').value = '';
+        document.getElementById('bookNote').value = '';
+        renderBookList();
+        showToast('已加入书单 📚');
+    });
+    document.querySelectorAll('#bookFilter .closet-tab').forEach(t => {
+        t.addEventListener('click', function() {
+            document.querySelectorAll('#bookFilter .closet-tab').forEach(x => x.classList.remove('active'));
+            this.classList.add('active');
+            bookFilter = this.dataset.filter;
+            renderBookList();
+        });
+    });
+    renderBookList();
+}
+
+function renderBookList() {
+    let list = DB.get('books');
+    if (bookFilter !== 'all') list = list.filter(x => x.status === bookFilter);
+    document.getElementById('bookCount').textContent = list.length;
+    const el = document.getElementById('bookList');
+    if (list.length === 0) { el.innerHTML = '<div class="empty-hint">书单是空的，添加一本书吧~</div>'; return; }
+    const statusMap = { want: '想读', reading: '在读', done: '已读' };
+    el.innerHTML = list.map(b => `
+        <div class="list-item-card" data-id="${b.id}">
+            <div style="display:flex;justify-content:space-between;align-items:start;">
+                <div style="flex:1;">
+                    <div class="list-item-title">${b.title}</div>
+                    <div class="list-item-meta">
+                        <span class="book-status ${b.status}">${statusMap[b.status]}</span>
+                        ${b.author ? ' · ' + b.author : ''}
+                        ${b.rating > 0 ? ' · ' + '⭐'.repeat(b.rating) : ''}
+                    </div>
+                    ${b.note ? `<div class="list-item-preview">${b.note.substring(0, 60)}</div>` : ''}
+                </div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                    <button class="btn btn-sm" data-id="${b.id}" data-action="cycle">切换状态</button>
+                    <button class="delete-btn-small" data-id="${b.id}" data-action="del">×</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    el.querySelectorAll('button').forEach(b => {
+        b.addEventListener('click', e => {
+            e.stopPropagation();
+            const id = b.dataset.id;
+            if (b.dataset.action === 'del') {
+                DB.remove('books', id);
+                renderBookList();
+                showToast('已移除');
+            } else if (b.dataset.action === 'cycle') {
+                const list = DB.get('books');
+                const book = list.find(x => x.id === id);
+                if (book) {
+                    book.status = book.status === 'want' ? 'reading' : book.status === 'reading' ? 'done' : 'want';
+                    DB.upsert('books', book);
+                    renderBookList();
+                }
+            }
+        });
+    });
+}
+
+/* ============ 初始化 ============ */
+updateTime(); setInterval(updateTime, 1000);
+updateMotivation();
+renderTasks();
+initCheckin();
+initNavigation();
+renderExamTabs(); renderExam(); initExamActions();
+renderEssayTemplates();
+renderWrongQuestions();
+renderWordbook();
+renderCloset(); initCloset();
+fetchWeather();
+initDiary();
+initReview();
+initNotes();
+initBooks();
+checkSupabaseConnection();
+// 定时检查连接
+setInterval(() => { if (navigator.onLine) checkSupabaseConnection(); }, 60000);
+</script>
+<script src="tarot-data.js"></script>
+<script src="bazi-data.js"></script>
+<script>
+/* ============ 塔罗占卜 ============ */
+const SPREADS = {
+    simple: {
+        name: '三张时间流', count: 3,
+        positions: ['过去', '现在', '未来'],
+        desc: '过去：影响当下的根源 · 现在：当前处境的真实状态 · 未来：若顺势发展的走向'
+    },
+    love: {
+        name: '关系牌阵', count: 4,
+        positions: ['你自己', '对方', '关系现状', '建议'],
+        desc: '你自己：你在关系中的状态 · 对方：对方的状态与态度 · 关系现状：关系整体面貌 · 建议：塔罗给出的方向'
+    },
+    decision: {
+        name: '二选一牌阵', count: 3,
+        positions: ['选项A结果', '选项B结果', '建议'],
+        desc: '选项A结果：走这条路的大致走向 · 选项B结果：另一条路的走向 · 建议：综合判断后的方向'
+    },
+    general: {
+        name: '凯尔特十字牌阵', count: 10,
+        positions: ['现状', '挑战', '潜意识', '过去', '显意识', '近未来', '自我', '环境', '希望与恐惧', '最终结果'],
+        desc: '这是最经典的综合牌阵，覆盖现状、挑战、潜意识、过去、显意识、近未来、自我、环境、内心矛盾、最终走向十个维度。'
+    }
+};
+
+let tarotState = { type: 'simple', question: '', sign: '', mbti: '', status: '' };
+
+function initTarot() {
+    // 月份/日期填充用八字模块共享，这里只绑定塔罗事件
+    document.getElementById('tarotConfirmQ').addEventListener('click', function() {
+        const type = document.getElementById('tarotQuestionType').value;
+        const q = document.getElementById('tarotQuestion').value.trim();
+        if (!q) { showToast('请输入你的问题'); return; }
+        tarotState = {
+            type, question: q,
+            sign: document.getElementById('tarotSign').value.trim(),
+            mbti: document.getElementById('tarotMbti').value.trim(),
+            status: document.getElementById('tarotStatus').value.trim()
+        };
+        document.getElementById('tarotStep1').style.display = 'none';
+        const step2 = document.getElementById('tarotStep2');
+        step2.style.display = 'block';
+        const spread = SPREADS[type];
+        document.getElementById('tarotSpreadDesc').innerHTML =
+            `<strong>推荐牌阵：${spread.name}（${spread.count}张）</strong><br>${spread.desc}<br><br>` +
+            `<strong>牌位含义：</strong>${spread.positions.map((p,i)=>`<br>${i+1}. ${p}`).join('')}`;
+        document.getElementById('tarotNumCount').textContent = spread.count;
+        // 生成输入框
+        const inputsDiv = document.getElementById('tarotNumInputs');
+        inputsDiv.innerHTML = Array.from({length: spread.count}, (_, i) =>
+            `<input type="number" min="1" max="78" placeholder="第${i+1}个" class="form-select tarot-num" style="width:90px;padding:10px;text-align:center;">`
+        ).join('');
+    });
+
+    document.getElementById('tarotDraw').addEventListener('click', drawTarot);
+}
+
+function drawTarot() {
+    const spread = SPREADS[tarotState.type];
+    const inputs = document.querySelectorAll('.tarot-num');
+    const nums = [];
+    for (const inp of inputs) {
+        const v = parseInt(inp.value);
+        if (!v || v < 1 || v > 78) { showToast('请输入1-78之间的数字'); return; }
+        nums.push(v);
+    }
+    // 奇数正位，偶数逆位
+    const cards = nums.map((n, i) => {
+        const card = TAROT_CARDS[(n - 1) % 78];
+        const isReversed = (n % 2 === 0);
+        return {
+            ...card,
+            isReversed,
+            position: spread.positions[i],
+            positionIdx: i,
+            userNum: n
+        };
+    });
+
+    renderTarotResult(cards, spread);
+}
+
+function renderTarotResult(cards, spread) {
+    const step3 = document.getElementById('tarotStep3');
+    step3.style.display = 'block';
+
+    // 个性化前言
+    let intro = '';
+    if (tarotState.sign || tarotState.mbti || tarotState.status) {
+        intro = '<div style="font-size:13px;color:#999;margin-bottom:12px;padding:10px;background:#fff8fb;border-radius:10px;">';
+        if (tarotState.sign) intro += `星座 ${tarotState.sign} · `;
+        if (tarotState.mbti) intro += `MBTI ${tarotState.mbti} · `;
+        if (tarotState.status) intro += `近况：${tarotState.status}`;
+        intro += '</div>';
+    }
+
+    // 牌面展示
+    const cardsHtml = cards.map((c, i) => {
+        const meaning = c.isReversed ? c.reversedMeaning : c.uprightMeaning;
+        const kws = c.isReversed ? c.keywords.reversed : c.keywords.upright;
+        const posLabel = c.isReversed ? '逆位' : '正位';
+        const suitLabel = c.type === 'major' ? '大阿尔卡纳' :
+            (c.suit === 'wands' ? '权杖·火' : c.suit === 'cups' ? '圣杯·水' : c.suit === 'swords' ? '宝剑·风' : '星币·土');
+        return `
+        <div class="card" style="border-left:4px solid ${c.isReversed ? '#9e9e9e' : '#ff6b9d'};">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap;">
+                <div>
+                    <span style="font-size:11px;color:#ff6b9d;background:#fff0f6;padding:2px 8px;border-radius:10px;">位置${i+1}：${c.position}</span>
+                </div>
+                <span style="font-size:11px;color:${c.isReversed ? '#9e9e9e' : '#4caf50'};">${posLabel} · 数字${c.userNum}</span>
+            </div>
+            <div style="font-size:20px;color:#ff6b9d;font-weight:bold;margin-bottom:4px;">${c.nameZh} ${c.isReversed ? '↕️' : '⬆️'}</div>
+            <div style="font-size:13px;color:#999;font-style:italic;margin-bottom:8px;">${c.nameEn} · ${suitLabel} · ${posLabel}</div>
+            <div style="font-size:12px;color:#ff6b9d;margin-bottom:8px;">关键词：${kws.join(' · ')}</div>
+            <div style="font-size:13px;color:#666;margin-bottom:10px;line-height:1.6;">📜 ${c.description}</div>
+            <div style="font-size:14px;color:#333;line-height:1.7;">${meaning}</div>
+            <div style="font-size:13px;color:#ff6b9d;margin-top:8px;padding:8px;background:#fff8fb;border-radius:8px;">
+                <strong>在此位置（${c.position}）的解读：</strong><br>${getCardPositionReading(c, tarotState)}
+            </div>
+        </div>`;
+    }).join('');
+
+    // 总体解读
+    const overallHtml = generateOverallReading(cards, tarotState);
+
+    // 建议
+    const adviceHtml = generateTarotAdvice(cards, tarotState);
+
+    step3.innerHTML = `
+        <div class="card">
+            <div class="section-label">🔮 占卜结果</div>
+            ${intro}
+            <div style="font-size:15px;color:#333;margin-bottom:8px;"><strong>问题：</strong>${tarotState.question}</div>
+            <div style="font-size:13px;color:#999;margin-bottom:15px;">牌阵：${spread.name} · ${cards.length}张</div>
+        </div>
+        ${cardsHtml}
+        <div class="card" style="background:linear-gradient(135deg,#fff 0%,#fff0f6 100%);">
+            <div class="section-label">🌙 总体解读</div>
+            ${overallHtml}
+        </div>
+        <div class="card">
+            <div class="section-label">💡 行动建议</div>
+            ${adviceHtml}
+        </div>
+        <div class="card" style="text-align:center;">
+            <div style="font-size:13px;color:#999;margin-bottom:10px;">想对某张牌做更深入解读？</div>
+            <button class="btn btn-outline btn-sm" id="tarotDeepDive">深入解读某张牌</button>
+            <button class="btn btn-outline btn-sm" id="tarotRestart" style="margin-left:8px;">重新占卜</button>
+        </div>
+    `;
+
+    document.getElementById('tarotDeepDive').addEventListener('click', () => {
+        const idx = prompt('想深入解读第几张牌？（输入1-' + cards.length + '）');
+        if (idx && idx >= 1 && idx <= cards.length) {
+            const c = cards[idx - 1];
+            showToast(`「${c.nameZh}」：${c.isReversed ? c.reversedMeaning : c.uprightMeaning}`);
+        }
+    });
+    document.getElementById('tarotRestart').addEventListener('click', () => {
+        document.getElementById('tarotStep1').style.display = 'block';
+        document.getElementById('tarotStep2').style.display = 'none';
+        step3.style.display = 'none';
+        document.getElementById('tarotQuestion').value = '';
+    });
+}
+
+function getCardPositionReading(card, state) {
+    // 根据位置含义+牌意生成个性化解读
+    const meaning = card.isReversed ? card.keywords.reversed : card.keywords.upright;
+    const base = card.isReversed ? card.reversedMeaning : card.uprightMeaning;
+    const posReading = `在「${card.position}」这个位置，${card.nameZh}（${card.isReversed ? '逆位' : '正位'}）提示你：${base.substring(0, 100)}…`;
+    return posReading;
+}
+
+function generateOverallReading(cards, state) {
+    // 故事线串联
+    const cardNames = cards.map(c => `${c.nameZh}${c.isReversed ? '(逆)' : ''}`).join(' → ');
+    // 元素分析
+    const elements = { fire: 0, water: 0, air: 0, earth: 0 };
+    cards.forEach(c => { if (c.element) elements[c.element] = (elements[c.element] || 0) + 1; });
+    const majorCount = cards.filter(c => c.type === 'major').length;
+    const reversedCount = cards.filter(c => c.isReversed).length;
+
+    let eleDesc = '';
+    if (elements.fire > 2) eleDesc += '火元素旺盛，行动力强但易冲动；';
+    if (elements.water > 2) eleDesc += '水元素主导，情感丰富但易感伤；';
+    if (elements.air > 2) eleDesc += '风元素突出，思维活跃但易焦虑；';
+    if (elements.earth > 2) eleDesc += '土元素为主，务实稳定但易保守；';
+
+    let story = `从牌面走向看：${cardNames}。`;
+    if (majorCount >= cards.length / 2) {
+        story += `本局大阿尔卡纳占比高，说明此事对你的人生走向有重要影响，不是小事。`;
+    } else {
+        story += `本局以小牌为主，说明此事更多是日常层面的波动，不必过度焦虑。`;
+    }
+    if (reversedCount > cards.length / 2) {
+        story += `逆位较多，提示当前存在内在阻塞或能量未顺畅流动，需要先理清内在。`;
+    } else if (reversedCount === 0) {
+        story += `全部正位，能量流通顺畅，是积极的信号。`;
+    }
+
+    return `
+        <div style="font-size:14px;color:#333;line-height:1.8;margin-bottom:12px;">${story}</div>
+        ${eleDesc ? `<div style="font-size:13px;color:#ff6b9d;margin-bottom:10px;">⚡ 元素分析：${eleDesc}</div>` : ''}
+        <div style="font-size:13px;color:#666;margin-top:10px;padding:10px;background:white;border-radius:8px;">
+            <strong>当事人当前状态：</strong>${cards[Math.min(1, cards.length-1)] ? cards[Math.min(1, cards.length-1)].nameZh + '的位置提示' : ''}你正处于一个${cards[0].isReversed ? '需要反思调整' : '可以向前推进'}的阶段。
+        </div>
+    `;
+}
+
+function generateTarotAdvice(cards, state) {
+    // 基于牌面生成3条建议
+    const advice1 = cards[0].isReversed ?
+        `面对「${cards[0].nameZh}（逆位）」的能量，先暂停 outward action，向内看，理清自己真正的需求。` :
+        `「${cards[0].nameZh}」的出现是鼓励你，第一步是接纳当前的位置，然后顺势而为。`;
+    const midCard = cards[Math.floor(cards.length / 2)];
+    const advice2 = `「${midCard.nameZh}」的位置提醒你注意：${midCard.isReversed ? midCard.keywords.reversed[0] : midCard.keywords.upright[0]}是当前的关键。`;
+    const lastCard = cards[cards.length - 1];
+    const advice3 = lastCard.isReversed ?
+        `最终位置「${lastCard.nameZh}（逆位）」提示结果未定，主动调整可改变走向。` :
+        `最终位置「${lastCard.nameZh}」指向一个积极的走向，保持现在的方向。`;
+
+    return `
+        <div style="font-size:14px;color:#333;line-height:1.8;margin-bottom:8px;">1. ${advice1}</div>
+        <div style="font-size:14px;color:#333;line-height:1.8;margin-bottom:8px;">2. ${advice2}</div>
+        <div style="font-size:14px;color:#333;line-height:1.8;margin-bottom:12px;">3. ${advice3}</div>
+        <div style="font-size:13px;color:#ff6b9d;font-style:italic;padding:10px;background:#fff8fb;border-radius:8px;text-align:center;">
+            🌟 寄语：塔罗是一面镜子，照见的是你内在的智慧。真正的选择权，始终在你手中。
+        </div>
+    `;
+}
+
+/* ============ 八字命理 ============ */
+function initBazi() {
+    // 填充月份和日期
+    const monthSel = document.getElementById('baziMonth');
+    for (let m = 1; m <= 12; m++) monthSel.innerHTML += `<option value="${m}">${m}月</option>`;
+    const daySel = document.getElementById('baziDay');
+    for (let d = 1; d <= 31; d++) daySel.innerHTML += `<option value="${d}">${d}日</option>`;
+
+    document.getElementById('baziSubmit').addEventListener('click', function() {
+        const year = parseInt(document.getElementById('baziYear').value);
+        const month = parseInt(document.getElementById('baziMonth').value);
+        const day = parseInt(document.getElementById('baziDay').value);
+        const hour = parseInt(document.getElementById('baziHour').value);
+        const gender = document.getElementById('baziGender').value;
+        if (!year || year < 1900 || year > 2100) { showToast('请输入有效的出生年份'); return; }
+        // 调用排盘（bazi-data.js 提供）
+        if (typeof paiPan !== 'function') { showToast('排盘数据加载中，请稍后'); return; }
+        const r = paiPan(year, month, day, hour, gender);
+        renderBaziResult(r, gender);
+    });
+}
+
+function renderBaziResult(r, gender) {
+    const pillarHtml = (name, p, tenGod) => `
+        <div style="text-align:center;flex:1;">
+            <div style="font-size:12px;color:#999;margin-bottom:6px;">${name}柱</div>
+            <div style="font-size:24px;color:#ff6b9d;font-weight:bold;">${p.gan}${p.zhi}</div>
+            <div style="font-size:11px;color:#999;margin-top:4px;">${p.naYin || ''}</div>
+            ${tenGod ? `<div style="font-size:11px;color:#ff6b9d;margin-top:2px;">${tenGod}</div>` : ''}
+            <div style="font-size:10px;color:#ccc;margin-top:4px;">藏：${(p.cangGan||[]).join('')}</div>
+        </div>
+    `;
+
+    const daYunHtml = r.daYun.daYun.map(d => `
+        <div style="text-align:center;flex:1;min-width:60px;">
+            <div style="font-size:11px;color:#999;">${d.age}岁</div>
+            <div style="font-size:16px;color:#ff6b9d;font-weight:bold;">${d.ganZhi}</div>
+            <div style="font-size:10px;color:#ccc;">${d.naYin}</div>
+        </div>
+    `).join('');
+
+    // 旺衰解读
+    const strengthDesc = r.strength.strength === '旺' ?
+        `日主${r.dayMaster}（${r.dayMasterWuxing}）偏旺，喜克泄耗，忌生扶。` :
+        `日主${r.dayMaster}（${r.dayMasterWuxing}）偏弱，喜生扶，忌克泄耗。`;
+
+    // 命局建议（基于旺衰+十神）
+    let lifeAdvice = '';
+    const dm = r.dayMasterWuxing;
+    if (r.strength.strength === '旺') {
+        lifeAdvice = `<strong>用神思路：</strong>日主${dm}旺，取克泄耗为用。<br>
+        ${dm === '木' ? '宜火泄秀、金克伐，从事创意、管理类工作较顺。' : ''}
+        ${dm === '火' ? '宜土泄秀、水克伐，从事教育、文化、技术类工作较顺。' : ''}
+        ${dm === '土' ? '宜金泄秀、木克伐，从事金融、农业、规划类工作较顺。' : ''}
+        ${dm === '金' ? '宜水泄秀、火克伐，从事流通、传媒、军警类工作较顺。' : ''}
+        ${dm === '水' ? '宜木泄秀、土克伐，从事教育、农业、管理类工作较顺。' : ''}`;
+    } else {
+        lifeAdvice = `<strong>用神思路：</strong>日主${dm}弱，取生扶为用。<br>
+        ${dm === '木' ? '宜水生木、木比劫，宜文教、设计、园艺类。' : ''}
+        ${dm === '火' ? '宜木生火、火比劫，宜传媒、餐饮、美容类。' : ''}
+        ${dm === '土' ? '宜火生土、土比劫，宜地产、建筑、矿产类。' : ''}
+        ${dm === '金' ? '宜土生金、金比劫，宜金融、机械、法律类。' : ''}
+        ${dm === '水' ? '宜金生水、水比劫，宜水利、物流、旅游类。' : ''}`;
+    }
+
+    // 大运趋势
+    const currentYear = 2026;
+    let currentDaYun = '未入或已出';
+    r.daYun.daYun.forEach(d => {
+        if (currentYear >= d.age + (parseInt(r.daYun.startAge) - d.age)) {
+            // 粗略匹配
+        }
+    });
+
+    document.getElementById('baziResult').innerHTML = `
+        <div class="card">
+            <div class="section-label">🎋 四柱八字</div>
+            <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+                ${pillarHtml('年', r.year, r.year.tenGod)}
+                ${pillarHtml('月', r.month, r.month.tenGod)}
+                ${pillarHtml('日', r.day, '')}
+                ${pillarHtml('时', r.hour, '')}
+            </div>
+            <div style="font-size:13px;color:#666;margin-bottom:8px;">
+                <strong>日主：</strong>${r.dayMaster}（${r.dayMasterWuxing} · ${r.dayMasterYinyang}）
+                &nbsp;·&nbsp; <strong>旺衰：</strong>${r.strength.strength}
+            </div>
+            <div style="font-size:12px;color:#999;margin-bottom:8px;">依据：${r.strength.reasons.join('；')}</div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">🌊 大运（${r.daYun.forward ? '顺' : '逆'}排 · ${r.daYun.startAge}岁起运）</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">${daYunHtml}</div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">📖 命理分析</div>
+            <div style="font-size:14px;color:#333;line-height:1.8;margin-bottom:12px;">
+                ${lifeAdvice}
+            </div>
+            <div style="font-size:13px;color:#666;line-height:1.7;padding:10px;background:#fff8fb;border-radius:10px;">
+                <strong>性格倾向：</strong>日主${r.dayMasterWuxing}命，${r.strength.strength === '旺' ? '性格较坚毅果断，行事有主见，但需注意不可过于刚硬。' : '性格较温和内敛，心思细腻，但需注意培养自信与决断力。'}<br><br>
+                <strong>事业财运：</strong>${r.strength.strength === '旺' ? '旺身可任财官，宜主动进取，中年后财运渐旺。' : '弱身需借力，宜稳扎稳打，不宜过度冒险，宜从事稳定性工作。'}<br><br>
+                <strong>健康提示：</strong>${r.dayMasterWuxing === '木' ? '注意肝胆、神经系统，少熬夜。' : r.dayMasterWuxing === '火' ? '注意心血管、眼睛，少辛辣。' : r.dayMasterWuxing === '土' ? '注意脾胃消化，饮食有节。' : r.dayMasterWuxing === '金' ? '注意肺、呼吸道，防感冒。' : '注意肾、泌尿系统，少寒凉。'}
+            </div>
+        </div>
+
+        <div class="card" style="background:#fffbe6;">
+            <div class="section-label">📜 依据与声明</div>
+            <div style="font-size:12px;color:#666;line-height:1.7;">
+                依据古籍：《渊海子平》《滴天髓》《子平真诠》《三命通会》《穷通宝鉴》。<br>
+                节气以近似日期判断，排盘可能存在 1-2 天误差，精确排盘请用专业软件二次校验。<br>
+                命理仅供参考，不可作为重大决策唯一依据。<strong>凡古籍无据者不妄断。</strong>
+            </div>
+        </div>
+    `;
+    document.getElementById('baziResult').scrollIntoView({ behavior: 'smooth' });
+}
+
+// 数据文件加载后初始化
+if (typeof TAROT_CARDS !== 'undefined') { initTarot(); } else { document.addEventListener('DOMContentLoaded', initTarot); }
+if (typeof paiPan !== 'undefined') { initBazi(); } else { document.addEventListener('DOMContentLoaded', initBazi); }
+
+/* ============ Service Worker（离线缓存）============ */
+if ('serviceWorker' in navigator) {
+    const swCode = `
+        const CACHE = 'workbench-v1';
+        const ASSETS = ['./', './index.html', './tarot-data.js', './bazi-data.js'];
+        self.addEventListener('install', e => {
+            e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(()=>{}));
+            self.skipWaiting();
+        });
+        self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
+        self.addEventListener('fetch', e => {
+            if (e.request.method !== 'GET') return;
+            e.respondWith(
+                caches.match(e.request).then(cached => {
+                    const fetchPromise = fetch(e.request).then(res => {
+                        if (res && res.status === 200 && e.request.url.startsWith(location.origin)) {
+                            const clone = res.clone();
+                            caches.open(CACHE).then(c => c.put(e.request, clone));
+                        }
+                        return res;
+                    }).catch(() => cached);
+                    return cached || fetchPromise;
+                })
+            );
+        });
+    `;
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+</script>
+</body>
+</html>
