@@ -343,18 +343,22 @@
         <div class="card">
             <div class="section-label" id="vocabCardTitle">单词卡片 · 第 1 个 / 共 40 个</div>
             <div id="vocabCard" style="text-align:center;padding:20px 0;">
-                <div style="font-size:36px;color:#ff6b9d;font-weight:bold;margin-bottom:8px;" id="vocabWord">loading...</div>
+                <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;">
+                    <div style="font-size:36px;color:#ff6b9d;font-weight:bold;cursor:pointer;" id="vocabWord" onclick="speakCurrentWord()">loading...</div>
+                    <button onclick="speakCurrentWord()" title="播放读音" style="border:none;background:#ffeef8;border-radius:50%;width:42px;height:42px;font-size:19px;cursor:pointer;flex-shrink:0;">🔊</button>
+                </div>
                 <div style="font-size:16px;color:#999;font-style:italic;margin-bottom:15px;" id="vocabPhonetic"></div>
                 <div style="font-size:18px;color:#333;margin-bottom:15px;display:none;" id="vocabMeaning"></div>
-                <div style="font-size:14px;color:#666;line-height:1.6;padding:10px 15px;background:#fff5f9;border-radius:12px;margin-bottom:15px;display:none;" id="vocabExample"></div>
-                <div style="font-size:13px;color:#999;margin-bottom:20px;display:none;" id="vocabExampleZh"></div>
+                <div style="font-size:14px;color:#666;line-height:1.6;padding:10px 15px;background:#fff5f9;border-radius:12px;margin-bottom:8px;display:none;" id="vocabExample"></div>
+                <div style="font-size:13px;color:#999;margin-bottom:8px;display:none;" id="vocabExampleZh"></div>
+                <div style="margin-bottom:15px;display:none;" id="vocabExampleSpeakWrap"><button onclick="speakCurrentExample()" style="border:none;background:#ffeef8;border-radius:16px;padding:6px 16px;font-size:13px;color:#ff6b9d;cursor:pointer;">🔊 朗读例句</button></div>
                 <div style="display:flex;gap:12px;justify-content:center;">
-                    <button class="btn btn-outline" id="vocabFlip">查看释义</button>
+                    <button class="btn btn-outline" id="vocabFlip" onclick="toggleVocabMeaning()">查看释义</button>
                 </div>
             </div>
             <div style="display:flex;gap:12px;margin-top:15px;">
-                <button class="word-btn btn-dont-know" id="vocabDontKnow" style="flex:1;padding:12px;border:none;border-radius:20px;cursor:pointer;font-size:15px;color:white;background:#ff6b9d;">不认识 ✗</button>
-                <button class="word-btn btn-know" id="vocabKnow" style="flex:1;padding:12px;border:none;border-radius:20px;cursor:pointer;font-size:15px;color:white;background:#4caf50;">认识 ✓</button>
+                <button class="word-btn btn-dont-know" id="vocabDontKnow" onclick="markVocab(false)" style="flex:1;padding:12px;border:none;border-radius:20px;cursor:pointer;font-size:15px;color:white;background:#ff6b9d;">不认识 ✗</button>
+                <button class="word-btn btn-know" id="vocabKnow" onclick="markVocab(true)" style="flex:1;padding:12px;border:none;border-radius:20px;cursor:pointer;font-size:15px;color:white;background:#4caf50;">认识 ✓</button>
             </div>
         </div>
 
@@ -2411,6 +2415,40 @@ function saveVocabProgress(p) {
     localStorage.setItem('vocabProgress', JSON.stringify(p));
 }
 
+/* ---- 单词发音（Web Speech API，iPhone 自带，免费离线可用）---- */
+function speakText(text, rate) {
+    if (!('speechSynthesis' in window)) { showToast('当前浏览器不支持语音 🔇'); return; }
+    try {
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US';
+        u.rate = rate || 0.82;
+        u.pitch = 1;
+        speechSynthesis.speak(u);
+    } catch (e) {}
+}
+function speakCurrentWord() {
+    const todayWords = getTodayVocab();
+    if (vocabIndex < todayWords.length) speakText(todayWords[vocabIndex].word);
+}
+function speakCurrentExample() {
+    const todayWords = getTodayVocab();
+    if (vocabIndex < todayWords.length) speakText(todayWords[vocabIndex].example, 0.92);
+}
+
+/* ---- 卡片骨架模板（完成态覆盖后可用于重建）---- */
+const VOCAB_CARD_TEMPLATE =
+    '<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px;">' +
+        '<div style="font-size:36px;color:#ff6b9d;font-weight:bold;cursor:pointer;" id="vocabWord" onclick="speakCurrentWord()"></div>' +
+        '<button onclick="speakCurrentWord()" title="播放读音" style="border:none;background:#ffeef8;border-radius:50%;width:42px;height:42px;font-size:19px;cursor:pointer;flex-shrink:0;">🔊</button>' +
+    '</div>' +
+    '<div style="font-size:16px;color:#999;font-style:italic;margin-bottom:15px;" id="vocabPhonetic"></div>' +
+    '<div style="font-size:18px;color:#333;margin-bottom:15px;display:none;" id="vocabMeaning"></div>' +
+    '<div style="font-size:14px;color:#666;line-height:1.6;padding:10px 15px;background:#fff5f9;border-radius:12px;margin-bottom:8px;display:none;" id="vocabExample"></div>' +
+    '<div style="font-size:13px;color:#999;margin-bottom:8px;display:none;" id="vocabExampleZh"></div>' +
+    '<div style="margin-bottom:15px;display:none;" id="vocabExampleSpeakWrap"><button onclick="speakCurrentExample()" style="border:none;background:#ffeef8;border-radius:16px;padding:6px 16px;font-size:13px;color:#ff6b9d;cursor:pointer;">🔊 朗读例句</button></div>' +
+    '<div style="display:flex;gap:12px;justify-content:center;"><button class="btn btn-outline" id="vocabFlip" onclick="toggleVocabMeaning()">查看释义</button></div>';
+
 function initVocab() {
     if (typeof VOCAB_LIST === 'undefined') return;
     vocabDay = getVocabDay();
@@ -2430,18 +2468,19 @@ function initVocab() {
     const pct = Math.round(totalLearned / VOCAB_LIST.length * 100);
     document.getElementById('vocabProgressFill').style.width = pct + '%';
 
-    renderVocabCard();
+    renderVocabCard(false);
     renderVocabList();
-
-    document.getElementById('vocabFlip').addEventListener('click', toggleVocabMeaning);
-    document.getElementById('vocabKnow').addEventListener('click', function() { markVocab(true); });
-    document.getElementById('vocabDontKnow').addEventListener('click', function() { markVocab(false); });
 }
 
-function renderVocabCard() {
+function renderVocabCard(autoSpeak) {
+    const card = document.getElementById('vocabCard');
+    /* 卡片骨架被"完成态"覆盖过时，先重建 */
+    if (!document.getElementById('vocabWord')) {
+        card.innerHTML = VOCAB_CARD_TEMPLATE;
+    }
     const todayWords = getTodayVocab();
     if (vocabIndex >= todayWords.length) {
-        document.getElementById('vocabCard').innerHTML = '<div style="color:#ff6b9d;font-size:20px;margin-bottom:10px;">🎉</div><div style="color:#333;font-size:18px;margin-bottom:8px;">今日单词已学完！</div><div style="color:#999;font-size:14px;">明天继续学习 Day ' + (vocabDay + 1) + '</div>';
+        card.innerHTML = '<div style="color:#ff6b9d;font-size:20px;margin-bottom:10px;">🎉</div><div style="color:#333;font-size:18px;margin-bottom:8px;">今日单词已学完！</div><div style="color:#999;font-size:14px;">明天继续学习 Day ' + (vocabDay + 1) + '</div>';
         document.getElementById('vocabCardTitle').textContent = '今日完成 ✓';
         return;
     }
@@ -2456,7 +2495,10 @@ function renderVocabCard() {
     document.getElementById('vocabMeaning').style.display = 'none';
     document.getElementById('vocabExample').style.display = 'none';
     document.getElementById('vocabExampleZh').style.display = 'none';
+    document.getElementById('vocabExampleSpeakWrap').style.display = 'none';
     document.getElementById('vocabFlip').textContent = '查看释义';
+    /* 标记后自动朗读新单词（由用户点击触发，iOS 允许发声） */
+    if (autoSpeak) speakText(w.word);
 }
 
 function toggleVocabMeaning() {
@@ -2464,10 +2506,16 @@ function toggleVocabMeaning() {
     document.getElementById('vocabMeaning').style.display = vocabShowMeaning ? 'block' : 'none';
     document.getElementById('vocabExample').style.display = vocabShowMeaning ? 'block' : 'none';
     document.getElementById('vocabExampleZh').style.display = vocabShowMeaning ? 'block' : 'none';
+    document.getElementById('vocabExampleSpeakWrap').style.display = vocabShowMeaning ? 'block' : 'none';
     document.getElementById('vocabFlip').textContent = vocabShowMeaning ? '收起释义' : '查看释义';
 }
 
+let vocabLock = false; /* 防连点跳词 */
 function markVocab(known) {
+    if (vocabLock) return;
+    vocabLock = true;
+    setTimeout(function() { vocabLock = false; }, 350);
+
     const todayWords = getTodayVocab();
     if (vocabIndex >= todayWords.length) return;
     const w = todayWords[vocabIndex];
@@ -2495,7 +2543,7 @@ function markVocab(known) {
     document.getElementById('vocabMastered').textContent = totalMastered;
     const pct = Math.round(totalLearned / VOCAB_LIST.length * 100);
     document.getElementById('vocabProgressFill').style.width = pct + '%';
-    renderVocabCard();
+    renderVocabCard(true);
     renderVocabList();
     if (!known) showToast('已加入生词本 📝');
 }
@@ -2511,11 +2559,15 @@ function renderVocabList() {
             '<div class="task-check ' + (learned ? 'done' : '') + '" style="width:18px;height:18px;"></div>' +
             '<div style="flex:1;">' +
             '<span style="font-size:14px;font-weight:bold;color:#333;">' + w.word + '</span>' +
-            '<span style="font-size:12px;color:#999;margin-left:8px;">' + w.phonetic + '</span>' +
+            '<span onclick="speakText(\'' + w.word + '\')" title="播放读音" style="cursor:pointer;margin-left:6px;font-size:13px;">🔊</span>' +
+            '<span style="font-size:12px;color:#999;margin-left:6px;">' + w.phonetic + '</span>' +
             '<span style="font-size:13px;color:#666;margin-left:8px;">' + w.meaning + '</span>' +
             '</div></div>';
     }).join('');
 }
+
+/* ---- 启动词汇模块（关键！之前漏了这行导致按钮全失效）---- */
+initVocab();
 
 /* ============ Service Worker（离线缓存，独立文件 sw.js）============ */
 if ('serviceWorker' in navigator) {
