@@ -260,6 +260,7 @@
 
 <div class="sidebar">
     <div class="nav-item active" data-page="home"><div class="nav-icon">🏠</div><div class="nav-text">备考首页</div></div>
+    <div class="nav-item" data-page="vocab"><div class="nav-icon">🔤</div><div class="nav-text">词汇学习</div></div>
     <div class="nav-item" data-page="exam"><div class="nav-icon">📝</div><div class="nav-text">真题演练</div></div>
     <div class="nav-item" data-page="wordbook"><div class="nav-icon">📖</div><div class="nav-text">错题生词</div></div>
     <div class="nav-item" data-page="diary"><div class="nav-icon">📔</div><div class="nav-text">日记</div></div>
@@ -321,6 +322,45 @@
                 填句补文10分 | 填词补文15分 | 完形补文15分 | <strong>短文写作30分</strong><br><br>
                 <strong style="color:#ff6b9d;">作文占30分，零基础必须背模板！</strong>这是过线的关键。
             </div>
+        </div>
+    </div>
+
+    <!-- 词汇学习 -->
+    <div class="page" id="vocab">
+        <h2 class="page-title">🔤 每日词汇学习</h2>
+
+        <div class="card">
+            <div class="section-label">📊 学习进度</div>
+            <div style="display:flex;justify-content:space-around;text-align:center;">
+                <div><div class="stat-number" id="vocabDay">Day 1</div><div class="stat-label">当前天数</div></div>
+                <div><div class="stat-number" id="vocabLearned">0</div><div class="stat-label">已学单词</div></div>
+                <div><div class="stat-number" id="vocabMastered">0</div><div class="stat-label">已掌握</div></div>
+                <div><div class="stat-number" id="vocabTotal">400</div><div class="stat-label">总词数</div></div>
+            </div>
+            <div class="task-progress-bar" style="margin-top:12px;"><div class="task-progress-fill" id="vocabProgressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="card">
+            <div class="section-label" id="vocabCardTitle">单词卡片 · 第 1 个 / 共 40 个</div>
+            <div id="vocabCard" style="text-align:center;padding:20px 0;">
+                <div style="font-size:36px;color:#ff6b9d;font-weight:bold;margin-bottom:8px;" id="vocabWord">loading...</div>
+                <div style="font-size:16px;color:#999;font-style:italic;margin-bottom:15px;" id="vocabPhonetic"></div>
+                <div style="font-size:18px;color:#333;margin-bottom:15px;display:none;" id="vocabMeaning"></div>
+                <div style="font-size:14px;color:#666;line-height:1.6;padding:10px 15px;background:#fff5f9;border-radius:12px;margin-bottom:15px;display:none;" id="vocabExample"></div>
+                <div style="font-size:13px;color:#999;margin-bottom:20px;display:none;" id="vocabExampleZh"></div>
+                <div style="display:flex;gap:12px;justify-content:center;">
+                    <button class="btn btn-outline" id="vocabFlip">查看释义</button>
+                </div>
+            </div>
+            <div style="display:flex;gap:12px;margin-top:15px;">
+                <button class="word-btn btn-dont-know" id="vocabDontKnow" style="flex:1;padding:12px;border:none;border-radius:20px;cursor:pointer;font-size:15px;color:white;background:#ff6b9d;">不认识 ✗</button>
+                <button class="word-btn btn-know" id="vocabKnow" style="flex:1;padding:12px;border:none;border-radius:20px;cursor:pointer;font-size:15px;color:white;background:#4caf50;">认识 ✓</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">📋 今日单词清单</div>
+            <div id="vocabList" style="max-height:300px;overflow-y:auto;"></div>
         </div>
     </div>
 
@@ -1988,6 +2028,7 @@ setInterval(() => { if (navigator.onLine) checkSupabaseConnection(); }, 60000);
 </script>
 <script src="tarot-data.js"></script>
 <script src="bazi-data.js"></script>
+<script src="vocab-data.js"></script>
 <script>
 /* ============ 塔罗占卜 ============ */
 const SPREADS = {
@@ -2343,11 +2384,144 @@ function renderBaziResult(r, gender) {
 if (typeof TAROT_CARDS !== 'undefined') { initTarot(); } else { document.addEventListener('DOMContentLoaded', initTarot); }
 if (typeof paiPan !== 'undefined') { initBazi(); } else { document.addEventListener('DOMContentLoaded', initBazi); }
 
+/* ============ 词汇学习模块 ============ */
+const WORDS_PER_DAY = 40;
+let vocabIndex = 0;
+let vocabDay = 1;
+let vocabShowMeaning = false;
+
+function getVocabDay() {
+    const startDate = new Date('2026-08-01');
+    const now = new Date();
+    const dayDiff = Math.floor((now - startDate) / 86400000) + 1;
+    return Math.max(1, Math.min(10, dayDiff));
+}
+
+function getTodayVocab() {
+    const day = getVocabDay();
+    const start = (day - 1) * WORDS_PER_DAY;
+    return VOCAB_LIST.slice(start, start + WORDS_PER_DAY);
+}
+
+function getVocabProgress() {
+    return JSON.parse(localStorage.getItem('vocabProgress') || '{}');
+}
+
+function saveVocabProgress(p) {
+    localStorage.setItem('vocabProgress', JSON.stringify(p));
+}
+
+function initVocab() {
+    if (typeof VOCAB_LIST === 'undefined') return;
+    vocabDay = getVocabDay();
+    const progress = getVocabProgress();
+    const dayKey = 'day_' + vocabDay;
+    vocabIndex = progress[dayKey + '_index'] || 0;
+
+    let totalLearned = 0, totalMastered = 0;
+    for (let d = 1; d <= 10; d++) {
+        totalLearned += progress['day_' + d + '_learned'] || 0;
+        totalMastered += progress['day_' + d + '_mastered'] || 0;
+    }
+    document.getElementById('vocabDay').textContent = 'Day ' + vocabDay;
+    document.getElementById('vocabLearned').textContent = totalLearned;
+    document.getElementById('vocabMastered').textContent = totalMastered;
+    document.getElementById('vocabTotal').textContent = VOCAB_LIST.length;
+    const pct = Math.round(totalLearned / VOCAB_LIST.length * 100);
+    document.getElementById('vocabProgressFill').style.width = pct + '%';
+
+    renderVocabCard();
+    renderVocabList();
+
+    document.getElementById('vocabFlip').addEventListener('click', toggleVocabMeaning);
+    document.getElementById('vocabKnow').addEventListener('click', function() { markVocab(true); });
+    document.getElementById('vocabDontKnow').addEventListener('click', function() { markVocab(false); });
+}
+
+function renderVocabCard() {
+    const todayWords = getTodayVocab();
+    if (vocabIndex >= todayWords.length) {
+        document.getElementById('vocabCard').innerHTML = '<div style="color:#ff6b9d;font-size:20px;margin-bottom:10px;">🎉</div><div style="color:#333;font-size:18px;margin-bottom:8px;">今日单词已学完！</div><div style="color:#999;font-size:14px;">明天继续学习 Day ' + (vocabDay + 1) + '</div>';
+        document.getElementById('vocabCardTitle').textContent = '今日完成 ✓';
+        return;
+    }
+    const w = todayWords[vocabIndex];
+    document.getElementById('vocabCardTitle').textContent = '单词卡片 · 第 ' + (vocabIndex + 1) + ' 个 / 共 ' + todayWords.length + ' 个';
+    document.getElementById('vocabWord').textContent = w.word;
+    document.getElementById('vocabPhonetic').textContent = w.phonetic;
+    document.getElementById('vocabMeaning').textContent = w.meaning;
+    document.getElementById('vocabExample').textContent = w.example;
+    document.getElementById('vocabExampleZh').textContent = w.exampleZh;
+    vocabShowMeaning = false;
+    document.getElementById('vocabMeaning').style.display = 'none';
+    document.getElementById('vocabExample').style.display = 'none';
+    document.getElementById('vocabExampleZh').style.display = 'none';
+    document.getElementById('vocabFlip').textContent = '查看释义';
+}
+
+function toggleVocabMeaning() {
+    vocabShowMeaning = !vocabShowMeaning;
+    document.getElementById('vocabMeaning').style.display = vocabShowMeaning ? 'block' : 'none';
+    document.getElementById('vocabExample').style.display = vocabShowMeaning ? 'block' : 'none';
+    document.getElementById('vocabExampleZh').style.display = vocabShowMeaning ? 'block' : 'none';
+    document.getElementById('vocabFlip').textContent = vocabShowMeaning ? '收起释义' : '查看释义';
+}
+
+function markVocab(known) {
+    const todayWords = getTodayVocab();
+    if (vocabIndex >= todayWords.length) return;
+    const w = todayWords[vocabIndex];
+    const progress = getVocabProgress();
+    const dayKey = 'day_' + vocabDay;
+    progress[dayKey + '_learned'] = (progress[dayKey + '_learned'] || 0) + 1;
+    if (known) {
+        progress[dayKey + '_mastered'] = (progress[dayKey + '_mastered'] || 0) + 1;
+    } else {
+        const wordbook = JSON.parse(localStorage.getItem('wordbook') || '[]');
+        if (!wordbook.find(function(x) { return x.en === w.word; })) {
+            wordbook.push({ en: w.word, meaning: w.meaning, phonetic: w.phonetic });
+            localStorage.setItem('wordbook', JSON.stringify(wordbook));
+        }
+    }
+    progress[dayKey + '_index'] = vocabIndex + 1;
+    saveVocabProgress(progress);
+    vocabIndex++;
+    let totalLearned = 0, totalMastered = 0;
+    for (let d = 1; d <= 10; d++) {
+        totalLearned += progress['day_' + d + '_learned'] || 0;
+        totalMastered += progress['day_' + d + '_mastered'] || 0;
+    }
+    document.getElementById('vocabLearned').textContent = totalLearned;
+    document.getElementById('vocabMastered').textContent = totalMastered;
+    const pct = Math.round(totalLearned / VOCAB_LIST.length * 100);
+    document.getElementById('vocabProgressFill').style.width = pct + '%';
+    renderVocabCard();
+    renderVocabList();
+    if (!known) showToast('已加入生词本 📝');
+}
+
+function renderVocabList() {
+    const todayWords = getTodayVocab();
+    const progress = getVocabProgress();
+    const learnedIdx = progress['day_' + vocabDay + '_index'] || 0;
+    const el = document.getElementById('vocabList');
+    el.innerHTML = todayWords.map(function(w, i) {
+        const learned = i < learnedIdx;
+        return '<div class="task-item" style="display:flex;align-items:center;padding:8px 0;">' +
+            '<div class="task-check ' + (learned ? 'done' : '') + '" style="width:18px;height:18px;"></div>' +
+            '<div style="flex:1;">' +
+            '<span style="font-size:14px;font-weight:bold;color:#333;">' + w.word + '</span>' +
+            '<span style="font-size:12px;color:#999;margin-left:8px;">' + w.phonetic + '</span>' +
+            '<span style="font-size:13px;color:#666;margin-left:8px;">' + w.meaning + '</span>' +
+            '</div></div>';
+    }).join('');
+}
+
 /* ============ Service Worker（离线缓存）============ */
 if ('serviceWorker' in navigator) {
     const swCode = `
         const CACHE = 'workbench-v1';
-        const ASSETS = ['./', './index.html', './tarot-data.js', './bazi-data.js'];
+        const ASSETS = ['./', './index.html', './tarot-data.js', './bazi-data.js', './vocab-data.js'];
         self.addEventListener('install', e => {
             e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(()=>{}));
             self.skipWaiting();
