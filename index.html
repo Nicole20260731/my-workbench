@@ -2517,35 +2517,11 @@ function renderVocabList() {
     }).join('');
 }
 
-/* ============ Service Worker（离线缓存）============ */
+/* ============ Service Worker（离线缓存，独立文件 sw.js）============ */
 if ('serviceWorker' in navigator) {
-    const swCode = `
-        const CACHE = 'workbench-v1';
-        const ASSETS = ['./', './index.html', './tarot-data.js', './bazi-data.js', './vocab-data.js'];
-        self.addEventListener('install', e => {
-            e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(()=>{}));
-            self.skipWaiting();
-        });
-        self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
-        self.addEventListener('fetch', e => {
-            if (e.request.method !== 'GET') return;
-            e.respondWith(
-                caches.match(e.request).then(cached => {
-                    const fetchPromise = fetch(e.request).then(res => {
-                        if (res && res.status === 200 && e.request.url.startsWith(location.origin)) {
-                            const clone = res.clone();
-                            caches.open(CACHE).then(c => c.put(e.request, clone));
-                        }
-                        return res;
-                    }).catch(() => cached);
-                    return cached || fetchPromise;
-                })
-            );
-        });
-    `;
-    const blob = new Blob([swCode], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(swUrl).catch(() => {});
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
 }
 </script>
 </body>
