@@ -1294,7 +1294,7 @@ function renderWordbook() {
     });
 }
 
-/* ============ 天气获取（无锡新吴区 31.49°N 120.31°E）============ */
+/* ============ 天气获取（GPS 定位 + Open-Meteo）============ */
 // WMO 天气代码映射
 const wmoCodeMap = {
     0:['晴','☀️'], 1:['少云','🌤️'], 2:['多云','☁️'], 3:['阴','☁️'],
@@ -1310,9 +1310,69 @@ const wmoCodeMap = {
     95:['雷暴','⛈️'], 96:['雷暴伴冰雹','⛈️'], 99:['大雷暴伴冰雹','⛈️']
 };
 
+// 缓存定位坐标，避免每次都弹权限请求
+let cachedLocation = null;
+
+async function getLocation() {
+    // 优先用缓存
+    if (cachedLocation) return cachedLocation;
+    // 其次用 localStorage 缓存
+    const saved = localStorage.getItem('cached_location');
+    if (saved) {
+        cachedLocation = JSON.parse(saved);
+        return cachedLocation;
+    }
+    // 请求 GPS 定位
+    return new Promise((resolve) => {
+        if (!navigator.geolocation) {
+            resolve(null);
+            return;
+        }
+        // 给个超时，避免一直卡着
+        const timer = setTimeout(() => resolve(null), 8000);
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                clearTimeout(timer);
+                cachedLocation = {
+                    lat: pos.coords.latitude.toFixed(2),
+                    lon: pos.coords.longitude.toFixed(2),
+                    source: 'GPS'
+                };
+                localStorage.setItem('cached_location', JSON.stringify(cachedLocation));
+                resolve(cachedLocation);
+            },
+            (err) => {
+                clearTimeout(timer);
+                resolve(null);
+            },
+            { enableHighAccuracy: false, timeout: 6000, maximumAge: 600000 }
+        );
+    });
+}
+
 async function fetchWeather() {
+    const weatherDesc = document.getElementById('weatherDesc');
+    const weatherDetail = document.getElementById('weatherDetail');
+
+    // 尝试获取 GPS 定位
+    const loc = await getLocation();
+
+    if (!loc) {
+        // 定位失败或拒绝，用默认坐标（无锡新吴区）
+        weatherDetail.textContent = '定位未开启，使用默认位置（无锡）';
+        await fetchWeatherByCoords(31.49, 120.31, '无锡新吴区（默认）');
+        // 加一个按钮提示用户可以手动刷新定位
+        addLocationRetryButton();
+        return;
+    }
+
+    // 用定位坐标查询
+    await fetchWeatherByCoords(loc.lat, loc.lon, '当前位置');
+}
+
+async function fetchWeatherByCoords(lat, lon, locationName) {
     try {
-        const url = 'https://api.open-meteo.com/v1/forecast?latitude=31.49&longitude=120.31&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,apparent_temperature&timezone=Asia/Shanghai';
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,apparent_temperature&timezone=Asia/Shanghai`;
         const res = await fetch(url);
         const data = await res.json();
         const c = data.current;
@@ -1326,14 +1386,46 @@ async function fetchWeather() {
         document.getElementById('weatherIcon').textContent = icon;
         document.getElementById('weatherTemp').textContent = temp + '°C';
         document.getElementById('weatherDesc').textContent = desc + '（体感 ' + feel + '°C）';
-        document.getElementById('weatherDetail').textContent = `湿度 ${humidity}% · 风速 ${wind}km/h · 无锡新吴区`;
-        // 存储当前天气供搭配使用
+        document.getElementById('weatherDetail').textContent = `湿度 ${humidity}% · 风速 ${wind}km/h · ${locationName}`;
         window._currentWeather = { temp, feel, desc, humidity, wind, code };
     } catch (e) {
-        document.getElementById('weatherDesc').textContent = '天气获取失败，可手动选择温度';
-        // 备用：让用户手动选温度档
+        document.getElementById('weatherDesc').textContent = '天气获取失败，刷新重试';
         window._currentWeather = null;
     }
+}
+
+function addLocationRetryButton() {
+    const detail = document.getElementById('weatherDetail');
+    if (detail && !detail.querySelector('.retry-btn')) {
+        detail.innerHTML += '<br><button class="btn btn-sm btn-outline" style="margin-top:6px;" onclick="retryLocation()">📍 开启定位</button>';
+    }
+}
+
+async function retryLocation() {
+    // 清除缓存强制重新定位
+    localStorage.removeItem('cached_location');
+    cachedLocation = null;
+    document.getElementById('weatherDesc').textContent = '正在定位...';
+    // 如果用户拒绝了，清缓存也没用，需要重新授权
+    if (!navigator.geolocation) {
+        document.getElementById('weatherDesc').textContent = '浏览器不支持定位';
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+            cachedLocation = {
+                lat: pos.coords.latitude.toFixed(2),
+                lon: pos.coords.longitude.toFixed(2),
+                source: 'GPS'
+            };
+            localStorage.setItem('cached_location', JSON.stringify(cachedLocation));
+            await fetchWeatherByCoords(cachedLocation.lat, cachedLocation.lon, '当前位置');
+        },
+        () => {
+            document.getElementById('weatherDesc').textContent = '定位权限被拒绝，可在浏览器设置中开启';
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+    );
 }
 
 /* ============ 衣橱系统 ============ */
