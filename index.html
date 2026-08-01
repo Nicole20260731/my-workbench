@@ -2569,6 +2569,32 @@ function renderVocabList() {
 /* ---- 启动词汇模块（关键！之前漏了这行导致按钮全失效）---- */
 initVocab();
 
+/* ============ 自动更新机制（无需手动刷新）============ */
+/* 原理：每次从后台切回 App 时自动检查 —— 跨天自动刷新换新单词；发现新版本自动更新 */
+const APP_VERSION = '20260801-3';
+let lastActiveDate = new Date().toDateString();
+function autoReload(msg) {
+    showToast(msg);
+    setTimeout(function() { location.reload(); }, 900);
+}
+function checkAutoUpdate() {
+    const today = new Date().toDateString();
+    if (today !== lastActiveDate) {
+        lastActiveDate = today;
+        autoReload('🌅 新的一天，自动更新中…');
+        return;
+    }
+    fetch('./version.json?t=' + Date.now())
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+            if (d.v && d.v !== APP_VERSION) autoReload('✨ 发现新版本，自动更新中…');
+        })
+        .catch(function() {});
+}
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) checkAutoUpdate();
+});
+
 /* ============ Service Worker（离线缓存，独立文件 sw.js）============ */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
