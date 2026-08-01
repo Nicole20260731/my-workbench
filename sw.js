@@ -1,7 +1,7 @@
 /* Nicole工作台 Service Worker — 离线缓存
  * 策略：应用外壳缓存优先 + 网络回源更新；页面导航网络优先 + 缓存兜底（断网可开）
  * 每次部署更新 VERSION 号即可让旧缓存失效 */
-const VERSION = 'v20260801-3';
+const VERSION = 'v20260801-4';
 const CACHE = 'nicole-workbench-' + VERSION;
 const ASSETS = [
     './',

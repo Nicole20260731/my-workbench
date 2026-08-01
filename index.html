@@ -252,6 +252,15 @@
             .countdown-num { font-size: 42px; }
             .main-content { padding: 15px; }
         }
+
+        /* AI助手 */
+        .ai-chip { border:none;background:#fff5f9;color:#ff6b9d;padding:9px 15px;border-radius:18px;font-size:13px;cursor:pointer; }
+        .ai-chip:active { background:#ffe0ee; }
+        .ai-msg { margin-bottom:10px;display:flex; }
+        .ai-msg.user { justify-content:flex-end; }
+        .ai-bubble { max-width:85%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word; }
+        .ai-msg.user .ai-bubble { background:#ff6b9d;color:white;border-bottom-right-radius:4px; }
+        .ai-msg.bot .ai-bubble { background:#fff5f9;color:#333;border-bottom-left-radius:4px; }
     </style>
 </head>
 <body>
@@ -263,6 +272,7 @@
     <div class="nav-item" data-page="vocab"><div class="nav-icon">🔤</div><div class="nav-text">词汇学习</div></div>
     <div class="nav-item" data-page="exam"><div class="nav-icon">📝</div><div class="nav-text">真题演练</div></div>
     <div class="nav-item" data-page="wordbook"><div class="nav-icon">📖</div><div class="nav-text">错题生词</div></div>
+    <div class="nav-item" data-page="ai"><div class="nav-icon">🤖</div><div class="nav-text">AI助手</div></div>
     <div class="nav-item" data-page="diary"><div class="nav-icon">📔</div><div class="nav-text">日记</div></div>
     <div class="nav-item" data-page="review"><div class="nav-icon">🔍</div><div class="nav-text">每日复盘</div></div>
     <div class="nav-item" data-page="notes"><div class="nav-icon">📓</div><div class="nav-text">自由笔记</div></div>
@@ -365,6 +375,57 @@
         <div class="card">
             <div class="section-label">📋 今日单词清单</div>
             <div id="vocabList" style="max-height:300px;overflow-y:auto;"></div>
+        </div>
+    </div>
+
+    <!-- AI助手 -->
+    <div class="page" id="ai">
+        <h2 class="page-title">🤖 AI 助手</h2>
+
+        <div class="card" id="aiSetupCard">
+            <div class="section-label">⚙️ 引擎设置（仅需一次）</div>
+            <div style="display:flex;gap:10px;margin-bottom:10px;">
+                <select id="aiProvider" style="flex:1;padding:10px;border:2px solid #ffd6e8;border-radius:12px;font-size:14px;background:white;">
+                    <option value="zhipu">智谱 GLM · 免费（推荐）</option>
+                    <option value="deepseek">DeepSeek · 更强（约1元/月）</option>
+                </select>
+            </div>
+            <div style="display:flex;gap:10px;">
+                <input type="password" id="aiApiKey" placeholder="粘贴你的 API Key" style="flex:1;padding:10px;border:2px solid #ffd6e8;border-radius:12px;font-size:14px;min-width:0;">
+                <button class="btn btn-primary" onclick="saveAiSettings()" style="white-space:nowrap;">保存</button>
+            </div>
+            <div id="aiSetupStatus" style="font-size:13px;color:#999;margin-top:10px;"></div>
+            <div style="font-size:13px;color:#ff9ec6;margin-top:10px;line-height:1.8;background:#fff5f9;padding:10px 12px;border-radius:12px;">
+                📌 <b>免费 Key 获取步骤</b>：<br>
+                ① 浏览器打开 <b>bigmodel.cn</b><br>
+                ② 手机号注册登录（需实名认证，国家统一要求）<br>
+                ③ 点右上角头像 → <b>API Keys</b> → 新建 → 复制<br>
+                ④ 粘贴到上面输入框 → 点保存 ✅
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">⚡ 一键提问</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <button class="ai-chip" onclick="aiQuickAsk('vocab')">📖 讲解今日单词</button>
+                <button class="ai-chip" onclick="aiQuickAsk('quiz')">✏️ 出5道练习题</button>
+                <button class="ai-chip" onclick="aiQuickAsk('grammar')">🅰️ 每日语法一点通</button>
+                <button class="ai-chip" onclick="aiQuickAsk('outfit')">👗 今天穿什么</button>
+                <button class="ai-chip" onclick="aiQuickAsk('tarot')">🔮 塔罗解读</button>
+                <button class="ai-chip" onclick="aiQuickAsk('review')">🌙 帮我复盘今天</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-label">💬 自由对话</div>
+            <div id="aiMessages" style="max-height:380px;overflow-y:auto;margin-bottom:12px;"></div>
+            <div style="display:flex;gap:10px;">
+                <input type="text" id="aiInput" placeholder="输入问题，点发送…" style="flex:1;padding:12px;border:2px solid #ffd6e8;border-radius:20px;font-size:14px;min-width:0;" onkeydown="if(event.key==='Enter')sendAiMessage()">
+                <button class="btn btn-primary" onclick="sendAiMessage()" id="aiSendBtn" style="border-radius:20px;white-space:nowrap;">发送</button>
+            </div>
+            <div style="text-align:right;margin-top:8px;">
+                <span onclick="clearAiHistory()" style="font-size:12px;color:#ddd;cursor:pointer;">清空对话记录</span>
+            </div>
         </div>
     </div>
 
@@ -2569,9 +2630,157 @@ function renderVocabList() {
 /* ---- 启动词汇模块（关键！之前漏了这行导致按钮全失效）---- */
 initVocab();
 
+/* ============ AI 助手模块（智谱GLM免费 / DeepSeek 双引擎）============ */
+const AI_PROVIDERS = {
+    zhipu: { name: '智谱 GLM', url: 'https://open.bigmodel.cn/api/paas/v4/chat/completions', model: 'glm-4-flash' },
+    deepseek: { name: 'DeepSeek', url: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat' }
+};
+const AI_SYSTEM_PROMPT = '你是「Nicole工作台」内置的私人助手，主人 Nicole 正在备考2026年10月的自考英语13000（目标70分以上），英语基础较薄弱。你可以帮她：讲解英语单词/语法/真题、制定学习计划、结合天气给穿搭建议、解读塔罗牌、陪她复盘总结、闲聊解压。回答要求：用简体中文，简洁实用，语气温暖像朋友，多用短句和列表，不要长篇大论。';
+
+function getAiProvider() { return localStorage.getItem('ai_provider') || 'zhipu'; }
+function getAiKey() { return localStorage.getItem('ai_key_' + getAiProvider()) || ''; }
+function escapeAiHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function initAi() {
+    const sel = document.getElementById('aiProvider');
+    if (!sel) return;
+    sel.value = getAiProvider();
+    document.getElementById('aiApiKey').value = getAiKey();
+    updateAiSetupStatus();
+    renderAiMessages();
+    sel.addEventListener('change', function() {
+        localStorage.setItem('ai_provider', this.value);
+        document.getElementById('aiApiKey').value = getAiKey();
+        updateAiSetupStatus();
+    });
+}
+
+function updateAiSetupStatus() {
+    const el = document.getElementById('aiSetupStatus');
+    if (getAiKey()) {
+        el.innerHTML = '<span style="color:#4caf50;font-weight:bold;">✅ Key 已保存，可以直接对话啦</span>';
+    } else {
+        el.innerHTML = '⏳ 还没有 Key，按下方粉色框步骤免费获取（约2分钟）';
+    }
+}
+
+function saveAiSettings() {
+    const key = document.getElementById('aiApiKey').value.trim();
+    localStorage.setItem('ai_key_' + getAiProvider(), key);
+    updateAiSetupStatus();
+    if (key) { showToast('AI 已就绪 🤖'); } else { showToast('Key 已清除'); }
+}
+
+function getAiHistory() { return JSON.parse(localStorage.getItem('ai_history') || '[]'); }
+function saveAiHistory(h) { localStorage.setItem('ai_history', JSON.stringify(h.slice(-20))); }
+
+function renderAiMessages() {
+    const box = document.getElementById('aiMessages');
+    const h = getAiHistory();
+    if (!h.length) {
+        box.innerHTML = '<div style="text-align:center;color:#ccc;font-size:13px;padding:30px 10px;line-height:2;">点上方「一键提问」快速开始<br>或直接输入任何问题 💕<br>我会记住最近的聊天内容哦</div>';
+        return;
+    }
+    box.innerHTML = h.map(function(m) {
+        return '<div class="ai-msg ' + (m.role === 'user' ? 'user' : 'bot') + '"><div class="ai-bubble">' + escapeAiHtml(m.content) + '</div></div>';
+    }).join('');
+    box.scrollTop = box.scrollHeight;
+}
+
+let aiSending = false;
+function sendAiMessage(presetText) {
+    const input = document.getElementById('aiInput');
+    const text = (presetText || input.value).trim();
+    if (!text || aiSending) return;
+    if (!getAiKey()) { showToast('先在上方填入 API Key 哦 🔑'); document.getElementById('aiSetupCard').scrollIntoView({ behavior: 'smooth' }); return; }
+    if (!presetText) input.value = '';
+
+    const h = getAiHistory();
+    h.push({ role: 'user', content: text });
+    saveAiHistory(h);
+    renderAiMessages();
+
+    const box = document.getElementById('aiMessages');
+    const thinking = document.createElement('div');
+    thinking.className = 'ai-msg bot';
+    thinking.id = 'aiThinking';
+    thinking.innerHTML = '<div class="ai-bubble">思考中… 🤔</div>';
+    box.appendChild(thinking);
+    box.scrollTop = box.scrollHeight;
+    aiSending = true;
+    document.getElementById('aiSendBtn').style.opacity = '0.5';
+
+    const p = AI_PROVIDERS[getAiProvider()];
+    const messages = [{ role: 'system', content: AI_SYSTEM_PROMPT }].concat(h.slice(-12));
+
+    fetch(p.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getAiKey() },
+        body: JSON.stringify({ model: p.model, messages: messages, temperature: 0.7, max_tokens: 1200 })
+    })
+    .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, d: d }; }); })
+    .then(function(res) {
+        const t = document.getElementById('aiThinking');
+        if (t) t.remove();
+        aiSending = false;
+        document.getElementById('aiSendBtn').style.opacity = '1';
+        let reply;
+        if (res.ok && res.d.choices && res.d.choices[0] && res.d.choices[0].message) {
+            reply = res.d.choices[0].message.content;
+        } else {
+            reply = '出错了 🥺 ' + (res.d.error && res.d.error.message ? res.d.error.message : '请检查 Key 是否复制完整、或稍后再试');
+        }
+        const h2 = getAiHistory();
+        h2.push({ role: 'assistant', content: reply });
+        saveAiHistory(h2);
+        renderAiMessages();
+    })
+    .catch(function() {
+        const t = document.getElementById('aiThinking');
+        if (t) t.remove();
+        aiSending = false;
+        document.getElementById('aiSendBtn').style.opacity = '1';
+        const h2 = getAiHistory();
+        h2.push({ role: 'assistant', content: '网络连接失败 🥺 检查一下网络（WiFi/流量）再试一次吧' });
+        saveAiHistory(h2);
+        renderAiMessages();
+    });
+}
+
+function aiQuickAsk(type) {
+    let prompt = '';
+    if (type === 'vocab') {
+        const words = getTodayVocab().map(function(w) { return w.word; }).join(', ');
+        prompt = '今天是我备考第' + vocabDay + '天，要学这些单词：' + words + '。请挑出8个最重要或最容易记混的，每个用「单词+词性+中文意思+一个简单例句+一句记忆技巧」的格式讲解，帮我快速记住。';
+    } else if (type === 'quiz') {
+        const words = getTodayVocab().slice(0, 20).map(function(w) { return w.word; }).join(', ');
+        prompt = '请用这些单词给我出5道练习题（中英互译或选词填空）：' + words + '。先只出题目不要给答案，等我回答后再逐题批改讲解。';
+    } else if (type === 'grammar') {
+        prompt = '我在备考自考英语13000，语法薄弱。请教我一个小而实用的语法点（比如某个时态或从句），用最简单的中文+2个例句讲明白，最后出2道小题让我练手。';
+    } else if (type === 'outfit') {
+        const temp = document.getElementById('weatherTemp').textContent;
+        const desc = document.getElementById('weatherDesc').textContent;
+        const detail = document.getElementById('weatherDetail').textContent;
+        prompt = '我这里今天天气：' + temp + '，' + desc + '，' + detail + '。我是女生，请给我一套今天的穿搭建议（上衣+下装+鞋子+小配饰），舒适又好看，说明理由。';
+    } else if (type === 'tarot') {
+        prompt = '我想请你帮我解读塔罗牌。请先问我：我想问什么问题、抽到了哪几张牌（分别是正位还是逆位）。等我回答后，再结合我的问题做详细解读和建议。';
+    } else if (type === 'review') {
+        prompt = '陪我做个今日复盘吧。请一次只问我一个问题，等我回答后再问下一个：①今天最有收获的一件事 ②今天有点遗憾的事 ③明天最重要的一个目标。最后给我一段温暖的总结和明天的小建议。';
+    }
+    sendAiMessage(prompt);
+}
+
+function clearAiHistory() {
+    localStorage.removeItem('ai_history');
+    renderAiMessages();
+    showToast('对话已清空 🧹');
+}
+
+initAi();
+
 /* ============ 自动更新机制（无需手动刷新）============ */
 /* 原理：每次从后台切回 App 时自动检查 —— 跨天自动刷新换新单词；发现新版本自动更新 */
-const APP_VERSION = '20260801-3';
+const APP_VERSION = '20260801-4';
 let lastActiveDate = new Date().toDateString();
 function autoReload(msg) {
     showToast(msg);
