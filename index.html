@@ -768,6 +768,3640 @@
 </div>
 
 <script>
+const VOCAB_LIST = [
+  {
+    "day": 1,
+    "words": [
+      {
+        "word": "abandon",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "放弃，抛弃",
+        "example": "He abandoned his plan."
+      },
+      {
+        "word": "ability",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "能力，才能",
+        "example": "She has the ability to solve problems."
+      },
+      {
+        "word": "abroad",
+        "phonetic": "",
+        "pos": "ad.",
+        "meaning": "在国外",
+        "example": "He studies abroad."
+      },
+      {
+        "word": "absence",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "缺席",
+        "example": "His absence was noticed."
+      },
+      {
+        "word": "absorb",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "吸收",
+        "example": "Plants absorb water."
+      },
+      {
+        "word": "abstract",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "抽象的",
+        "example": "This is an abstract concept."
+      },
+      {
+        "word": "abundant",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "丰富的",
+        "example": "The country is abundant in natural resources."
+      },
+      {
+        "word": "accelerate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "加速",
+        "example": "The car accelerated quickly."
+      },
+      {
+        "word": "accept",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "接受",
+        "example": "I accept your invitation."
+      },
+      {
+        "word": "access",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "接近，进入",
+        "example": "You can access the internet here."
+      },
+      {
+        "word": "accomplish",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "完成",
+        "example": "We accomplished our goal."
+      },
+      {
+        "word": "account",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "账户",
+        "example": "I opened a bank account."
+      },
+      {
+        "word": "accurate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "准确的",
+        "example": "The data is accurate."
+      },
+      {
+        "word": "achieve",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "达到，实现",
+        "example": "He achieved his dream."
+      },
+      {
+        "word": "acknowledge",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "承认",
+        "example": "He acknowledged his mistake."
+      },
+      {
+        "word": "acquire",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "获得",
+        "example": "She acquired new skills."
+      },
+      {
+        "word": "adapt",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "适应",
+        "example": "You must adapt to the environment."
+      },
+      {
+        "word": "adequate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "足够的",
+        "example": "We have adequate supplies."
+      },
+      {
+        "word": "adjust",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "调整",
+        "example": "Please adjust the volume."
+      },
+      {
+        "word": "administration",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "管理",
+        "example": "The administration made a decision."
+      },
+      {
+        "word": "admire",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "钦佩",
+        "example": "I admire your courage."
+      },
+      {
+        "word": "admit",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "承认",
+        "example": "He admitted his fault."
+      },
+      {
+        "word": "adopt",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "采用",
+        "example": "We adopted a new method."
+      },
+      {
+        "word": "advance",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "前进",
+        "example": "The army advanced."
+      },
+      {
+        "word": "advantage",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "优势",
+        "example": "This gives us an advantage."
+      },
+      {
+        "word": "adventure",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "冒险",
+        "example": "Life is an adventure."
+      },
+      {
+        "word": "advertise",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "做广告",
+        "example": "They advertise on TV."
+      },
+      {
+        "word": "affect",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "影响",
+        "example": "The weather affects our mood."
+      },
+      {
+        "word": "afford",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "负担得起",
+        "example": "I can't afford it."
+      },
+      {
+        "word": "aggressive",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "好斗的",
+        "example": "He is too aggressive."
+      },
+      {
+        "word": "allocate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "分配",
+        "example": "We allocated resources."
+      },
+      {
+        "word": "alternative",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "替代选择",
+        "example": "We need an alternative plan."
+      },
+      {
+        "word": "ambitious",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "有雄心的",
+        "example": "She is very ambitious."
+      },
+      {
+        "word": "analyze",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "分析",
+        "example": "Let's analyze the data."
+      },
+      {
+        "word": "annual",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "每年的",
+        "example": "This is our annual report."
+      },
+      {
+        "word": "anticipate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "预期",
+        "example": "We anticipate good results."
+      },
+      {
+        "word": "anxiety",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "焦虑",
+        "example": "She feels anxiety."
+      },
+      {
+        "word": "apparent",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "明显的",
+        "example": "The answer is apparent."
+      },
+      {
+        "word": "appeal",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "呼吁",
+        "example": "They appealed for help."
+      },
+      {
+        "word": "appetite",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "食欲",
+        "example": "I have a good appetite."
+      }
+    ]
+  },
+  {
+    "day": 2,
+    "words": [
+      {
+        "word": "application",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "应用",
+        "example": "This is a useful application."
+      },
+      {
+        "word": "appreciate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "欣赏",
+        "example": "I appreciate your help."
+      },
+      {
+        "word": "approach",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "接近",
+        "example": "We approached the city."
+      },
+      {
+        "word": "appropriate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "适当的",
+        "example": "This is appropriate behavior."
+      },
+      {
+        "word": "approve",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "批准",
+        "example": "They approved the plan."
+      },
+      {
+        "word": "arise",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "出现",
+        "example": "Problems arose."
+      },
+      {
+        "word": "arrange",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "安排",
+        "example": "I'll arrange a meeting."
+      },
+      {
+        "word": "artificial",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "人工的",
+        "example": "This is artificial intelligence."
+      },
+      {
+        "word": "aspect",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "方面",
+        "example": "Consider every aspect."
+      },
+      {
+        "word": "assemble",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "集合",
+        "example": "We assembled in the hall."
+      },
+      {
+        "word": "assess",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "评估",
+        "example": "Let's assess the situation."
+      },
+      {
+        "word": "assign",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "分配",
+        "example": "I'll assign tasks."
+      },
+      {
+        "word": "assist",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "协助",
+        "example": "Can I assist you?"
+      },
+      {
+        "word": "associate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "联想",
+        "example": "I associate red with danger."
+      },
+      {
+        "word": "assume",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "假设",
+        "example": "Let's assume it's true."
+      },
+      {
+        "word": "assure",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "保证",
+        "example": "I assure you it's safe."
+      },
+      {
+        "word": "atmosphere",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "气氛",
+        "example": "The atmosphere is friendly."
+      },
+      {
+        "word": "attach",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "附上",
+        "example": "Please attach the file."
+      },
+      {
+        "word": "attempt",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "尝试",
+        "example": "I'll attempt again."
+      },
+      {
+        "word": "attend",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "参加",
+        "example": "I'll attend the meeting."
+      },
+      {
+        "word": "attitude",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "态度",
+        "example": "He has a positive attitude."
+      },
+      {
+        "word": "attract",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "吸引",
+        "example": "The show attracts audiences."
+      },
+      {
+        "word": "authority",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "权威",
+        "example": "He is an authority."
+      },
+      {
+        "word": "available",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "可用的",
+        "example": "Is this seat available?"
+      },
+      {
+        "word": "avenue",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "大街",
+        "example": "Walk down this avenue."
+      },
+      {
+        "word": "aware",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "意识到的",
+        "example": "I'm aware of the risk."
+      },
+      {
+        "word": "awesome",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "极好的",
+        "example": "That's awesome!"
+      },
+      {
+        "word": "balance",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "平衡",
+        "example": "Keep your balance."
+      },
+      {
+        "word": "barrier",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "障碍",
+        "example": "Language is a barrier."
+      },
+      {
+        "word": "benefit",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "好处",
+        "example": "Exercise benefits health."
+      },
+      {
+        "word": "blame",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "责备",
+        "example": "Don't blame others."
+      },
+      {
+        "word": "bloom",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "开花",
+        "example": "Flowers bloom in spring."
+      },
+      {
+        "word": "boundary",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "边界",
+        "example": "Respect boundaries."
+      },
+      {
+        "word": "breed",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "繁殖",
+        "example": "Rabbits breed quickly."
+      },
+      {
+        "word": "brief",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "简短的",
+        "example": "Give a brief answer."
+      },
+      {
+        "word": "brilliant",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "杰出的",
+        "example": "She's brilliant."
+      },
+      {
+        "word": "budget",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "预算",
+        "example": "We need a budget."
+      },
+      {
+        "word": "burden",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "负担",
+        "example": "Don't be a burden."
+      },
+      {
+        "word": "calculate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "计算",
+        "example": "Calculate the cost."
+      },
+      {
+        "word": "campaign",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "运动",
+        "example": "The campaign was successful."
+      }
+    ]
+  },
+  {
+    "day": 3,
+    "words": [
+      {
+        "word": "candidate",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "候选人",
+        "example": "He's a good candidate."
+      },
+      {
+        "word": "capable",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "有能力的",
+        "example": "She's very capable."
+      },
+      {
+        "word": "capture",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "捕获",
+        "example": "Capture the moment."
+      },
+      {
+        "word": "career",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "职业",
+        "example": "Choose your career."
+      },
+      {
+        "word": "casual",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "随意的",
+        "example": "Casual clothes."
+      },
+      {
+        "word": "category",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "类别",
+        "example": "What category?"
+      },
+      {
+        "word": "celebrate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "庆祝",
+        "example": "Let's celebrate!"
+      },
+      {
+        "word": "challenge",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "挑战",
+        "example": "Accept the challenge."
+      },
+      {
+        "word": "character",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "性格",
+        "example": "Good character."
+      },
+      {
+        "word": "charge",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "收费",
+        "example": "How much do you charge?"
+      },
+      {
+        "word": "cherish",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "珍惜",
+        "example": "Cherish every moment."
+      },
+      {
+        "word": "circumstance",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "情况",
+        "example": "Under no circumstance."
+      },
+      {
+        "word": "claim",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "声称",
+        "example": "He claims to know."
+      },
+      {
+        "word": "classify",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "分类",
+        "example": "Classify the items."
+      },
+      {
+        "word": "climate",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "气候",
+        "example": "The climate is warm."
+      },
+      {
+        "word": "collapse",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "倒塌",
+        "example": "The building collapsed."
+      },
+      {
+        "word": "colleague",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "同事",
+        "example": "My colleague helped."
+      },
+      {
+        "word": "combine",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "结合",
+        "example": "Combine the ingredients."
+      },
+      {
+        "word": "comfort",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "舒适",
+        "example": "Find comfort."
+      },
+      {
+        "word": "command",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "命令",
+        "example": "Command the army."
+      },
+      {
+        "word": "communicate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "交流",
+        "example": "Communicate clearly."
+      },
+      {
+        "word": "community",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "社区",
+        "example": "Our community."
+      },
+      {
+        "word": "companion",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "同伴",
+        "example": "A loyal companion."
+      },
+      {
+        "word": "compare",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "比较",
+        "example": "Compare the two."
+      },
+      {
+        "word": "compete",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "竞争",
+        "example": "Compete fairly."
+      },
+      {
+        "word": "complain",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "抱怨",
+        "example": "Don't complain."
+      },
+      {
+        "word": "complex",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "复杂的",
+        "example": "A complex problem."
+      },
+      {
+        "word": "component",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "组件",
+        "example": "Key component."
+      },
+      {
+        "word": "compose",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "组成",
+        "example": "Composed of parts."
+      },
+      {
+        "word": "concentrate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "集中",
+        "example": "Concentrate on work."
+      },
+      {
+        "word": "concept",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "概念",
+        "example": "New concept."
+      },
+      {
+        "word": "concern",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "关心",
+        "example": "My concern."
+      },
+      {
+        "word": "conclude",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "得出结论",
+        "example": "I conclude that..."
+      },
+      {
+        "word": "conduct",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "进行",
+        "example": "Conduct research."
+      },
+      {
+        "word": "confidence",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "信心",
+        "example": "Have confidence."
+      },
+      {
+        "word": "confirm",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "确认",
+        "example": "Confirm the booking."
+      },
+      {
+        "word": "conflict",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "冲突",
+        "example": "Resolve conflicts."
+      },
+      {
+        "word": "confuse",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "使困惑",
+        "example": "Don't confuse me."
+      },
+      {
+        "word": "conscious",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "有意识的",
+        "example": "Stay conscious."
+      },
+      {
+        "word": "consequence",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "后果",
+        "example": "Face consequences."
+      }
+    ]
+  },
+  {
+    "day": 4,
+    "words": [
+      {
+        "word": "conservative",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "保守的",
+        "example": "Conservative view."
+      },
+      {
+        "word": "consider",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "考虑",
+        "example": "Consider all options."
+      },
+      {
+        "word": "consistent",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "一致的",
+        "example": "Be consistent."
+      },
+      {
+        "word": "constant",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "不断的",
+        "example": "Constant effort."
+      },
+      {
+        "word": "construct",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "建造",
+        "example": "Construct a building."
+      },
+      {
+        "word": "consult",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "咨询",
+        "example": "Consult a doctor."
+      },
+      {
+        "word": "consume",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "消耗",
+        "example": "Consume energy."
+      },
+      {
+        "word": "contact",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "联系",
+        "example": "Contact me."
+      },
+      {
+        "word": "contemporary",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "当代的",
+        "example": "Contemporary art."
+      },
+      {
+        "word": "content",
+        "phonetic": "",
+        "pos": "n./a.",
+        "meaning": "内容",
+        "example": "Page content."
+      },
+      {
+        "word": "context",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "语境",
+        "example": "In this context."
+      },
+      {
+        "word": "contract",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "合同",
+        "example": "Sign the contract."
+      },
+      {
+        "word": "contribute",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "贡献",
+        "example": "Contribute ideas."
+      },
+      {
+        "word": "controversial",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "有争议的",
+        "example": "Controversial topic."
+      },
+      {
+        "word": "convenient",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "方便的",
+        "example": "Very convenient."
+      },
+      {
+        "word": "convince",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "说服",
+        "example": "Convince him."
+      },
+      {
+        "word": "cooperate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "合作",
+        "example": "Cooperate with us."
+      },
+      {
+        "word": "correspond",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "对应",
+        "example": "Correspond to."
+      },
+      {
+        "word": "creative",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "创造性的",
+        "example": "Creative thinking."
+      },
+      {
+        "word": "critical",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "关键的",
+        "example": "Critical moment."
+      },
+      {
+        "word": "cultivate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "培养",
+        "example": "Cultivate habits."
+      },
+      {
+        "word": "curious",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "好奇的",
+        "example": "Stay curious."
+      },
+      {
+        "word": "current",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "当前的",
+        "example": "Current situation."
+      },
+      {
+        "word": "database",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "数据库",
+        "example": "Search the database."
+      },
+      {
+        "word": "deadline",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "截止日期",
+        "example": "Meet the deadline."
+      },
+      {
+        "word": "debate",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "辩论",
+        "example": "Have a debate."
+      },
+      {
+        "word": "decade",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "十年",
+        "example": "Past decade."
+      },
+      {
+        "word": "decline",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "下降",
+        "example": "Sales declined."
+      },
+      {
+        "word": "definite",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "明确的",
+        "example": "A definite answer."
+      },
+      {
+        "word": "deliberate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "故意的",
+        "example": "Deliberate action."
+      },
+      {
+        "word": "deliver",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "递送",
+        "example": "Deliver goods."
+      },
+      {
+        "word": "demonstrate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "演示",
+        "example": "Demonstrate how."
+      },
+      {
+        "word": "desperate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "绝望的",
+        "example": "Desperate situation."
+      },
+      {
+        "word": "despite",
+        "phonetic": "",
+        "pos": "prep.",
+        "meaning": "尽管",
+        "example": "Despite difficulties."
+      },
+      {
+        "word": "destination",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "目的地",
+        "example": "Reach destination."
+      },
+      {
+        "word": "distinguish",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "区分",
+        "example": "Distinguish right from wrong."
+      },
+      {
+        "word": "distribute",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "分配",
+        "example": "Distribute resources."
+      },
+      {
+        "word": "domestic",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "国内的",
+        "example": "Domestic flight."
+      },
+      {
+        "word": "dominant",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "主导的",
+        "example": "Dominant position."
+      },
+      {
+        "word": "dramatic",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "戏剧性的",
+        "example": "Dramatic change."
+      }
+    ]
+  },
+  {
+    "day": 5,
+    "words": [
+      {
+        "word": "duration",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "持续时间",
+        "example": "Short duration."
+      },
+      {
+        "word": "dynamic",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "动态的",
+        "example": "Dynamic market."
+      },
+      {
+        "word": "efficient",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "高效的",
+        "example": "Very efficient."
+      },
+      {
+        "word": "elaborate",
+        "phonetic": "",
+        "pos": "a./v.",
+        "meaning": "精心的",
+        "example": "Elaborate plan."
+      },
+      {
+        "word": "eliminate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "消除",
+        "example": "Eliminate errors."
+      },
+      {
+        "word": "embrace",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "拥抱",
+        "example": "Embrace change."
+      },
+      {
+        "word": "emerge",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "出现",
+        "example": "New trends emerge."
+      },
+      {
+        "word": "emphasize",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "强调",
+        "example": "Emphasize quality."
+      },
+      {
+        "word": "encounter",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "遇到",
+        "example": "Encounter problems."
+      },
+      {
+        "word": "encourage",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "鼓励",
+        "example": "Encourage students."
+      },
+      {
+        "word": "enhance",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "增强",
+        "example": "Enhance skills."
+      },
+      {
+        "word": "enormous",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "巨大的",
+        "example": "Enormous success."
+      },
+      {
+        "word": "ensure",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "确保",
+        "example": "Ensure safety."
+      },
+      {
+        "word": "enthusiasm",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "热情",
+        "example": "Full of enthusiasm."
+      },
+      {
+        "word": "evaluate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "评估",
+        "example": "Evaluate performance."
+      },
+      {
+        "word": "evidence",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "证据",
+        "example": "Strong evidence."
+      },
+      {
+        "word": "evolve",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "进化",
+        "example": "Technology evolves."
+      },
+      {
+        "word": "exaggerate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "夸张",
+        "example": "Don't exaggerate."
+      },
+      {
+        "word": "exceed",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "超过",
+        "example": "Exceed expectations."
+      },
+      {
+        "word": "exception",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "例外",
+        "example": "No exception."
+      },
+      {
+        "word": "excessive",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "过多的",
+        "example": "Excessive noise."
+      },
+      {
+        "word": "expand",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "扩展",
+        "example": "Expand business."
+      },
+      {
+        "word": "exploit",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "利用",
+        "example": "Exploit resources."
+      },
+      {
+        "word": "explore",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "探索",
+        "example": "Explore new areas."
+      },
+      {
+        "word": "expose",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "暴露",
+        "example": "Expose the truth."
+      },
+      {
+        "word": "extend",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "延伸",
+        "example": "Extend the deadline."
+      },
+      {
+        "word": "external",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "外部的",
+        "example": "External factors."
+      },
+      {
+        "word": "extraordinary",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "非凡的",
+        "example": "Extraordinary talent."
+      },
+      {
+        "word": "facilitate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "促进",
+        "example": "Facilitate learning."
+      },
+      {
+        "word": "failure",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "失败",
+        "example": "Learn from failure."
+      },
+      {
+        "word": "fascinate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "使着迷",
+        "example": "Fascinating story."
+      },
+      {
+        "word": "feature",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "特征",
+        "example": "Key feature."
+      },
+      {
+        "word": "flexible",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "灵活的",
+        "example": "Flexible schedule."
+      },
+      {
+        "word": "fluent",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "流利的",
+        "example": "Fluent English."
+      },
+      {
+        "word": "focus",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "集中",
+        "example": "Focus on goals."
+      },
+      {
+        "word": "forbid",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "禁止",
+        "example": "Forbidden area."
+      },
+      {
+        "word": "forecast",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "预测",
+        "example": "Weather forecast."
+      },
+      {
+        "word": "formal",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "正式的",
+        "example": "Formal dress."
+      },
+      {
+        "word": "formula",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "公式",
+        "example": "Mathematical formula."
+      },
+      {
+        "word": "fortune",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "财富",
+        "example": "Good fortune."
+      }
+    ]
+  },
+  {
+    "day": 6,
+    "words": [
+      {
+        "word": "foundation",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "基础",
+        "example": "Strong foundation."
+      },
+      {
+        "word": "fundamental",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "基本的",
+        "example": "Fundamental rights."
+      },
+      {
+        "word": "generate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "产生",
+        "example": "Generate ideas."
+      },
+      {
+        "word": "generous",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "慷慨的",
+        "example": "Very generous."
+      },
+      {
+        "word": "genuine",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "真正的",
+        "example": "Genuine interest."
+      },
+      {
+        "word": "global",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "全球的",
+        "example": "Global warming."
+      },
+      {
+        "word": "guarantee",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "保证",
+        "example": "Money-back guarantee."
+      },
+      {
+        "word": "habitat",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "栖息地",
+        "example": "Natural habitat."
+      },
+      {
+        "word": "hesitate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "犹豫",
+        "example": "Don't hesitate."
+      },
+      {
+        "word": "highlight",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "强调",
+        "example": "Highlight key points."
+      },
+      {
+        "word": "horizon",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "地平线",
+        "example": "On the horizon."
+      },
+      {
+        "word": "humble",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "谦逊的",
+        "example": "Stay humble."
+      },
+      {
+        "word": "identical",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "相同的",
+        "example": "Identical twins."
+      },
+      {
+        "word": "identify",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "识别",
+        "example": "Identify the problem."
+      },
+      {
+        "word": "ignorance",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "无知",
+        "example": "Pure ignorance."
+      },
+      {
+        "word": "illustrate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "说明",
+        "example": "Let me illustrate."
+      },
+      {
+        "word": "immediate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "立即的",
+        "example": "Immediate action."
+      },
+      {
+        "word": "impact",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "影响",
+        "example": "Big impact."
+      },
+      {
+        "word": "implement",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "实施",
+        "example": "Implement the plan."
+      },
+      {
+        "word": "implication",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "含义",
+        "example": "Serious implications."
+      },
+      {
+        "word": "impose",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "强加",
+        "example": "Impose rules."
+      },
+      {
+        "word": "impressive",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "令人印象深刻的",
+        "example": "Very impressive."
+      },
+      {
+        "word": "incident",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "事件",
+        "example": "Strange incident."
+      },
+      {
+        "word": "incline",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "倾斜",
+        "example": "Incline forward."
+      },
+      {
+        "word": "indicate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "表明",
+        "example": "Results indicate..."
+      },
+      {
+        "word": "individual",
+        "phonetic": "",
+        "pos": "n./a.",
+        "meaning": "个人",
+        "example": "Individual needs."
+      },
+      {
+        "word": "inevitable",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "不可避免的",
+        "example": "Inevitable change."
+      },
+      {
+        "word": "influence",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "影响",
+        "example": "Positive influence."
+      },
+      {
+        "word": "initial",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "最初的",
+        "example": "Initial stage."
+      },
+      {
+        "word": "innovative",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "创新的",
+        "example": "Innovative design."
+      },
+      {
+        "word": "insight",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "洞察力",
+        "example": "Deep insight."
+      },
+      {
+        "word": "inspect",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "检查",
+        "example": "Inspect carefully."
+      },
+      {
+        "word": "inspire",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "启发",
+        "example": "Inspire others."
+      },
+      {
+        "word": "instance",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "例子",
+        "example": "For instance."
+      },
+      {
+        "word": "integrate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "整合",
+        "example": "Integrate systems."
+      },
+      {
+        "word": "intense",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "强烈的",
+        "example": "Intense pressure."
+      },
+      {
+        "word": "interact",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "互动",
+        "example": "Interact with others."
+      },
+      {
+        "word": "interpret",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "解释",
+        "example": "Interpret data."
+      },
+      {
+        "word": "interval",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "间隔",
+        "example": "Short interval."
+      },
+      {
+        "word": "intimate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "亲密的",
+        "example": "Intimate friends."
+      }
+    ]
+  },
+  {
+    "day": 7,
+    "words": [
+      {
+        "word": "investigate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "调查",
+        "example": "Investigate the case."
+      },
+      {
+        "word": "involve",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "涉及",
+        "example": "Involve everyone."
+      },
+      {
+        "word": "isolate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "隔离",
+        "example": "Isolate the patient."
+      },
+      {
+        "word": "justify",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "证明正当",
+        "example": "Justify your actions."
+      },
+      {
+        "word": "launch",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "发射",
+        "example": "Launch a product."
+      },
+      {
+        "word": "layer",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "层",
+        "example": "Top layer."
+      },
+      {
+        "word": "lean",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "倾斜",
+        "example": "Lean forward."
+      },
+      {
+        "word": "legend",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "传说",
+        "example": "Ancient legend."
+      },
+      {
+        "word": "legislation",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "立法",
+        "example": "New legislation."
+      },
+      {
+        "word": "leisure",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "休闲",
+        "example": "Leisure time."
+      },
+      {
+        "word": "liberal",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "自由的",
+        "example": "Liberal views."
+      },
+      {
+        "word": "likewise",
+        "phonetic": "",
+        "pos": "ad.",
+        "meaning": "同样地",
+        "example": "Likewise, I agree."
+      },
+      {
+        "word": "limitation",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "限制",
+        "example": "Know your limitations."
+      },
+      {
+        "word": "linger",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "徘徊",
+        "example": "Memories linger."
+      },
+      {
+        "word": "literary",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "文学的",
+        "example": "Literary works."
+      },
+      {
+        "word": "literally",
+        "phonetic": "",
+        "pos": "ad.",
+        "meaning": "字面上",
+        "example": "Literally true."
+      },
+      {
+        "word": "locate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "定位",
+        "example": "Locate the source."
+      },
+      {
+        "word": "logical",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "逻辑的",
+        "example": "Logical thinking."
+      },
+      {
+        "word": "magnificent",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "壮丽的",
+        "example": "Magnificent view."
+      },
+      {
+        "word": "maintain",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "维持",
+        "example": "Maintain quality."
+      },
+      {
+        "word": "majority",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "多数",
+        "example": "Majority vote."
+      },
+      {
+        "word": "manipulate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "操纵",
+        "example": "Manipulate data."
+      },
+      {
+        "word": "manufacture",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "制造",
+        "example": "Manufacture goods."
+      },
+      {
+        "word": "margin",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "边缘",
+        "example": "Profit margin."
+      },
+      {
+        "word": "massive",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "大量的",
+        "example": "Massive support."
+      },
+      {
+        "word": "mature",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "成熟的",
+        "example": "Mature decision."
+      },
+      {
+        "word": "maximum",
+        "phonetic": "",
+        "pos": "n./a.",
+        "meaning": "最大值",
+        "example": "Maximum speed."
+      },
+      {
+        "word": "mechanism",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "机制",
+        "example": "Complex mechanism."
+      },
+      {
+        "word": "moderate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "适度的",
+        "example": "Moderate exercise."
+      },
+      {
+        "word": "modify",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "修改",
+        "example": "Modify the design."
+      },
+      {
+        "word": "monitor",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "监控",
+        "example": "Monitor progress."
+      },
+      {
+        "word": "motivate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "激励",
+        "example": "Motivate the team."
+      },
+      {
+        "word": "mutual",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "相互的",
+        "example": "Mutual respect."
+      },
+      {
+        "word": "negotiate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "谈判",
+        "example": "Negotiate terms."
+      },
+      {
+        "word": "nevertheless",
+        "phonetic": "",
+        "pos": "ad.",
+        "meaning": "然而",
+        "example": "Nevertheless, we continue."
+      },
+      {
+        "word": "notion",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "概念",
+        "example": "Basic notion."
+      },
+      {
+        "word": "nuclear",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "核的",
+        "example": "Nuclear energy."
+      },
+      {
+        "word": "objective",
+        "phonetic": "",
+        "pos": "n./a.",
+        "meaning": "目标",
+        "example": "Main objective."
+      },
+      {
+        "word": "obligation",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "义务",
+        "example": "Legal obligation."
+      },
+      {
+        "word": "observe",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "观察",
+        "example": "Observe carefully."
+      }
+    ]
+  },
+  {
+    "day": 8,
+    "words": [
+      {
+        "word": "obstacle",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "障碍",
+        "example": "Overcome obstacles."
+      },
+      {
+        "word": "obtain",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "获得",
+        "example": "Obtain permission."
+      },
+      {
+        "word": "obvious",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "明显的",
+        "example": "Obvious answer."
+      },
+      {
+        "word": "occupy",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "占据",
+        "example": "Occupy space."
+      },
+      {
+        "word": "offend",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "冒犯",
+        "example": "Don't offend anyone."
+      },
+      {
+        "word": "operate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "操作",
+        "example": "Operate machinery."
+      },
+      {
+        "word": "opponent",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "对手",
+        "example": "Strong opponent."
+      },
+      {
+        "word": "opportunity",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "机会",
+        "example": "Great opportunity."
+      },
+      {
+        "word": "optimistic",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "乐观的",
+        "example": "Stay optimistic."
+      },
+      {
+        "word": "origin",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "起源",
+        "example": "Country of origin."
+      },
+      {
+        "word": "outcome",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "结果",
+        "example": "Final outcome."
+      },
+      {
+        "word": "overcome",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "克服",
+        "example": "Overcome difficulties."
+      },
+      {
+        "word": "overlook",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "忽视",
+        "example": "Don't overlook details."
+      },
+      {
+        "word": "overwhelm",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "压倒",
+        "example": "Overwhelmed with work."
+      },
+      {
+        "word": "parallel",
+        "phonetic": "",
+        "pos": "a./n.",
+        "meaning": "平行的",
+        "example": "Parallel lines."
+      },
+      {
+        "word": "participate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "参与",
+        "example": "Participate actively."
+      },
+      {
+        "word": "perceive",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "感知",
+        "example": "Perceive the truth."
+      },
+      {
+        "word": "permanent",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "永久的",
+        "example": "Permanent job."
+      },
+      {
+        "word": "permit",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "允许",
+        "example": "Permit entry."
+      },
+      {
+        "word": "perspective",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "观点",
+        "example": "Different perspective."
+      },
+      {
+        "word": "phenomenon",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "现象",
+        "example": "Natural phenomenon."
+      },
+      {
+        "word": "philosophy",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "哲学",
+        "example": "Life philosophy."
+      },
+      {
+        "word": "physical",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "身体的",
+        "example": "Physical exercise."
+      },
+      {
+        "word": "platform",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "平台",
+        "example": "Online platform."
+      },
+      {
+        "word": "plunge",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "投入",
+        "example": "Plunge into water."
+      },
+      {
+        "word": "portion",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "部分",
+        "example": "Large portion."
+      },
+      {
+        "word": "pose",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "造成",
+        "example": "Pose a threat."
+      },
+      {
+        "word": "positive",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "积极的",
+        "example": "Positive attitude."
+      },
+      {
+        "word": "possess",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "拥有",
+        "example": "Possess skills."
+      },
+      {
+        "word": "potential",
+        "phonetic": "",
+        "pos": "n./a.",
+        "meaning": "潜力",
+        "example": "Great potential."
+      },
+      {
+        "word": "poverty",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "贫困",
+        "example": "End poverty."
+      },
+      {
+        "word": "practical",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "实际的",
+        "example": "Practical solution."
+      },
+      {
+        "word": "precise",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "精确的",
+        "example": "Precise measurement."
+      },
+      {
+        "word": "predict",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "预测",
+        "example": "Predict the future."
+      },
+      {
+        "word": "prejudice",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "偏见",
+        "example": "Overcome prejudice."
+      },
+      {
+        "word": "previous",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "以前的",
+        "example": "Previous experience."
+      },
+      {
+        "word": "primitive",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "原始的",
+        "example": "Primitive tools."
+      },
+      {
+        "word": "principal",
+        "phonetic": "",
+        "pos": "a./n.",
+        "meaning": "主要的",
+        "example": "Principal reason."
+      },
+      {
+        "word": "principle",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "原则",
+        "example": "Basic principle."
+      },
+      {
+        "word": "priority",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "优先",
+        "example": "Top priority."
+      }
+    ]
+  },
+  {
+    "day": 9,
+    "words": [
+      {
+        "word": "proceed",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "继续",
+        "example": "Proceed with caution."
+      },
+      {
+        "word": "process",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "过程",
+        "example": "Complex process."
+      },
+      {
+        "word": "produce",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "生产",
+        "example": "Produce goods."
+      },
+      {
+        "word": "profession",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "职业",
+        "example": "Noble profession."
+      },
+      {
+        "word": "profit",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "利润",
+        "example": "Make profit."
+      },
+      {
+        "word": "prohibit",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "禁止",
+        "example": "Prohibit smoking."
+      },
+      {
+        "word": "promote",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "促进",
+        "example": "Promote growth."
+      },
+      {
+        "word": "proportion",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "比例",
+        "example": "Right proportion."
+      },
+      {
+        "word": "propose",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "提议",
+        "example": "Propose a plan."
+      },
+      {
+        "word": "prospect",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "前景",
+        "example": "Good prospects."
+      },
+      {
+        "word": "provoke",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "激怒",
+        "example": "Don't provoke him."
+      },
+      {
+        "word": "pursue",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "追求",
+        "example": "Pursue your dream."
+      },
+      {
+        "word": "qualify",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "使合格",
+        "example": "Qualify for the job."
+      },
+      {
+        "word": "quote",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "引用",
+        "example": "Quote the source."
+      },
+      {
+        "word": "radical",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "根本的",
+        "example": "Radical change."
+      },
+      {
+        "word": "random",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "随机的",
+        "example": "Random selection."
+      },
+      {
+        "word": "rational",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "理性的",
+        "example": "Rational decision."
+      },
+      {
+        "word": "react",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "反应",
+        "example": "React quickly."
+      },
+      {
+        "word": "reasonable",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "合理的",
+        "example": "Reasonable price."
+      },
+      {
+        "word": "recognize",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "认出",
+        "example": "Recognize the face."
+      },
+      {
+        "word": "recommend",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "推荐",
+        "example": "I recommend this."
+      },
+      {
+        "word": "recover",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "恢复",
+        "example": "Recover from illness."
+      },
+      {
+        "word": "reform",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "改革",
+        "example": "Reform the system."
+      },
+      {
+        "word": "refuse",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "拒绝",
+        "example": "Refuse to go."
+      },
+      {
+        "word": "regulate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "管理",
+        "example": "Regulate traffic."
+      },
+      {
+        "word": "reinforce",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "加强",
+        "example": "Reforce the wall."
+      },
+      {
+        "word": "release",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "释放",
+        "example": "Release the prisoner."
+      },
+      {
+        "word": "relevant",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "相关的",
+        "example": "Relevant information."
+      },
+      {
+        "word": "reluctant",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "不情愿的",
+        "example": "Reluctant to help."
+      },
+      {
+        "word": "remarkable",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "非凡的",
+        "example": "Remarkable achievement."
+      },
+      {
+        "word": "render",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "使成为",
+        "example": "Render help."
+      },
+      {
+        "word": "represent",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "代表",
+        "example": "Represent the company."
+      },
+      {
+        "word": "reproduce",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "繁殖",
+        "example": "Reproduce quickly."
+      },
+      {
+        "word": "resemble",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "类似",
+        "example": "Resemble each other."
+      },
+      {
+        "word": "reserve",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "预订",
+        "example": "Reserve a table."
+      },
+      {
+        "word": "resident",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "居民",
+        "example": "Local resident."
+      },
+      {
+        "word": "resist",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "抵抗",
+        "example": "Resist temptation."
+      },
+      {
+        "word": "resolve",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "解决",
+        "example": "Resolve the issue."
+      },
+      {
+        "word": "resource",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "资源",
+        "example": "Natural resources."
+      },
+      {
+        "word": "respond",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "回应",
+        "example": "Respond quickly."
+      }
+    ]
+  },
+  {
+    "day": 10,
+    "words": [
+      {
+        "word": "restore",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "恢复",
+        "example": "Restore order."
+      },
+      {
+        "word": "restrict",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "限制",
+        "example": "Restrict access."
+      },
+      {
+        "word": "retain",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "保留",
+        "example": "Retain customers."
+      },
+      {
+        "word": "reveal",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "揭示",
+        "example": "Reveal the truth."
+      },
+      {
+        "word": "revolution",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "革命",
+        "example": "Industrial revolution."
+      },
+      {
+        "word": "rigid",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "严格的",
+        "example": "Rigid rules."
+      },
+      {
+        "word": "routine",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "常规",
+        "example": "Daily routine."
+      },
+      {
+        "word": "sacrifice",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "牺牲",
+        "example": "Make sacrifices."
+      },
+      {
+        "word": "sample",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "样本",
+        "example": "Free sample."
+      },
+      {
+        "word": "satellite",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "卫星",
+        "example": "Communication satellite."
+      },
+      {
+        "word": "satisfy",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "使满意",
+        "example": "Satisfy customers."
+      },
+      {
+        "word": "schedule",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "日程",
+        "example": "Tight schedule."
+      },
+      {
+        "word": "scheme",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "计划",
+        "example": "New scheme."
+      },
+      {
+        "word": "secure",
+        "phonetic": "",
+        "pos": "a./v.",
+        "meaning": "安全的",
+        "example": "Secure the area."
+      },
+      {
+        "word": "seek",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "寻找",
+        "example": "Seek help."
+      },
+      {
+        "word": "select",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "选择",
+        "example": "Select carefully."
+      },
+      {
+        "word": "senior",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "高级的",
+        "example": "Senior manager."
+      },
+      {
+        "word": "sensitive",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "敏感的",
+        "example": "Sensitive skin."
+      },
+      {
+        "word": "sequence",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "顺序",
+        "example": "Right sequence."
+      },
+      {
+        "word": "session",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "会议",
+        "example": "Training session."
+      },
+      {
+        "word": "settle",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "解决",
+        "example": "Settle the dispute."
+      },
+      {
+        "word": "severe",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "严重的",
+        "example": "Severe weather."
+      },
+      {
+        "word": "shelter",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "庇护所",
+        "example": "Find shelter."
+      },
+      {
+        "word": "shift",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "转变",
+        "example": "Shift gears."
+      },
+      {
+        "word": "significance",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "重要性",
+        "example": "Great significance."
+      },
+      {
+        "word": "similar",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "相似的",
+        "example": "Similar results."
+      },
+      {
+        "word": "simplify",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "简化",
+        "example": "Simplify the process."
+      },
+      {
+        "word": "simultaneous",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "同时的",
+        "example": "Simultaneous translation."
+      },
+      {
+        "word": "solar",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "太阳的",
+        "example": "Solar energy."
+      },
+      {
+        "word": "sophisticated",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "复杂的",
+        "example": "Sophisticated system."
+      },
+      {
+        "word": "source",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "来源",
+        "example": "Main source."
+      },
+      {
+        "word": "specific",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "具体的",
+        "example": "Specific details."
+      },
+      {
+        "word": "sponsor",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "赞助",
+        "example": "Main sponsor."
+      },
+      {
+        "word": "stable",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "稳定的",
+        "example": "Stable economy."
+      },
+      {
+        "word": "statistics",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "统计",
+        "example": "Official statistics."
+      },
+      {
+        "word": "status",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "地位",
+        "example": "High status."
+      },
+      {
+        "word": "stimulate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "刺激",
+        "example": "Stimulate growth."
+      },
+      {
+        "word": "strategy",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "策略",
+        "example": "Winning strategy."
+      },
+      {
+        "word": "stress",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "压力",
+        "example": "Reduce stress."
+      },
+      {
+        "word": "structure",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "结构",
+        "example": "Clear structure."
+      }
+    ]
+  },
+  {
+    "day": 11,
+    "words": [
+      {
+        "word": "struggle",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "斗争",
+        "example": "Struggle for freedom."
+      },
+      {
+        "word": "submit",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "提交",
+        "example": "Submit the report."
+      },
+      {
+        "word": "subsequent",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "随后的",
+        "example": "Subsequent events."
+      },
+      {
+        "word": "substitute",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "替代",
+        "example": "Good substitute."
+      },
+      {
+        "word": "sufficient",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "足够的",
+        "example": "Sufficient evidence."
+      },
+      {
+        "word": "suggest",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "建议",
+        "example": "I suggest we go."
+      },
+      {
+        "word": "summarize",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "总结",
+        "example": "Summarize the main points."
+      },
+      {
+        "word": "superior",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "优越的",
+        "example": "Superior quality."
+      },
+      {
+        "word": "supplement",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "补充",
+        "example": "Dietary supplement."
+      },
+      {
+        "word": "suppose",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "假设",
+        "example": "I suppose so."
+      },
+      {
+        "word": "surrender",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "投降",
+        "example": "Surrender now."
+      },
+      {
+        "word": "survive",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "幸存",
+        "example": "Survive the crash."
+      },
+      {
+        "word": "suspect",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "怀疑",
+        "example": "I suspect him."
+      },
+      {
+        "word": "suspend",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "暂停",
+        "example": "Suspend the service."
+      },
+      {
+        "word": "sustain",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "维持",
+        "example": "Sustain growth."
+      },
+      {
+        "word": "symbol",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "象征",
+        "example": "Peace symbol."
+      },
+      {
+        "word": "sympathy",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "同情",
+        "example": "Show sympathy."
+      },
+      {
+        "word": "symptom",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "症状",
+        "example": "Common symptom."
+      },
+      {
+        "word": "target",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "目标",
+        "example": "Main target."
+      },
+      {
+        "word": "technique",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "技术",
+        "example": "New technique."
+      },
+      {
+        "word": "temporary",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "临时的",
+        "example": "Temporary job."
+      },
+      {
+        "word": "tendency",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "倾向",
+        "example": "Natural tendency."
+      },
+      {
+        "word": "terminate",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "终止",
+        "example": "Terminate the contract."
+      },
+      {
+        "word": "territory",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "领土",
+        "example": "National territory."
+      },
+      {
+        "word": "theory",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "理论",
+        "example": "Scientific theory."
+      },
+      {
+        "word": "threaten",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "威胁",
+        "example": "Don't threaten me."
+      },
+      {
+        "word": "tolerance",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "容忍",
+        "example": "Show tolerance."
+      },
+      {
+        "word": "trace",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "追踪",
+        "example": "Trace the origin."
+      },
+      {
+        "word": "tradition",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "传统",
+        "example": "Old tradition."
+      },
+      {
+        "word": "transfer",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "转移",
+        "example": "Transfer money."
+      },
+      {
+        "word": "transform",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "转变",
+        "example": "Transform lives."
+      },
+      {
+        "word": "transmit",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "传播",
+        "example": "Transmit signals."
+      },
+      {
+        "word": "transparent",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "透明的",
+        "example": "Transparent glass."
+      },
+      {
+        "word": "tremendous",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "巨大的",
+        "example": "Tremendous effort."
+      },
+      {
+        "word": "trigger",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "触发",
+        "example": "Trigger alarm."
+      },
+      {
+        "word": "triumph",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "胜利",
+        "example": "Great triumph."
+      },
+      {
+        "word": "tropical",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "热带的",
+        "example": "Tropical climate."
+      },
+      {
+        "word": "ultimate",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "最终的",
+        "example": "Ultimate goal."
+      },
+      {
+        "word": "undergo",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "经历",
+        "example": "Undergo surgery."
+      },
+      {
+        "word": "underline",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "强调",
+        "example": "Underline importance."
+      }
+    ]
+  },
+  {
+    "day": 12,
+    "words": [
+      {
+        "word": "undertake",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "承担",
+        "example": "Undertake responsibility."
+      },
+      {
+        "word": "uniform",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "制服",
+        "example": "School uniform."
+      },
+      {
+        "word": "unique",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "独特的",
+        "example": "Unique style."
+      },
+      {
+        "word": "universe",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "宇宙",
+        "example": "Vast universe."
+      },
+      {
+        "word": "update",
+        "phonetic": "",
+        "pos": "v./n.",
+        "meaning": "更新",
+        "example": "Update software."
+      },
+      {
+        "word": "urge",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "催促",
+        "example": "Urge him to go."
+      },
+      {
+        "word": "utility",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "实用",
+        "example": "Public utility."
+      },
+      {
+        "word": "utilize",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "利用",
+        "example": "Utilize resources."
+      },
+      {
+        "word": "valid",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "有效的",
+        "example": "Valid passport."
+      },
+      {
+        "word": "value",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "价值",
+        "example": "Great value."
+      },
+      {
+        "word": "variety",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "多样",
+        "example": "Wide variety."
+      },
+      {
+        "word": "vehicle",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "车辆",
+        "example": "Electric vehicle."
+      },
+      {
+        "word": "venture",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "冒险",
+        "example": "Business venture."
+      },
+      {
+        "word": "version",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "版本",
+        "example": "Latest version."
+      },
+      {
+        "word": "viable",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "可行的",
+        "example": "Viable solution."
+      },
+      {
+        "word": "virtual",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "虚拟的",
+        "example": "Virtual reality."
+      },
+      {
+        "word": "visible",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "可见的",
+        "example": "Visible from afar."
+      },
+      {
+        "word": "vision",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "愿景",
+        "example": "Clear vision."
+      },
+      {
+        "word": "vital",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "至关重要的",
+        "example": "Vital importance."
+      },
+      {
+        "word": "volume",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "体积",
+        "example": "Large volume."
+      },
+      {
+        "word": "voluntary",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "自愿的",
+        "example": "Voluntary work."
+      },
+      {
+        "word": "vulnerable",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "脆弱的",
+        "example": "Vulnerable group."
+      },
+      {
+        "word": "wealth",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "财富",
+        "example": "Great wealth."
+      },
+      {
+        "word": "welfare",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "福利",
+        "example": "Social welfare."
+      },
+      {
+        "word": "whereas",
+        "phonetic": "",
+        "pos": "conj.",
+        "meaning": "然而",
+        "example": "He is tall, whereas she is short."
+      },
+      {
+        "word": "witness",
+        "phonetic": "",
+        "pos": "n./v.",
+        "meaning": "目击者",
+        "example": "Witness the event."
+      },
+      {
+        "word": "worthwhile",
+        "phonetic": "",
+        "pos": "a.",
+        "meaning": "值得的",
+        "example": "Worthwhile experience."
+      },
+      {
+        "word": "yield",
+        "phonetic": "",
+        "pos": "v.",
+        "meaning": "产生",
+        "example": "Yield results."
+      },
+      {
+        "word": "zone",
+        "phonetic": "",
+        "pos": "n.",
+        "meaning": "区域",
+        "example": "Time zone."
+      }
+    ]
+  },
+  {
+    "day": 13,
+    "words": []
+  },
+  {
+    "day": 14,
+    "words": []
+  },
+  {
+    "day": 15,
+    "words": []
+  },
+  {
+    "day": 16,
+    "words": []
+  },
+  {
+    "day": 17,
+    "words": []
+  },
+  {
+    "day": 18,
+    "words": []
+  },
+  {
+    "day": 19,
+    "words": []
+  },
+  {
+    "day": 20,
+    "words": []
+  },
+  {
+    "day": 21,
+    "words": []
+  },
+  {
+    "day": 22,
+    "words": []
+  },
+  {
+    "day": 23,
+    "words": []
+  },
+  {
+    "day": 24,
+    "words": []
+  },
+  {
+    "day": 25,
+    "words": []
+  },
+  {
+    "day": 26,
+    "words": []
+  },
+  {
+    "day": 27,
+    "words": []
+  },
+  {
+    "day": 28,
+    "words": []
+  },
+  {
+    "day": 29,
+    "words": []
+  },
+  {
+    "day": 30,
+    "words": []
+  },
+  {
+    "day": 31,
+    "words": []
+  },
+  {
+    "day": 32,
+    "words": []
+  },
+  {
+    "day": 33,
+    "words": []
+  },
+  {
+    "day": 34,
+    "words": []
+  },
+  {
+    "day": 35,
+    "words": []
+  },
+  {
+    "day": 36,
+    "words": []
+  },
+  {
+    "day": 37,
+    "words": []
+  },
+  {
+    "day": 38,
+    "words": []
+  },
+  {
+    "day": 39,
+    "words": []
+  },
+  {
+    "day": 40,
+    "words": []
+  },
+  {
+    "day": 41,
+    "words": []
+  },
+  {
+    "day": 42,
+    "words": []
+  },
+  {
+    "day": 43,
+    "words": []
+  },
+  {
+    "day": 44,
+    "words": []
+  },
+  {
+    "day": 45,
+    "words": []
+  },
+  {
+    "day": 46,
+    "words": []
+  },
+  {
+    "day": 47,
+    "words": []
+  },
+  {
+    "day": 48,
+    "words": []
+  },
+  {
+    "day": 49,
+    "words": []
+  },
+  {
+    "day": 50,
+    "words": []
+  },
+  {
+    "day": 51,
+    "words": []
+  },
+  {
+    "day": 52,
+    "words": []
+  },
+  {
+    "day": 53,
+    "words": []
+  },
+  {
+    "day": 54,
+    "words": []
+  },
+  {
+    "day": 55,
+    "words": []
+  },
+  {
+    "day": 56,
+    "words": []
+  },
+  {
+    "day": 57,
+    "words": []
+  },
+  {
+    "day": 58,
+    "words": []
+  },
+  {
+    "day": 59,
+    "words": []
+  },
+  {
+    "day": 60,
+    "words": []
+  },
+  {
+    "day": 61,
+    "words": []
+  },
+  {
+    "day": 62,
+    "words": []
+  },
+  {
+    "day": 63,
+    "words": []
+  },
+  {
+    "day": 64,
+    "words": []
+  },
+  {
+    "day": 65,
+    "words": []
+  },
+  {
+    "day": 66,
+    "words": []
+  },
+  {
+    "day": 67,
+    "words": []
+  },
+  {
+    "day": 68,
+    "words": []
+  },
+  {
+    "day": 69,
+    "words": []
+  },
+  {
+    "day": 70,
+    "words": []
+  },
+  {
+    "day": 71,
+    "words": []
+  },
+  {
+    "day": 72,
+    "words": []
+  },
+  {
+    "day": 73,
+    "words": []
+  },
+  {
+    "day": 74,
+    "words": []
+  },
+  {
+    "day": 75,
+    "words": []
+  },
+  {
+    "day": 76,
+    "words": []
+  },
+  {
+    "day": 77,
+    "words": []
+  },
+  {
+    "day": 78,
+    "words": []
+  },
+  {
+    "day": 79,
+    "words": []
+  },
+  {
+    "day": 80,
+    "words": []
+  },
+  {
+    "day": 81,
+    "words": []
+  },
+  {
+    "day": 82,
+    "words": []
+  },
+  {
+    "day": 83,
+    "words": []
+  },
+  {
+    "day": 84,
+    "words": []
+  }
+];
+
 /* ============ 通用工具 ============ */
 function showToast(msg) {
     const t = document.getElementById('toast');
