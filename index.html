@@ -2466,7 +2466,8 @@ function getVocabDay() {
 
 function getTodayVocab() {
     const day = getVocabDay();
-    return VOCAB_LIST[day - 1] || [];
+    const start = (day - 1) * WORDS_PER_DAY;
+    return VOCAB_LIST.slice(start, start + WORDS_PER_DAY);
 }
 
 function getVocabProgress() {
