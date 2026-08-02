@@ -273,10 +273,10 @@
     <div class="nav-item" data-page="exam"><div class="nav-icon">📝</div><div class="nav-text">真题演练</div></div>
     <div class="nav-item" data-page="wordbook"><div class="nav-icon">📖</div><div class="nav-text">错题生词</div></div>
     <div class="nav-item" data-page="ai"><div class="nav-icon">🤖</div><div class="nav-text">AI助手</div></div>
-    <div class="nav-item" data-page="diary"><div class="nav-icon">📔</div><div class="nav-text">日记</div></div>
-    <div class="nav-item" data-page="review"><div class="nav-icon">🔍</div><div class="nav-text">每日复盘</div></div>
-    <div class="nav-item" data-page="notes"><div class="nav-icon">📓</div><div class="nav-text">自由笔记</div></div>
-    <div class="nav-item" data-page="books"><div class="nav-icon">📚</div><div class="nav-text">待读书单</div></div>
+    <div class="nav-item" data-page="diary"><div class="nav-icon">📅</div><div class="nav-text">每日学习打卡</div></div>
+    <div class="nav-item" data-page="review"><div class="nav-icon">📊</div><div class="nav-text">84天详细计划</div></div>
+    <div class="nav-item" data-page="notes"><div class="nav-icon">📝</div><div class="nav-text">高频词组</div></div>
+    <div class="nav-item" data-page="books"><div class="nav-icon">📚</div><div class="nav-text">语法技巧</div></div>
     <div class="nav-item" data-page="closet"><div class="nav-icon">👗</div><div class="nav-text">AI衣橱</div></div>
     <div class="nav-item" data-page="tarot"><div class="nav-icon">🔮</div><div class="nav-text">塔罗占卜</div></div>
     <div class="nav-item" data-page="bazi"><div class="nav-icon">🎋</div><div class="nav-text">八字命理</div></div>
@@ -655,120 +655,114 @@
         <div id="baziResult"></div>
     </div>
 
-    <!-- 日记 -->
+    <!-- 每日学习打卡 -->
     <div class="page" id="diary">
-        <h2 class="page-title">📔 日记</h2>
+        <h2 class="page-title">📅 每日学习打卡</h2>
         <div class="card">
-            <div class="section-label">写日记</div>
-            <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
-                <input type="date" id="diaryDate" class="input-area" style="width:auto;flex:1;">
+            <div class="section-label">📋 今日学习任务（勾选完成）</div>
+            <div id="checkinTaskList"></div>
+            <div class="task-progress-bar" style="margin-top:15px;"><div class="task-progress-fill" id="checkinProgressFill" style="width:0%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:#999;">
+                <span>今日完成率</span><span id="checkinProgressText">0%</span>
             </div>
-            <div style="margin-bottom:10px;">
-                <span style="font-size:13px;color:#ff6b9d;margin-right:8px;">心情：</span>
-                <span class="mood-emoji" data-mood="😊">😊</span>
-                <span class="mood-emoji" data-mood="😐">😐</span>
-                <span class="mood-emoji" data-mood="😢">😢</span>
-                <span class="mood-emoji" data-mood="😡">😡</span>
-                <span class="mood-emoji" data-mood="😴">😴</span>
-                <span class="mood-emoji" data-mood="🥰">🥰</span>
+            <div class="stat-row">
+                <div class="stat-item"><div class="stat-number" id="checkinStreak">0</div><div class="stat-label">连续打卡天数</div></div>
+                <div class="stat-item"><div class="stat-number" id="checkinTotal">0</div><div class="stat-label">累计打卡天数</div></div>
             </div>
-            <textarea id="diaryContent" class="input-area" rows="6" placeholder="今天发生了什么？记录下来..." style="min-height:120px;"></textarea>
-            <div class="save-indicator" id="diarySaveStatus">✓ 已保存</div>
-        </div>
-        <div class="card">
-            <div class="section-label">历史日记</div>
-            <div id="diaryList"></div>
+            <button class="btn" id="checkinConfirmBtn" style="width:100%;margin-top:15px;">✓ 确认今日打卡</button>
         </div>
     </div>
 
-    <!-- 每日复盘 -->
+    <!-- 84天详细计划 -->
     <div class="page" id="review">
-        <h2 class="page-title">🔍 每日复盘</h2>
-        <div class="card">
-            <div class="section-label">今日复盘</div>
-            <input type="date" id="reviewDate" class="input-area" style="width:auto;margin-bottom:12px;">
-            <div style="margin-bottom:12px;">
-                <label class="form-label">✅ 今日收获</label>
-                <textarea id="reviewGain" class="input-area" rows="3" placeholder="今天学到了什么？做对了什么？"></textarea>
+        <h2 class="page-title">📊 84天详细计划</h2>
+        <div class="card" style="background:#fffbe6;border-left:4px solid #ffc107;">
+            <div class="section-label">📅 计划概览</div>
+            <div style="font-size:13px;color:#666;line-height:1.8;">
+                <strong style="color:#ff6b9d;">总天数：84天</strong>（约12周）<br>
+                <strong style="color:#ff6b9d;">目标：自考英语13000 通过（60分+）</strong><br>
+                每天学习2-3小时，坚持就是胜利！💪
             </div>
-            <div style="margin-bottom:12px;">
-                <label class="form-label">❌ 不足之处</label>
-                <textarea id="reviewLack" class="input-area" rows="3" placeholder="哪里做得不好？什么没完成？"></textarea>
-            </div>
-            <div style="margin-bottom:12px;">
-                <label class="form-label">🔧 明日改进</label>
-                <textarea id="reviewImprove" class="input-area" rows="3" placeholder="明天打算怎么改进？"></textarea>
-            </div>
-            <div class="save-indicator" id="reviewSaveStatus">✓ 已保存</div>
         </div>
         <div class="card">
-            <div class="section-label">历史复盘</div>
-            <div id="reviewList"></div>
+            <div class="section-label">📖 第一阶段：词汇+阅读筑基（Day 1-28，8月）</div>
+            <div style="font-size:13px;color:#666;line-height:1.8;">
+                <strong>每日任务：</strong><br>
+                • 背40个核心单词（用词汇学习模块）<br>
+                • 做1篇阅读理解（阅读判断/选择交替）<br>
+                • 学1个语法点（用语法技巧模块）<br>
+                • 复习前一天的单词<br><br>
+                <strong>周末加餐：</strong><br>
+                • 做1套完整阅读练习（4篇）<br>
+                • 整理本周生词本
+            </div>
+        </div>
+        <div class="card">
+            <div class="section-label">📖 第二阶段：7题型专项+作文模板（Day 29-56，9月）</div>
+            <div style="font-size:13px;color:#666;line-height:1.8;">
+                <strong>每周攻破1个题型（4天学习+2天练习+1天复习）：</strong><br>
+                • Week 5-6：阅读判断（10分）<br>
+                • Week 7：阅读选择（10分）<br>
+                • Week 8：概括段落+补全句子（10分）<br>
+                • Week 9：填句补文（10分）<br>
+                • Week 10：填词补文（15分）<br>
+                • Week 11：完形补文（15分）<br>
+                • Week 12：短文写作（30分）——背3-5篇模板<br><br>
+                <strong>每日任务：</strong><br>
+                • 背30个单词（保持词汇量）<br>
+                • 专项题型练习30分钟<br>
+                • 作文模板背诵（Week 12）
+            </div>
+        </div>
+        <div class="card">
+            <div class="section-label">📖 第三阶段：真题模拟+作文实战（Day 57-84，10月）</div>
+            <div style="font-size:13px;color:#666;line-height:1.8;">
+                <strong>每周任务：</strong><br>
+                • 做1套完整真题（150分钟限时）<br>
+                • 对答案+错题分析<br>
+                • 二刷错题（重点题型）<br>
+                • 作文限时训练（30分钟写1篇）<br><br>
+                <strong>每日任务：</strong><br>
+                • 背20个单词（维持）<br>
+                • 复习错题本<br>
+                • 作文模板默写（隔天1篇）<br><br>
+                <strong style="color:#ff6b9d;">考前3天：</strong><br>
+                • 不再做新题，只看错题<br>
+                • 默写作文模板<br>
+                • 调整作息，保证睡眠
+            </div>
         </div>
     </div>
 
-    <!-- 自由笔记 -->
+    <!-- 高频词组200组 -->
     <div class="page" id="notes">
-        <h2 class="page-title">📓 自由笔记</h2>
-        <div class="card">
-            <div class="section-label">新建笔记</div>
-            <input type="text" id="noteTitle" class="input-area" placeholder="标题" style="margin-bottom:8px;">
-            <div style="display:flex;gap:8px;margin-bottom:8px;">
-                <input type="text" id="noteTag" class="input-area" placeholder="分类标签（如：英语/生活/灵感）" style="flex:1;">
+        <h2 class="page-title">📝 高频词组200组</h2>
+        <div class="card" style="background:#fffbe6;border-left:4px solid #ffc107;">
+            <div class="section-label">💡 学习建议</div>
+            <div style="font-size:13px;color:#666;line-height:1.7;">
+                每天背10组词组，20天背完一遍。词组比单词更重要，考试常考固定搭配！<br>
+                <strong style="color:#ff6b9d;">点击词组旁的 🔊 可以听发音</strong>
             </div>
-            <textarea id="noteContent" class="input-area" rows="6" placeholder="写点什么..." style="min-height:120px;"></textarea>
-            <div style="display:flex;gap:8px;margin-top:8px;">
-                <button class="btn" id="noteSave" style="flex:1;">保存笔记</button>
-                <button class="btn btn-outline" id="noteClear" style="flex:1;">清空</button>
-            </div>
-            <div class="save-indicator" id="noteSaveStatus"></div>
         </div>
         <div class="card">
-            <div class="section-label">我的笔记（<span id="noteCount">0</span>条）</div>
-            <div id="noteList"></div>
+            <div class="section-label">📚 词组列表（点击展开释义）</div>
+            <div id="phraseList" style="max-height:500px;overflow-y:auto;"></div>
         </div>
     </div>
 
-    <!-- 待读书单 -->
+    <!-- 语法速查与技巧 -->
     <div class="page" id="books">
-        <h2 class="page-title">📚 待读书单</h2>
-        <div class="card">
-            <div class="section-label">添加书籍</div>
-            <div class="form-row">
-                <div class="form-group"><input type="text" id="bookTitle" class="input-area" placeholder="书名"></div>
-                <div class="form-group"><input type="text" id="bookAuthor" class="input-area" placeholder="作者"></div>
+        <h2 class="page-title">📚 语法速查与技巧</h2>
+        <div class="card" style="background:#fffbe6;border-left:4px solid #ffc107;">
+            <div class="section-label">💡 语法学习建议</div>
+            <div style="font-size:13px;color:#666;line-height:1.7;">
+                语法是阅读理解和写作的基础。每天学1个语法点，84天足够掌握核心语法！<br>
+                <strong style="color:#ff6b9d;">重点：时态、从句、非谓语动词</strong>（考试必考）
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <select id="bookStatus" class="form-select">
-                        <option value="want">想读</option>
-                        <option value="reading">在读</option>
-                        <option value="done">已读</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="bookRating" class="form-select">
-                        <option value="0">未评分</option>
-                        <option value="1">⭐ 1星</option>
-                        <option value="2">⭐⭐ 2星</option>
-                        <option value="3">⭐⭐⭐ 3星</option>
-                        <option value="4">⭐⭐⭐⭐ 4星</option>
-                        <option value="5">⭐⭐⭐⭐⭐ 5星</option>
-                    </select>
-                </div>
-            </div>
-            <textarea id="bookNote" class="input-area" rows="2" placeholder="读书笔记（选填）" style="margin-bottom:8px;"></textarea>
-            <button class="btn" id="bookAdd" style="width:100%;">加入书单</button>
         </div>
         <div class="card">
-            <div class="section-label">书单（<span id="bookCount">0</span>本）</div>
-            <div class="closet-tabs" id="bookFilter">
-                <div class="closet-tab active" data-filter="all">全部</div>
-                <div class="closet-tab" data-filter="want">想读</div>
-                <div class="closet-tab" data-filter="reading">在读</div>
-                <div class="closet-tab" data-filter="done">已读</div>
-            </div>
-            <div id="bookList"></div>
+            <div class="section-label">📖 语法知识点（点击展开详解）</div>
+            <div id="grammarList" style="max-height:500px;overflow-y:auto;"></div>
         </div>
     </div>
 </div>
@@ -1777,218 +1771,189 @@ function renderEssayTemplates() {
     });
 }
 
-/* ============ 日记模块 ============ */
-let diaryMood = '😊';
-function initDiary() {
-    const dateInput = document.getElementById('diaryDate');
-    dateInput.value = todayISO();
-    // 心情选择
-    document.querySelectorAll('.mood-emoji').forEach(el => {
-        el.addEventListener('click', function() {
-            document.querySelectorAll('.mood-emoji').forEach(e => e.classList.remove('selected'));
-            this.classList.add('selected');
-            diaryMood = this.dataset.mood;
-            autoSaveDiary();
-        });
-    });
-    // 自动保存（输入后1秒自动存）
-    let diaryTimer;
-    document.getElementById('diaryContent').addEventListener('input', () => {
-        document.getElementById('diarySaveStatus').textContent = '⏳ 输入中...';
-        document.getElementById('diarySaveStatus').className = 'save-indicator saving';
-        clearTimeout(diaryTimer);
-        diaryTimer = setTimeout(autoSaveDiary, 800);
-    });
-    dateInput.addEventListener('change', () => { loadDiaryByDate(dateInput.value); });
-    loadDiaryByDate(todayISO());
-    renderDiaryList();
+/* ============ 每日学习打卡模块 ============ */
+function initCheckin() {
+    renderCheckinTasks();
+    updateCheckinProgress();
+    document.getElementById('checkinConfirmBtn').addEventListener('click', confirmCheckin);
 }
 
-function autoSaveDiary() {
-    const date = document.getElementById('diaryDate').value;
-    const content = document.getElementById('diaryContent').value;
-    const list = DB.get('diary');
-    const idx = list.findIndex(x => x.date === date);
-    const item = { id: idx >= 0 ? list[idx].id : genId(), date, mood: diaryMood, content, updatedAt: new Date().toISOString() };
-    if (idx >= 0) list[idx] = item; else list.unshift(item);
-    DB.save('diary', list);
-    document.getElementById('diarySaveStatus').textContent = '✓ 已保存';
-    document.getElementById('diarySaveStatus').className = 'save-indicator saved';
-    renderDiaryList();
-}
-
-function loadDiaryByDate(date) {
-    const list = DB.get('diary');
-    const item = list.find(x => x.date === date);
-    const contentEl = document.getElementById('diaryContent');
-    contentEl.value = item ? item.content : '';
-    diaryMood = item ? item.mood : '😊';
-    document.querySelectorAll('.mood-emoji').forEach(e => {
-        e.classList.toggle('selected', e.dataset.mood === diaryMood);
-    });
-    document.getElementById('diarySaveStatus').textContent = '✓ 已保存';
-    document.getElementById('diarySaveStatus').className = 'save-indicator saved';
-}
-
-function renderDiaryList() {
-    const list = DB.get('diary').sort((a,b) => b.date.localeCompare(a.date));
-    const el = document.getElementById('diaryList');
-    if (list.length === 0) { el.innerHTML = '<div class="empty-hint">还没有日记，开始写第一篇吧~</div>'; return; }
-    el.innerHTML = list.map(d => `
-        <div class="list-item-card" data-date="${d.date}">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span class="list-item-title">${d.mood} ${d.date}</span>
-                <button class="delete-btn-small" data-id="${d.id}">×</button>
-            </div>
-            <div class="list-item-preview">${(d.content || '').substring(0, 80) || '(空)'}</div>
-        </div>
-    `).join('');
-    el.querySelectorAll('.list-item-card').forEach(c => {
-        c.addEventListener('click', e => {
-            if (e.target.tagName === 'BUTTON') return;
-            const date = c.dataset.date;
-            document.getElementById('diaryDate').value = date;
-            loadDiaryByDate(date);
-        });
-    });
-    el.querySelectorAll('.delete-btn-small').forEach(b => {
-        b.addEventListener('click', e => {
-            e.stopPropagation();
-            DB.remove('diary', b.dataset.id);
-            renderDiaryList();
-            if (document.getElementById('diaryDate').value === list.find(x=>x.id===b.dataset.id)?.date) {
-                loadDiaryByDate(document.getElementById('diaryDate').value);
-            }
-            showToast('日记已删除');
-        });
-    });
-}
-
-/* ============ 每日复盘模块 ============ */
-function initReview() {
-    document.getElementById('reviewDate').value = todayISO();
-    let reviewTimer;
-    ['reviewGain','reviewLack','reviewImprove'].forEach(id => {
-        document.getElementById(id).addEventListener('input', () => {
-            document.getElementById('reviewSaveStatus').textContent = '⏳ 输入中...';
-            document.getElementById('reviewSaveStatus').className = 'save-indicator saving';
-            clearTimeout(reviewTimer);
-            reviewTimer = setTimeout(autoSaveReview, 800);
-        });
-    });
-    document.getElementById('reviewDate').addEventListener('change', () => loadReviewByDate(document.getElementById('reviewDate').value));
-    loadReviewByDate(todayISO());
-    renderReviewList();
-}
-
-function autoSaveReview() {
-    const date = document.getElementById('reviewDate').value;
-    const gain = document.getElementById('reviewGain').value;
-    const lack = document.getElementById('reviewLack').value;
-    const improve = document.getElementById('reviewImprove').value;
-    const list = DB.get('review');
-    const idx = list.findIndex(x => x.date === date);
-    const item = { id: idx >= 0 ? list[idx].id : genId(), date, gain, lack, improve, updatedAt: new Date().toISOString() };
-    if (idx >= 0) list[idx] = item; else list.unshift(item);
-    DB.save('review', list);
-    document.getElementById('reviewSaveStatus').textContent = '✓ 已保存';
-    document.getElementById('reviewSaveStatus').className = 'save-indicator saved';
-    renderReviewList();
-}
-
-function loadReviewByDate(date) {
-    const list = DB.get('review');
-    const item = list.find(x => x.date === date);
-    document.getElementById('reviewGain').value = item ? item.gain : '';
-    document.getElementById('reviewLack').value = item ? item.lack : '';
-    document.getElementById('reviewImprove').value = item ? item.improve : '';
-    document.getElementById('reviewSaveStatus').textContent = '✓ 已保存';
-    document.getElementById('reviewSaveStatus').className = 'save-indicator saved';
-}
-
-function renderReviewList() {
-    const list = DB.get('review').sort((a,b) => b.date.localeCompare(a.date));
-    const el = document.getElementById('reviewList');
-    if (list.length === 0) { el.innerHTML = '<div class="empty-hint">还没有复盘记录</div>'; return; }
-    el.innerHTML = list.map(r => `
-        <div class="list-item-card" data-date="${r.date}">
-            <div class="list-item-title">🔍 ${r.date}</div>
-            <div class="list-item-preview">✅ ${((r.gain||'').substring(0,40)) || '未填'}</div>
-        </div>
-    `).join('');
-    el.querySelectorAll('.list-item-card').forEach(c => {
-        c.addEventListener('click', () => {
-            const date = c.dataset.date;
-            document.getElementById('reviewDate').value = date;
-            loadReviewByDate(date);
-        });
-    });
-}
-
-/* ============ 自由笔记模块 ============ */
-function initNotes() {
-    document.getElementById('noteSave').addEventListener('click', () => {
-        const title = document.getElementById('noteTitle').value.trim();
-        const content = document.getElementById('noteContent').value.trim();
-        if (!title && !content) { showToast('请输入标题或内容'); return; }
-        const item = {
-            id: genId(), title: title || '无标题', tag: document.getElementById('noteTag').value.trim() || '未分类',
-            content, createdAt: new Date().toISOString()
-        };
-        DB.upsert('notes', item);
-        document.getElementById('noteTitle').value = '';
-        document.getElementById('noteTag').value = '';
-        document.getElementById('noteContent').value = '';
-        document.getElementById('noteSaveStatus').textContent = '✓ 已保存';
-        document.getElementById('noteSaveStatus').className = 'save-indicator saved';
-        renderNoteList();
-        showToast('笔记已保存 📓');
-    });
-    document.getElementById('noteClear').addEventListener('click', () => {
-        document.getElementById('noteTitle').value = '';
-        document.getElementById('noteTag').value = '';
-        document.getElementById('noteContent').value = '';
-    });
-    renderNoteList();
-}
-
-function renderNoteList() {
-    const list = DB.get('notes');
-    document.getElementById('noteCount').textContent = list.length;
-    const el = document.getElementById('noteList');
-    if (list.length === 0) { el.innerHTML = '<div class="empty-hint">还没有笔记</div>'; return; }
-    el.innerHTML = list.map(n => `
-        <div class="list-item-card" data-id="${n.id}">
-            <div style="display:flex;justify-content:space-between;align-items:start;">
-                <div style="flex:1;">
-                    <div class="list-item-title">${n.title}</div>
-                    <div class="list-item-meta"><span class="outfit-tag">${n.tag}</span> · ${(n.createdAt||'').slice(0,10)}</div>
-                    <div class="list-item-preview">${(n.content||'').substring(0, 80)}</div>
+function renderCheckinTasks() {
+    const tasks = [
+        { id: 'vocab40', name: '背40个核心单词', desc: '使用词汇学习模块' },
+        { id: 'reading1', name: '做1篇阅读理解', desc: '阅读判断/选择交替' },
+        { id: 'grammar1', name: '学1个语法点', desc: '使用语法技巧模块' },
+        { id: 'review_vocab', name: '复习昨天的单词', desc: '巩固记忆' }
+    ];
+    
+    const today = todayISO();
+    const checkinData = DB.get('checkin_' + today) || {};
+    
+    const html = tasks.map(task => {
+        const done = checkinData[task.id] || false;
+        return `
+            <div class="task-item">
+                <div class="task-check ${done ? 'done' : ''}" data-task="${task.id}" onclick="toggleCheckinTask('${task.id}')"></div>
+                <div class="task-content">
+                    <div class="task-name">${task.name}</div>
+                    <div class="task-meta">${task.desc}</div>
                 </div>
-                <button class="delete-btn-small" data-id="${n.id}">×</button>
+            </div>
+        `;
+    }).join('');
+    
+    document.getElementById('checkinTaskList').innerHTML = html;
+}
+
+function toggleCheckinTask(taskId) {
+    const today = todayISO();
+    const checkinData = DB.get('checkin_' + today) || {};
+    checkinData[taskId] = !checkinData[taskId];
+    DB.save('checkin_' + today, checkinData);
+    renderCheckinTasks();
+    updateCheckinProgress();
+}
+
+function updateCheckinProgress() {
+    const today = todayISO();
+    const checkinData = DB.get('checkin_' + today) || {};
+    const totalTasks = 4;
+    const completedTasks = Object.values(checkinData).filter(v => v).length;
+    const progress = (completedTasks / totalTasks) * 100;
+    
+    document.getElementById('checkinProgressFill').style.width = progress + '%';
+    document.getElementById('checkinProgressText').textContent = Math.round(progress) + '%';
+    
+    // 更新统计
+    const stats = DB.get('checkin_stats') || { streak: 0, total: 0, lastDate: '' };
+    document.getElementById('checkinStreak').textContent = stats.streak;
+    document.getElementById('checkinTotal').textContent = stats.total;
+}
+
+function confirmCheckin() {
+    const today = todayISO();
+    const checkinData = DB.get('checkin_' + today) || {};
+    const completedTasks = Object.values(checkinData).filter(v => v).length;
+    
+    if (completedTasks === 0) {
+        showToast('请至少完成1个任务再打卡 📚');
+        return;
+    }
+    
+    const stats = DB.get('checkin_stats') || { streak: 0, total: 0, lastDate: '' };
+    
+    // 检查是否今天已经打卡
+    if (stats.lastDate === today) {
+        showToast('今天已经打卡过了 ✅');
+        return;
+    }
+    
+    // 更新统计
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayISO = yesterday.toISOString().slice(0, 10);
+    
+    if (stats.lastDate === yesterdayISO) {
+        stats.streak += 1;
+    } else {
+        stats.streak = 1;
+    }
+    stats.total += 1;
+    stats.lastDate = today;
+    
+    DB.save('checkin_stats', stats);
+    updateCheckinProgress();
+    showToast('打卡成功！连续打卡 ' + stats.streak + ' 天 🎉');
+}
+
+/* ============ 高频词组模块 ============ */
+const highFrequencyPhrases = [
+    { phrase: 'take into account', meaning: '考虑到，体谅' },
+    { phrase: 'in accordance with', meaning: '依照，根据' },
+    { phrase: 'account for', meaning: '占（比例）；解释' },
+    { phrase: 'take advantage of', meaning: '利用' },
+    { phrase: 'in addition to', meaning: '除...之外' },
+    { phrase: 'make an effort', meaning: '努力，尝试' },
+    { phrase: 'at all costs', meaning: '不惜一切代价' },
+    { phrase: 'as a matter of fact', meaning: '事实上' },
+    { phrase: 'by all means', meaning: '务必，一定' },
+    { phrase: 'come into effect', meaning: '生效，实施' },
+    { phrase: 'in consequence', meaning: '因此，结果' },
+    { phrase: 'on the contrary', meaning: '相反' },
+    { phrase: 'in detail', meaning: '详细地' },
+    { phrase: 'make a difference', meaning: '有影响，起作用' },
+    { phrase: 'do one\'s best', meaning: '尽力' },
+    { phrase: 'in the end', meaning: '最后，终于' },
+    { phrase: 'as a result', meaning: '结果，因此' },
+    { phrase: 'for instance', meaning: '例如' },
+    { phrase: 'in general', meaning: '一般来说' },
+    { phrase: 'on the whole', meaning: '总的来说' },
+    { phrase: 'take into consideration', meaning: '考虑到' },
+    { phrase: 'make use of', meaning: '利用' },
+    { phrase: 'in particular', meaning: '特别，尤其' },
+    { phrase: 'at present', meaning: '目前，现在' },
+    { phrase: 'in practice', meaning: '在实践中' },
+    { phrase: 'as a rule', meaning: '通常，一般来说' },
+    { phrase: 'in short', meaning: '简而言之' },
+    { phrase: 'on the other hand', meaning: '另一方面' },
+    { phrase: 'take place', meaning: '发生' },
+    { phrase: 'make progress', meaning: '取得进步' },
+    { phrase: 'in turn', meaning: '依次，转而' },
+    { phrase: 'at first', meaning: '起初，开始' },
+    { phrase: 'in case', meaning: '万一，以防' },
+    { phrase: 'for the sake of', meaning: '为了...的缘故' },
+    { phrase: 'in favor of', meaning: '支持，赞同' },
+    { phrase: 'on behalf of', meaning: '代表' },
+    { phrase: 'with regard to', meaning: '关于' },
+    { phrase: 'in terms of', meaning: '就...而言' },
+    { phrase: 'as far as', meaning: '就...而言，远至' },
+    { phrase: 'make up one\'s mind', meaning: '下定决心' }
+];
+
+function initPhrases() {
+    const html = highFrequencyPhrases.map((item, idx) => `
+        <div class="list-item-card" style="cursor:pointer;" onclick="this.querySelector('.phrase-detail').style.display=this.querySelector('.phrase-detail').style.display==='none'?'block':'none'">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div style="flex:1;">
+                    <div class="list-item-title">${idx + 1}. ${item.phrase} 
+                        <button onclick="event.stopPropagation();speakWord('${item.phrase}')" style="border:none;background:#ffeef8;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;vertical-align:middle;">🔊</button>
+                    </div>
+                    <div class="phrase-detail" style="display:none;margin-top:8px;font-size:13px;color:#666;padding:8px;background:#fff5f9;border-radius:8px;">
+                        <strong style="color:#ff6b9d;">释义：</strong>${item.meaning}
+                    </div>
+                </div>
             </div>
         </div>
     `).join('');
-    el.querySelectorAll('.list-item-card').forEach(c => {
-        c.addEventListener('click', e => {
-            if (e.target.tagName === 'BUTTON') return;
-            const n = list.find(x => x.id === c.dataset.id);
-            if (n) {
-                document.getElementById('noteTitle').value = n.title;
-                document.getElementById('noteTag').value = n.tag;
-                document.getElementById('noteContent').value = n.content;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
-    });
-    el.querySelectorAll('.delete-btn-small').forEach(b => {
-        b.addEventListener('click', e => {
-            e.stopPropagation();
-            DB.remove('notes', b.dataset.id);
-            renderNoteList();
-            showToast('笔记已删除');
-        });
-    });
+    
+    document.getElementById('phraseList').innerHTML = html;
+}
+
+/* ============ 语法技巧模块 ============ */
+const grammarPoints = [
+    { title: '一般现在时', content: '表示经常性、习惯性的动作或状态。<br><strong>结构：</strong>主语 + 动词原形/三单<br><strong>例句：</strong>She reads books every day.' },
+    { title: '一般过去时', content: '表示过去某个时间发生的动作或状态。<br><strong>结构：</strong>主语 + 动词过去式<br><strong>例句：</strong>I visited my grandma yesterday.' },
+    { title: '现在进行时', content: '表示正在进行的动作。<br><strong>结构：</strong>主语 + am/is/are + doing<br><strong>例句：</strong>They are playing football now.' },
+    { title: '定语从句', content: '用来修饰名词或代词的从句。<br><strong>关系代词：</strong>who, whom, whose, which, that<br><strong>例句：</strong>The book that I bought is interesting.' },
+    { title: '名词性从句', content: '在句中作主语、宾语、表语或同位语的从句。<br><strong>类型：</strong>主语从句、宾语从句、表语从句、同位语从句<br><strong>例句：</strong>What he said is true.（主语从句）' },
+    { title: '非谓语动词', content: '动词的非谓语形式，包括不定式、动名词、分词。<br><strong>不定式：</strong>to do<br><strong>动名词：</strong>doing<br><strong>分词：</strong>doing/done<br><strong>例句：</strong>I enjoy reading.（动名词作宾语）' },
+    { title: '虚拟语气', content: '表示假设、愿望、建议等非真实情况。<br><strong>结构：</strong>If + 主语 + 过去式, 主语 + would/could + 动词原形<br><strong>例句：</strong>If I were you, I would study harder.' },
+    { title: '倒装句', content: '将谓语动词放在主语之前的句式。<br><strong>完全倒装：</strong>Here comes the bus.<br><strong>部分倒装：</strong>Never have I seen such a beautiful place.' },
+    { title: '强调句', content: '用来强调句子的某个成分。<br><strong>结构：</strong>It is/was + 被强调部分 + that/who + 其余部分<br><strong>例句：</strong>It was Tom that/who broke the window.' },
+    { title: '主谓一致', content: '主语和谓语在人称和数上要保持一致。<br><strong>原则：</strong>语法一致、意义一致、就近原则<br><strong>例句：</strong>The news is exciting.（news虽以s结尾但是单数）' }
+];
+
+function initGrammar() {
+    const html = grammarPoints.map((item, idx) => `
+        <div class="list-item-card" style="cursor:pointer;" onclick="this.querySelector('.grammar-detail').style.display=this.querySelector('.grammar-detail').style.display==='none'?'block':'none'">
+            <div class="list-item-title">${idx + 1}. ${item.title}</div>
+            <div class="grammar-detail" style="display:none;margin-top:10px;font-size:13px;color:#666;line-height:1.7;padding:10px;background:#fff5f9;border-radius:8px;">
+                ${item.content}
+            </div>
+        </div>
+    `).join('');
+    
+    document.getElementById('grammarList').innerHTML = html;
 }
 
 /* ============ 待读书单模块 ============ */
@@ -2083,9 +2048,9 @@ renderWrongQuestions();
 renderWordbook();
 renderCloset(); initCloset();
 fetchWeather();
-initDiary();
-initReview();
-initNotes();
+initCheckin();
+initPhrases();
+initGrammar();
 initBooks();
 checkSupabaseConnection();
 // 定时检查连接
@@ -2810,6 +2775,33 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
     });
 }
+
+
+/* ============ 发音功能 ============ */
+function speakWord(word) {
+    if (!word) return;
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8;
+        utterance.pitch = 1;
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert('您的浏览器不支持语音合成');
+    }
+}
+
+// 为所有带 speak-word 属性的元素添加点击事件
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(e) {
+        const speakBtn = e.target.closest('[data-speak]');
+        if (speakBtn) {
+            const word = speakBtn.getAttribute('data-speak');
+            speakWord(word);
+        }
+    });
+});
 </script>
 </body>
 </html>
