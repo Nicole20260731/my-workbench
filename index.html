@@ -5412,6 +5412,41 @@ function initCheckin() {
     document.getElementById('checkinConfirmBtn').addEventListener('click', confirmCheckin);
 }
 
+
+function goToStudy(target, dayNum) {
+    if (target === 'vocab') {
+        // 跳转到词汇学习页面
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelector('[data-page="vocab"]').classList.add('active');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('vocab').classList.add('active');
+        vocabDay = dayNum;
+        vocabIndex = 0;
+        renderVocabCard(true);
+        showToast('已跳转到第' + dayNum + '天词汇学习', 2000);
+    } else if (target === 'phrases') {
+        // 跳转到词组学习页面
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelector('[data-page="phrases"]').classList.add('active');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('phrases').classList.add('active');
+        phraseDay = dayNum;
+        phraseIndex = 0;
+        renderPhraseCard(true);
+        showToast('已跳转到第' + dayNum + '天词组学习', 2000);
+    } else if (target === 'grammar') {
+        // 跳转到语法学习页面
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelector('[data-page="grammar"]').classList.add('active');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('grammar').classList.add('active');
+        grammarDay = dayNum;
+        grammarIndex = 0;
+        renderGrammarCard(true);
+        showToast('已跳转到第' + dayNum + '天语法学习', 2000);
+    }
+}
+
 function renderCheckinTasks() {
     const tasks = [
         { id: 'vocab40', name: '背40个核心单词', desc: '使用词汇学习模块' },
