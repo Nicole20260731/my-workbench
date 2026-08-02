@@ -5452,12 +5452,9 @@ function goToStudy(target, dayNum) {
         document.querySelector('[data-page="vocab"]').classList.add('active');
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('vocab').classList.add('active');
-        // 设置当前天数
-        const daySelect = document.getElementById('daySelect');
-        if (daySelect) {
-            daySelect.value = dayNum;
-            if (daySelect.onchange) daySelect.onchange();
-        }
+        // 设置当前天数并刷新单词
+        vocabDay = dayNum;
+        renderVocabCard();
         showToast(`开始学习 Day ${dayNum} 单词 📖`);
     } else if (target === 'phrases') {
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
