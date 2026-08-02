@@ -5413,62 +5413,30 @@ function initCheckin() {
 }
 
 function renderCheckinTasks() {
-    // 计算今天是第几天
-    const startDate = new Date('2026-07-26');
-    const today = new Date();
-    const dayNum = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
-    const currentDay = Math.min(Math.max(dayNum, 1), 84);
-    
     const tasks = [
-        { id: 'vocab40', name: '背40个核心单词', desc: `Day ${currentDay} 单词`, target: 'vocab', icon: '📖' },
-        { id: 'phrase2', name: '学2个高频词组', desc: '掌握常用搭配', target: 'phrases', icon: '📝' },
-        { id: 'grammar1', name: '学1个语法点', desc: '理解语法规则', target: 'grammar', icon: '📚' },
-        { id: 'review_vocab', name: '复习昨天的单词', desc: '巩固记忆', target: 'vocab', icon: '🔄' }
+        { id: 'vocab40', name: '背40个核心单词', desc: '使用词汇学习模块' },
+        { id: 'reading1', name: '做1篇阅读理解', desc: '阅读判断/选择交替' },
+        { id: 'grammar1', name: '学1个语法点', desc: '使用语法技巧模块' },
+        { id: 'review_vocab', name: '复习昨天的单词', desc: '巩固记忆' }
     ];
     
-    const todayDate = todayISO();
-    const checkinData = DB.get('checkin_' + todayDate) || {};
+    const today = todayISO();
+    const checkinData = DB.get('checkin_' + today) || {};
     
     const html = tasks.map(task => {
         const done = checkinData[task.id] || false;
         return `
-            <div class="task-item" style="cursor:pointer;" onclick="${done ? '' : `goToStudy('${task.target}', ${currentDay})`}">
-                <div class="task-check ${done ? 'done' : ''}" data-task="${task.id}" onclick="event.stopPropagation();toggleCheckinTask('${task.id}')"></div>
+            <div class="task-item">
+                <div class="task-check ${done ? 'done' : ''}" data-task="${task.id}" onclick="toggleCheckinTask('${task.id}')"></div>
                 <div class="task-content">
-                    <div class="task-name">${task.icon} ${task.name}</div>
-                    <div class="task-meta">${task.desc}${!done ? ' <span style="color:#ff6b9d;">→ 点击学习</span>' : ' <span style="color:#4caf50;">✓ 已完成</span>'}</div>
+                    <div class="task-name">${task.name}</div>
+                    <div class="task-meta">${task.desc}</div>
                 </div>
             </div>
         `;
     }).join('');
     
     document.getElementById('checkinTaskList').innerHTML = html;
-}
-
-function goToStudy(target, dayNum) {
-    if (target === 'vocab') {
-        // 跳转到词汇学习页面
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.querySelector('[data-page="vocab"]').classList.add('active');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('vocab').classList.add('active');
-        // 设置当前天数并刷新单词
-        vocabDay = dayNum;
-        renderVocabCard();
-        showToast(`开始学习 Day ${dayNum} 单词 📖`);
-    } else if (target === 'phrases') {
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.querySelector('[data-page="notes"]').classList.add('active');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('notes').classList.add('active');
-        showToast('开始学习高频词组 📝');
-    } else if (target === 'grammar') {
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.querySelector('[data-page="books"]').classList.add('active');
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('books').classList.add('active');
-        showToast('开始学习语法技巧 📚');
-    }
 }
 
 function toggleCheckinTask(taskId) {
