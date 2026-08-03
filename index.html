@@ -1816,25 +1816,35 @@ function goToStudy(target, dayNum) {
 }
 
 function renderCheckinTasks() {
+    // 计算今天是第几天（从84天计划开始日期计算）
+    const startDate = DB.get('plan_start_date') || '2026-08-03';
+    const today = new Date();
+    const start = new Date(startDate);
+    const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+    const currentDay = Math.min(Math.max(diffDays, 1), 84);
+    
     const tasks = [
-        { id: 'vocab40', name: '背40个核心单词', desc: '使用词汇学习模块' },
-        { id: 'reading1', name: '做1篇阅读理解', desc: '阅读判断/选择交替' },
-        { id: 'grammar1', name: '学1个语法点', desc: '使用语法技巧模块' },
-        { id: 'review_vocab', name: '复习昨天的单词', desc: '巩固记忆' }
+        { id: 'vocab40', name: '背40个核心单词', desc: `第${currentDay}天词汇`, target: 'vocab', day: currentDay },
+        { id: 'phrases10', name: '学10个高频词组', desc: `第${Math.min(Math.floor((currentDay-1)/4)+1, 20)}天词组`, target: 'phrases', day: Math.min(Math.floor((currentDay-1)/4)+1, 20) },
+        { id: 'grammar1', name: '学1个语法点', desc: `第${Math.min(Math.floor((currentDay-1)/3)+1, 28)}天语法`, target: 'grammar', day: Math.min(Math.floor((currentDay-1)/3)+1, 28) },
+        { id: 'review_vocab', name: '复习昨天的单词', desc: `第${Math.max(currentDay-1, 1)}天词汇复习`, target: 'vocab', day: Math.max(currentDay-1, 1) }
     ];
     
-    const today = todayISO();
-    const checkinData = DB.get('checkin_' + today) || {};
+    const todayStr = todayISO();
+    const checkinData = DB.get('checkin_' + todayStr) || {};
     
     const html = tasks.map(task => {
         const done = checkinData[task.id] || false;
         return `
-            <div class="task-item">
-                <div class="task-check ${done ? 'done' : ''}" data-task="${task.id}" onclick="toggleCheckinTask('${task.id}')"></div>
-                <div class="task-content">
-                    <div class="task-name">${task.name}</div>
-                    <div class="task-meta">${task.desc}</div>
+            <div class="task-item" style="display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border-radius:12px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+                <div class="task-check ${done ? 'done' : ''}" data-task="${task.id}" onclick="toggleCheckinTask('${task.id}')" style="flex-shrink:0;"></div>
+                <div class="task-content" style="flex:1;">
+                    <div class="task-name" style="font-weight:600;color:#333;">${task.name}</div>
+                    <div class="task-meta" style="font-size:12px;color:#888;">${task.desc}</div>
                 </div>
+                <button onclick="goToStudy('${task.target}', ${task.day})" style="flex-shrink:0;padding:8px 16px;background:linear-gradient(135deg,#ff6b9d,#c06bff);color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(192,107,255,0.3);">
+                    开始学习 →
+                </button>
             </div>
         `;
     }).join('');
