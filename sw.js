@@ -10,7 +10,10 @@ const ASSETS = [
     './bazi-data.js',
     './vocab-data.js',
     './download.html',
-    './version.json'
+    './version.json',
+    './manifest.json',
+    './icon-192.png',
+    './icon-512.png'
 ];
 
 self.addEventListener('install', e => {
@@ -43,7 +46,10 @@ self.addEventListener('fetch', e => {
     // 版本探测文件：永远网络优先，保证能及时感知新版本
     if (url.pathname.endsWith('version.json')) {
         e.respondWith(
-            fetch(e.request).catch(() => caches.match('./version.json'))
+            fetch(e.request).catch(() => caches.match('./version.json',
+    './manifest.json',
+    './icon-192.png',
+    './icon-512.png'))
         );
         return;
     }
