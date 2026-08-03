@@ -2463,9 +2463,9 @@ if (typeof paiPan !== 'undefined') { initBazi(); } else { document.addEventListe
 
 /* ============ 词汇学习模块 ============ */
 const WORDS_PER_DAY = 40;
-let vocabIndex = 0;
-let vocabDay = 1;
-let vocabShowMeaning = false;
+if (typeof vocabIndex === 'undefined') vocabIndex = 0;
+if (typeof vocabDay === 'undefined') vocabDay = 1;
+if (typeof vocabShowMeaning === 'undefined') vocabShowMeaning = false;
 
 function getVocabDay() {
     const startDate = new Date('2026-08-01');
