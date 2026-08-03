@@ -274,6 +274,7 @@
     <div class="nav-item" data-page="dictation"><div class="nav-icon">🎧</div><div class="nav-text">听写测试</div></div>
     <div class="nav-item" data-page="stats"><div class="nav-icon">📊</div><div class="nav-text">学习统计</div></div>
     <div class="nav-item" data-page="exam"><div class="nav-icon">📝</div><div class="nav-text">真题演练</div></div>
+    <div class="nav-item" data-page="mock-exam"><div class="nav-icon">🎯</div><div class="nav-text">模拟考试</div></div>
     <div class="nav-item" data-page="wordbook"><div class="nav-icon">📖</div><div class="nav-text">错题生词</div></div>
     <div class="nav-item" data-page="ai"><div class="nav-icon">🤖</div><div class="nav-text">AI助手</div></div>
     <div class="nav-item" data-page="diary"><div class="nav-icon">📅</div><div class="nav-text">每日学习打卡</div></div>
@@ -456,6 +457,48 @@
         <div class="card">
             <div class="section-label">✍️ 作文模板库（30分大头 · 零基础必背）</div>
             <div id="essayTemplates"></div>
+        </div>
+    </div>
+
+    <!-- 模拟考试 -->
+    <div class="page" id="mock-exam">
+        <h2 class="page-title">🎯 模拟考试（150分钟限时）</h2>
+        <div class="card" style="background:#fffbe6;border-left:4px solid #ffc107;">
+            <div class="section-label">📋 考试说明</div>
+            <div style="font-size:13px;color:#666;line-height:1.8;">
+                <strong style="color:#ff6b9d;">考试时间：150分钟</strong>（与真实考试一致）<br>
+                <strong style="color:#ff6b9d;">题目数量：30题</strong>（随机抽取，覆盖全部题型）<br>
+                <strong>题型分布：</strong><br>
+                • 阅读判断 5题 | 阅读选择 5题 | 填词补文 5题<br>
+                • 完形补文 5题 | 填句补文 5题 | 概括补全 5题<br>
+                <strong>评分标准：</strong>自动评分 + 详细解析 + 用时统计
+            </div>
+        </div>
+        <div class="card" id="mockExamStartCard">
+            <div class="section-label">🚀 开始模拟考试</div>
+            <div style="text-align:center;padding:20px 0;">
+                <div style="font-size:48px;margin-bottom:15px;">🎯</div>
+                <div style="font-size:16px;color:#333;margin-bottom:8px;">准备好了吗？</div>
+                <div style="font-size:13px;color:#999;margin-bottom:20px;">点击开始后将进入150分钟倒计时</div>
+                <button class="btn" id="startMockExam" style="padding:15px 40px;font-size:16px;">开始考试</button>
+            </div>
+        </div>
+        <div class="card" id="mockExamTimerCard" style="display:none;">
+            <div class="section-label">⏱️ 考试倒计时</div>
+            <div style="text-align:center;padding:15px 0;">
+                <div style="font-size:42px;color:#ff6b9d;font-weight:bold;" id="mockExamTimer">150:00</div>
+                <div style="font-size:13px;color:#999;margin-top:8px;">剩余时间</div>
+                <div style="font-size:12px;color:#ff6b9d;margin-top:5px;" id="mockExamProgress">已完成 0/30 题</div>
+            </div>
+        </div>
+        <div class="card" id="mockExamContentCard" style="display:none;">
+            <div class="section-label">📝 模拟试卷</div>
+            <div id="mockExamContent"></div>
+            <div class="exam-result" id="mockExamResult"></div>
+            <div style="margin-top:15px;text-align:center;" id="mockExamActions">
+                <button class="btn" id="submitMockExam">交卷评分</button>
+                <button class="btn btn-outline" id="showAllMockExplain">显示全部解析</button>
+            </div>
         </div>
     </div>
 
@@ -1180,6 +1223,195 @@ const examBank = {
             { type:'填句补文', q:'(填句) 空格处应填: First, you should read the question carefully. ___, think about what you already know.', opts:['Then','Because','Although','But'], ans:0,
               explain:'First...Then...是顺序词，填Then。逻辑顺序题要找firstly/secondly/finally这类词。' }
         ]
+    },
+        'set4': {
+        name: '第4套 · 科技与生活',
+        questions: [
+            { type:'阅读判断', q:'(判断题) According to the passage, smartphones have made people more isolated.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:0,
+              explain:'阅读判断题要严格按原文判断。如果原文提到smartphones reduce face-to-face communication，则选True。' },
+            { type:'阅读判断', q:'(判断题) The author believes that AI will replace all human jobs in the future.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:1,
+              explain:'all是绝对词。原文若说AI will change many jobs但不是all，选False。' },
+            { type:'阅读判断', q:'(判断题) The writer has used virtual reality technology.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:2,
+              explain:'原文若未提及作者个人经历，选Not Given。不能推测。' },
+            { type:'阅读选择', q:'(选择题) What is the main idea of the passage about technology?', opts:['Technology is harmful','Technology brings both benefits and challenges','Only young people use technology','Technology should be banned'], ans:1,
+              explain:'科技类文章通常持中立态度，强调双刃剑效应。B最全面。' },
+            { type:'阅读选择', q:'(选择题) The word "innovative" in paragraph 2 most probably means ___.', opts:['old-fashioned','creative and new','expensive','difficult'], ans:1,
+              explain:'innovative=创新的。上下文若有new ideas/creative等线索可推断。' },
+            { type:'填词补文', q:'(填词) The ___ of the internet has changed our lives. (invent)', opts:['invention','inventing','invented','inventor'], ans:0,
+              explain:'the+名词+of结构，需名词。invent动词→invention名词。' },
+            { type:'填词补文', q:'(填词) This app is very ___ for learning English. (use)', opts:['useful','use','used','useless'], ans:0,
+              explain:'is+形容词，需形容词。use名词/动词→useful形容词（有用的）。' },
+            { type:'完形补文', q:'(完形变形) More and more people ___ (use) smartphones every day. 填入正确形式', opts:['are using','used','uses','is using'], ans:0,
+              explain:'More and more+现在进行时，表示趋势，填are using。' },
+            { type:'完形补文', q:'(完形变形) New technologies ___ (develop) rapidly in recent years. 填入正确形式', opts:['have been developed','developed','develop','is developed'], ans:0,
+              explain:'in recent years+到现在，用现在完成时。technologies与develop被动关系，填have been developed。' },
+            { type:'填句补文', q:'(填句) 空格处应填: Technology makes life easier. ___, it also creates new problems.', opts:['However','Therefore','Because','For example'], ans:0,
+              explain:'前说好处后说问题，转折关系，填However。' },
+            { type:'概括补全', q:'(段落大意) 段落: Social media allows people to connect with friends far away. However, it can also lead to addiction and less real-life interaction.', opts:['Advantages of social media','Disadvantages of social media','Both pros and cons of social media','How to use social media'], ans:2,
+              explain:'段落既提到优点又提到缺点，选C"Both pros and cons"最全面。' }
+        ]
+    },
+    'set5': {
+        name: '第5套 · 健康与运动',
+        questions: [
+            { type:'阅读判断', q:'(判断题) According to the passage, eating fast food every day is healthy.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:1,
+              explain:'原文若说fast food is unhealthy，选False。' },
+            { type:'阅读判断', q:'(判断题) The author recommends exercising for at least 30 minutes daily.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:0,
+              explain:'如果原文明确提到30 minutes daily，选True。' },
+            { type:'阅读判断', q:'(判断题) The writer lost 10 kilograms last year.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:2,
+              explain:'原文若未提及作者个人减肥经历，选Not Given。' },
+            { type:'阅读选择', q:'(选择题) What is the most important factor for good health according to the passage?', opts:['Taking medicine','A balanced lifestyle','Avoiding all fat','Sleeping all day'], ans:1,
+              explain:'健康类文章通常强调balanced lifestyle，A/C/D都太极端。' },
+            { type:'阅读选择', q:'(选择题) The word "obesity" in the passage most probably means ___.', opts:['being too thin','being too fat','feeling tired','eating too much'], ans:1,
+              explain:'obesity=肥胖。上下文若有overweight/too heavy等线索。' },
+            { type:'填词补文', q:'(填词) Regular exercise can ___ your risk of heart disease. (dangerous)', opts:['reduce','dangerous','danger','endanger'], ans:0,
+              explain:'can+动词，需动词。reduce risk=降低风险。' },
+            { type:'填词补文', q:'(填词) A ___ diet is important for children\'s growth. (health)', opts:['healthy','health','healthily','healthier'], ans:0,
+              explain:'a+形容词+名词，需形容词。health名词→healthy形容词。' },
+            { type:'完形补文', q:'(完形变形) He ___ (run) every morning for two years. 填入正确形式', opts:['has been running','ran','runs','is running'], ans:0,
+              explain:'for two years+every morning强调持续性，用现在完成进行时has been running。' },
+            { type:'完形补文', q:'(完形变形) Vegetables should ___ (eat) every day. 填入正确形式', opts:['be eaten','eat','ate','eaten'], ans:0,
+              explain:'vegetables与eat被动关系，should+be+过去分词，填be eaten。' },
+            { type:'填句补文', q:'(填句) 空格处应填: Drinking enough water is important. ___, you may feel tired and have headaches.', opts:['Otherwise','Therefore','However','Besides'], ans:0,
+              explain:'前说喝水重要，后说不喝的后果，Otherwise"否则"表反面结果。' },
+            { type:'概括补全', q:'(段落大意) 段落: Sleep plays a vital role in maintaining good health. During sleep, your body repairs itself and your brain processes information.', opts:['How to sleep well','The importance of sleep','Dreams and health','Sleep problems'], ans:1,
+              explain:'段落讲睡眠对健康的重要作用，选B。' }
+        ]
+    },
+    'set6': {
+        name: '第6套 · 环境保护',
+        questions: [
+            { type:'阅读判断', q:'(判断题) According to the passage, air pollution is only a problem in big cities.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:1,
+              explain:'only是绝对词。原文若说空气污染在农村也严重，选False。' },
+            { type:'阅读判断', q:'(判断题) The government has passed new laws to protect the environment.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:0,
+              explain:'如果原文提到new laws/regulations，选True。' },
+            { type:'阅读判断', q:'(判断题) The author believes the environment problem will be solved within 10 years.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:2,
+              explain:'原文若未提及具体时间预测，选Not Given。' },
+            { type:'阅读选择', q:'(选择题) What is the main purpose of the passage about environment?', opts:['To scare readers','To call for environmental protection','To introduce a new technology','To criticize the government'], ans:1,
+              explain:'环境类文章通常目的是呼吁环保。' },
+            { type:'阅读选择', q:'(选择题) The word "sustainable" in the passage most probably means ___.', opts:['expensive','able to continue for a long time','difficult to understand','popular'], ans:1,
+              explain:'sustainable=可持续的，能长期维持的。' },
+            { type:'填词补文', q:'(填词) We must take ___ to protect our environment. (act)', opts:['action','act','active','activity'], ans:0,
+              explain:'take action固定搭配，take+名词。' },
+            { type:'填词补文', q:'(填词) The ___ of forests is a serious problem. (destroy)', opts:['destruction','destroy','destroying','destroyed'], ans:0,
+              explain:'the+名词+of结构，需名词。destroy动词→destruction名词。' },
+            { type:'完形补文', q:'(完形变形) If we ___ (not protect) the earth, we will have no clean water. 填入正确形式', opts:['do not protect','will not protect','did not protect','are not protecting'], ans:0,
+              explain:'主将从现：主句will have将来时，if从句用一般现在时。' },
+            { type:'完形补文', q:'(完形变形) Many trees ___ (cut) down every year. 填入正确形式', opts:['are cut','cut','cutted','is cut'], ans:0,
+              explain:'trees与cut被动关系，every year一般现在时，复数用are cut。' },
+            { type:'填句补文', q:'(填句) 空格处应填: Plastic pollution is getting worse. ___, many sea animals are dying because of it.', opts:['As a result','However','On the other hand','In addition'], ans:0,
+              explain:'前因后果关系，填As a result"因此"。' },
+            { type:'概括补全', q:'(段落大意) 段落: Global warming is causing ice to melt at the poles. This leads to rising sea levels, which threaten coastal cities.', opts:['How to stop global warming','Effects of global warming','History of climate change','Ice at the poles'], ans:1,
+              explain:'段落讲全球变暖导致冰融化、海平面上升等后果，选B。' }
+        ]
+    },
+    'set7': {
+        name: '第7套 · 文化多样性',
+        questions: [
+            { type:'阅读判断', q:'(判断题) According to the passage, all countries celebrate the New Year on January 1st.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:1,
+              explain:'all是绝对词。原文若提到中国春节等不同日期，选False。' },
+            { type:'阅读判断', q:'(判断题) The writer has traveled to more than 20 countries.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:2,
+              explain:'原文若未提及作者个人旅行经历，选Not Given。' },
+            { type:'阅读判断', q:'(判断题) Understanding different cultures can help reduce conflicts.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:0,
+              explain:'如果原文提到understanding cultures promotes peace，选True。' },
+            { type:'阅读选择', q:'(选择题) What is the main idea of the passage about cultural diversity?', opts:['All cultures are the same','Cultural diversity enriches our world','We should abandon traditional culture','Only Western culture is important'], ans:1,
+              explain:'文化多样性文章通常持积极态度，B最恰当。' },
+            { type:'阅读选择', q:'(选择题) The word "tradition" in the passage most probably means ___.', opts:['a type of food','customs passed down through generations','a kind of music','modern lifestyle'], ans:1,
+              explain:'tradition=传统，世代相传的习俗。' },
+            { type:'填词补文', q:'(填词) Different cultures have different ___ of celebrating festivals. (tradition)', opts:['traditions','traditional','tradition','traditionally'], ans:0,
+              explain:'different+形容词+名词复数，填traditions。' },
+            { type:'填词补文', q:'(填词) It is ___ to respect people from different cultures. (importance)', opts:['important','importance','importantly','import'], ans:0,
+              explain:'It is+形容词+to do结构，需形容词。importance→important。' },
+            { type:'完形补文', q:'(完形变形) Chinese culture ___ (know) by more and more foreigners now. 填入正确形式', opts:['is being known','knew','knows','has known'], ans:0,
+              explain:'culture与know被动关系，now+现在进行时，填is being known。' },
+            { type:'完形补文', q:'(完形变形) People in different countries ___ (celebrate) festivals in different ways. 填入正确形式', opts:['celebrate','celebrated','celebrates','are celebrated'], ans:0,
+              explain:'陈述客观事实，一般现在时。people复数主语，填celebrate。' },
+            { type:'填句补文', q:'(填句) 空格处应填: Food is an important part of culture. ___, Chinese food is famous all over the world.', opts:['For example','However','Therefore','On the contrary'], ans:0,
+              explain:'后句是对前句的举例，填For example。' },
+            { type:'概括补全', q:'(段落大意) 段落: Traditional festivals help people remember their history and values. During these festivals, families get together and share meals.', opts:['How to cook traditional food','The role of traditional festivals','Family problems','Modern festivals'], ans:1,
+              explain:'段落讲传统节日的作用，选B。' }
+        ]
+    },
+    'set8': {
+        name: '第8套 · 教育与学习',
+        questions: [
+            { type:'阅读判断', q:'(判断题) According to the passage, online education can completely replace traditional classrooms.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:1,
+              explain:'completely是绝对词。原文若说online education是补充而非替代，选False。' },
+            { type:'阅读判断', q:'(判断题) The best age to start learning a foreign language is before 10.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:2,
+              explain:'原文若只说children learn faster但未指定具体年龄，选Not Given。' },
+            { type:'阅读判断', q:'(判断题) Group study can help students understand difficult topics better.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:0,
+              explain:'如果原文提到group discussion helps clarify difficult points，选True。' },
+            { type:'阅读选择', q:'(选择题) What does the author think about language learning?', opts:['It is only for talented people','It requires patience and practice','It is too difficult for adults','It should only be done in school'], ans:1,
+              explain:'教育类文章通常强调patience and practice。' },
+            { type:'阅读选择', q:'(选择题) The word "effective" in the passage most probably means ___.', opts:['expensive','producing good results','easy to understand','popular'], ans:1,
+              explain:'effective=有效的，能产生好结果的。' },
+            { type:'填词补文', q:'(填词) The teacher explained the lesson ___ (clear).', opts:['clearly','clear','cleared','clearing'], ans:0,
+              explain:'修饰动词explained需副词，clear→clearly。' },
+            { type:'填词补文', q:'(填词) Education is the ___ to a better future. (key)', opts:['key','keyed','keying','keys'], ans:0,
+              explain:'the key to固定搭配，key作名词不需变形。' },
+            { type:'完形补文', q:'(完形变形) She ___ (study) English for five years by next month. 填入正确形式', opts:['will have studied','studied','studies','has studied'], ans:0,
+              explain:'by next month+for five years，到将来某时已完成，用将来完成时。' },
+            { type:'完形补文', q:'(完形变形) Students are required ___ (finish) their homework before class. 填入正确形式', opts:['to finish','finish','finishing','finished'], ans:0,
+              explain:'be required to do sth固定搭配，填to finish。' },
+            { type:'填句补文', q:'(填句) 空格处应填: Some students prefer studying alone. ___, others enjoy group discussions.', opts:['On the other hand','Therefore','Because','In addition'], ans:0,
+              explain:'前说some，后说others，对比关系，填On the other hand。' },
+            { type:'概括补全', q:'(段落大意) 段落: Online learning offers flexibility. However, it requires strong self-discipline and may lack face-to-face interaction.', opts:['Advantages of online learning','Disadvantages of online learning','Features of online learning','How to study online'], ans:2,
+              explain:'段落既提到优点又提到缺点，选C"Features"最全面中立。' }
+        ]
+    },
+    'set9': {
+        name: '第9套 · 职场与团队合作',
+        questions: [
+            { type:'阅读判断', q:'(判断题) According to the passage, working longer hours always leads to higher productivity.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:1,
+              explain:'always是绝对词。原文若说longer hours不一定提高效率，选False。' },
+            { type:'阅读判断', q:'(判断题) The author thinks teamwork is more important than individual ability.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:2,
+              explain:'原文若只说teamwork很重要但未与个人能力比较，选Not Given。' },
+            { type:'阅读判断', q:'(判断题) Good communication skills are essential in the workplace.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:0,
+              explain:'如果原文提到communication is essential at work，选True。' },
+            { type:'阅读选择', q:'(选择题) What is the main idea of the passage about work-life balance?', opts:['Work is more important than life','People should find a balance between work and life','Life is more important than work','People should not work hard'], ans:1,
+              explain:'work-life balance文章主旨是找到平衡。' },
+            { type:'阅读选择', q:'(选择题) The word "collaborate" in the passage most probably means ___.', opts:['compete','work together','argue','work alone'], ans:1,
+              explain:'collaborate=合作，work together。' },
+            { type:'填词补文', q:'(填词) Good ___ is necessary for career development. (communicate)', opts:['communication','communicate','communicating','communicative'], ans:0,
+              explain:'good+形容词+名词，需名词。communicate→communication。' },
+            { type:'填词补文', q:'(填词) She is ___ at managing her time. (effect)', opts:['effective','effect','effectively','effected'], ans:0,
+              explain:'be effective at固定搭配，需形容词。' },
+            { type:'完形补文', q:'(完形变形) He ___ (work) in this company since 2020. 填入正确形式', opts:['has worked','worked','works','is working'], ans:0,
+              explain:'since 2020+到现在，用现在完成时has worked。' },
+            { type:'完形补文', q:'(完形变形) The project ___ (complete) by the team last week. 填入正确形式', opts:['was completed','completed','is completed','completes'], ans:0,
+              explain:'last week过去时，project与complete被动关系，填was completed。' },
+            { type:'填句补文', q:'(填句) 空格处应填: Many people feel stressed at work. ___, regular exercise can help reduce stress.', opts:['Fortunately','However','Because','Although'], ans:0,
+              explain:'前说压力问题，后说解决方法，Fortunately"幸运的是"。' },
+            { type:'概括补全', q:'(段落大意) 段落: A good team leader should listen to others, make decisions wisely, and motivate team members. These qualities help the team work efficiently.', opts:['How to become a team member','Qualities of a good team leader','Team conflicts','Work efficiency'], ans:1,
+              explain:'段落讲好的团队领导应具备的品质，选B。' }
+        ]
+    },
+    'set10': {
+        name: '第10套 · 幸福与人际关系',
+        questions: [
+            { type:'阅读判断', q:'(判断题) According to the passage, money is the most important thing for happiness.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:1,
+              explain:'原文若说money不是最重要的，relationships/health更重要，选False。' },
+            { type:'阅读判断', q:'(判断题) The author believes that having good relationships contributes to happiness.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:0,
+              explain:'如果原文提到good relationships bring happiness，选True。' },
+            { type:'阅读判断', q:'(判断题) The writer has three children.（选True/False/Not Given）', opts:['True','False','Not Given'], ans:2,
+              explain:'原文若未提及作者家庭具体情况，选Not Given。' },
+            { type:'阅读选择', q:'(选择题) What is the main idea of the passage about happiness?', opts:['Happiness comes from money','Happiness comes from within and from relationships','Happiness is impossible to achieve','Only children can be happy'], ans:1,
+              explain:'幸福类文章通常强调内在满足和人际关系。' },
+            { type:'阅读选择', q:'(选择题) The word "grateful" in the passage most probably means ___.', opts:['angry','feeling thankful','sad','surprised'], ans:1,
+              explain:'grateful=感恩的，feeling thankful。' },
+            { type:'填词补文', q:'(填词) Spending time with family brings great ___. (happy)', opts:['happiness','happy','happily','happier'], ans:0,
+              explain:'brings+名词，需名词。happy→happiness。' },
+            { type:'填词补文', q:'(填词) It is ___ to maintain good relationships with neighbors. (value)', opts:['valuable','value','valued','valuing'], ans:0,
+              explain:'It is+形容词+to do结构，需形容词。value→valuable。' },
+            { type:'完形补文', q:'(完形变形) She ___ (make) many friends since she moved to this city. 填入正确形式', opts:['has made','made','makes','is making'], ans:0,
+              explain:'since she moved+到现在，用现在完成时has made。' },
+            { type:'完形补文', q:'(完形变形) People should ___ (encourage) to express their feelings. 填入正确形式', opts:['be encouraged','encourage','encouraged','encouraging'], ans:0,
+              explain:'people与encourage被动关系，should+be+过去分词。' },
+            { type:'填句补文', q:'(填句) 空格处应填: Everyone wants to be happy. ___, happiness means different things to different people.', opts:['However','Therefore','Because','In addition'], ans:0,
+              explain:'前说人人都想幸福，后说幸福定义不同，转折关系，填However。' },
+            { type:'概括补全', q:'(段落大意) 段落: Hobbies play an important role in our daily life. They help us relax after a busy day and can also help us learn new skills.', opts:['How to find hobbies','The benefits of hobbies','Popular hobbies today','Hobbies for children'], ans:1,
+              explain:'段落讲爱好的好处，选B。' }
+        ]
     }
 };
 
@@ -1360,6 +1592,248 @@ function renderWrongQuestions() {
             showToast('错题已移除 ✓');
         });
     });
+}
+
+/* ============ 模拟考试功能 ============ */
+let mockExamState = {
+    isRunning: false,
+    startTime: null,
+    timer: null,
+    questions: [],
+    userAnswers: {},
+    submitted: false
+};
+
+// 从题库中随机抽取30题（按题型分布）
+function generateMockExamQuestions() {
+    const allQuestions = [];
+    Object.keys(examBank).forEach(key => {
+        examBank[key].questions.forEach(q => {
+            allQuestions.push({...q, source: key});
+        });
+    });
+    
+    // 按题型分组
+    const byType = {
+        '阅读判断': [],
+        '阅读选择': [],
+        '填词补文': [],
+        '完形补文': [],
+        '填句补文': [],
+        '概括补全': []
+    };
+    
+    allQuestions.forEach(q => {
+        if (byType[q.type]) {
+            byType[q.type].push(q);
+        }
+    });
+    
+    // 每种题型随机抽取5题
+    const selected = [];
+    Object.keys(byType).forEach(type => {
+        const pool = byType[type];
+        const shuffled = [...pool].sort(() => Math.random() - 0.5);
+        selected.push(...shuffled.slice(0, Math.min(5, pool.length)));
+    });
+    
+    // 打乱顺序
+    return selected.sort(() => Math.random() - 0.5);
+}
+
+// 开始模拟考试
+function startMockExam() {
+    mockExamState.questions = generateMockExamQuestions();
+    mockExamState.userAnswers = {};
+    mockExamState.submitted = false;
+    mockExamState.startTime = Date.now();
+    mockExamState.isRunning = true;
+    
+    // 隐藏开始卡片，显示计时器和题目
+    document.getElementById('mockExamStartCard').style.display = 'none';
+    document.getElementById('mockExamTimerCard').style.display = 'block';
+    document.getElementById('mockExamContentCard').style.display = 'block';
+    
+    // 渲染题目
+    renderMockExamQuestions();
+    
+    // 启动计时器
+    startMockExamTimer();
+    
+    showToast('模拟考试开始！加油 💪');
+}
+
+// 渲染模拟考试题目
+function renderMockExamQuestions() {
+    const content = document.getElementById('mockExamContent');
+    content.innerHTML = mockExamState.questions.map((q, i) => `
+        <div class="question-item">
+            <div class="question-text"><span class="question-num">${i+1}.</span>[${q.type}] ${q.q}</div>
+            <div class="option-list">
+                ${q.opts.map((o, j) => `
+                    <div class="option-item" data-q="${i}" data-o="${j}">
+                        <span class="option-label">${String.fromCharCode(65+j)}.</span>${o}
+                    </div>
+                `).join('')}
+            </div>
+            <div class="question-explain" id="mock-explain-${i}">💡 ${q.explain}</div>
+        </div>
+    `).join('');
+    
+    // 绑定点击事件
+    content.querySelectorAll('.option-item').forEach(el => {
+        el.addEventListener('click', function() {
+            if (mockExamState.submitted) return;
+            const qi = parseInt(this.dataset.q);
+            const oi = parseInt(this.dataset.o);
+            mockExamState.userAnswers[qi] = oi;
+            // 清除该题其他选中
+            content.querySelectorAll(`.option-item[data-q="${qi}"]`).forEach(e => e.classList.remove('selected'));
+            this.classList.add('selected');
+            // 更新进度
+            updateMockExamProgress();
+        });
+    });
+}
+
+// 更新考试进度
+function updateMockExamProgress() {
+    const answered = Object.keys(mockExamState.userAnswers).length;
+    const total = mockExamState.questions.length;
+    document.getElementById('mockExamProgress').textContent = `已完成 ${answered}/${total} 题`;
+}
+
+// 启动计时器
+function startMockExamTimer() {
+    const timerEl = document.getElementById('mockExamTimer');
+    const totalSeconds = 150 * 60; // 150分钟
+    
+    mockExamState.timer = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - mockExamState.startTime) / 1000);
+        const remaining = totalSeconds - elapsed;
+        
+        if (remaining <= 0) {
+            // 时间到，自动交卷
+            clearInterval(mockExamState.timer);
+            submitMockExam(true);
+            return;
+        }
+        
+        const minutes = Math.floor(remaining / 60);
+        const seconds = remaining % 60;
+        timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        // 最后10分钟变红提醒
+        if (remaining <= 600) {
+            timerEl.style.color = '#f44336';
+        }
+    }, 1000);
+}
+
+// 提交模拟考试
+function submitMockExam(autoSubmit = false) {
+    if (mockExamState.submitted) return;
+    
+    if (!autoSubmit && !confirm('确定要交卷吗？交卷后无法修改答案。')) {
+        return;
+    }
+    
+    mockExamState.submitted = true;
+    clearInterval(mockExamState.timer);
+    
+    const endTime = Date.now();
+    const timeUsed = Math.floor((endTime - mockExamState.startTime) / 1000);
+    const minutesUsed = Math.floor(timeUsed / 60);
+    const secondsUsed = timeUsed % 60;
+    
+    // 评分
+    let correct = 0;
+    const wrongList = [];
+    const typeStats = {};
+    
+    mockExamState.questions.forEach((q, i) => {
+        const userAns = mockExamState.userAnswers[i];
+        const opts = document.querySelectorAll(`#mockExamContent .option-item[data-q="${i}"]`);
+        
+        // 初始化题型统计
+        if (!typeStats[q.type]) {
+            typeStats[q.type] = { total: 0, correct: 0 };
+        }
+        typeStats[q.type].total++;
+        
+        if (userAns === q.ans) {
+            opts[q.ans].classList.add('correct');
+            correct++;
+            typeStats[q.type].correct++;
+        } else {
+            if (userAns !== undefined) opts[userAns].classList.add('wrong');
+            opts[q.ans].classList.add('correct');
+            wrongList.push({
+                type: q.type,
+                q: q.q,
+                userAns: userAns,
+                correctAns: q.ans,
+                opts: q.opts,
+                explain: q.explain
+            });
+        }
+    });
+    
+    // 显示解析
+    document.querySelectorAll('#mockExamContent .question-explain').forEach(e => e.classList.add('show'));
+    
+    // 计算各题型得分
+    const typeScores = Object.keys(typeStats).map(type => {
+        const stat = typeStats[type];
+        const score = Math.round(stat.correct / stat.total * 10);
+        return `${type}: ${stat.correct}/${stat.total} (${score}分)`;
+    }).join('<br>');
+    
+    // 保存错题
+    saveWrongQuestions(wrongList.map(w => ({...w, exam: 'mock', qIdx: Math.random()})));
+    
+    // 显示成绩
+    const total = mockExamState.questions.length;
+    const accuracy = Math.round(correct / total * 100);
+    const result = document.getElementById('mockExamResult');
+    result.innerHTML = `
+        <div class="exam-score">${correct} / ${total} · 正确率 ${accuracy}%</div>
+        <div style="font-size:14px;color:#666;margin-top:10px;">
+            <strong>用时：</strong>${minutesUsed}分${secondsUsed}秒<br>
+            <strong>各题型得分：</strong><br>
+            ${typeScores}
+        </div>
+        <div style="font-size:13px;color:#999;margin-top:8px;">${accuracy >= 70 ? '🎉 已达70分线，继续保持！' : '💪 还差'+(70-accuracy)+'分，继续加油！'}</div>
+        <div style="font-size:12px;color:#ff6b9d;margin-top:5px;">错题已自动加入错题本</div>
+        <button class="btn" id="restartMockExam" style="margin-top:15px;">重新考试</button>
+    `;
+    result.classList.add('show');
+    
+    // 绑定重新考试按钮
+    document.getElementById('restartMockExam').addEventListener('click', resetMockExam);
+    
+    showToast(autoSubmit ? '时间到！已自动交卷' : `本次正确率 ${accuracy}%，${accuracy>=70?'已达线！':'继续努力！'}`);
+}
+
+// 重置模拟考试
+function resetMockExam() {
+    mockExamState.isRunning = false;
+    mockExamState.submitted = false;
+    if (mockExamState.timer) {
+        clearInterval(mockExamState.timer);
+    }
+    
+    // 重置UI
+    document.getElementById('mockExamStartCard').style.display = 'block';
+    document.getElementById('mockExamTimerCard').style.display = 'none';
+    document.getElementById('mockExamContentCard').style.display = 'none';
+    document.getElementById('mockExamResult').classList.remove('show');
+    document.getElementById('mockExamTimer').style.color = '#ff6b9d';
+}
+
+// 显示全部解析
+function showAllMockExplain() {
+    document.querySelectorAll('#mockExamContent .question-explain').forEach(e => e.classList.add('show'));
 }
 
 /* ============ 生词本 ============ */
@@ -1752,6 +2226,13 @@ function initExamActions() {
         const anyShown = Array.from(explains).some(e => e.classList.contains('show'));
         explains.forEach(e => anyShown ? e.classList.remove('show') : e.classList.add('show'));
     });
+}
+
+/* ============ 模拟考试按钮事件 ============ */
+function initMockExamActions() {
+    document.getElementById('startMockExam').addEventListener('click', startMockExam);
+    document.getElementById('submitMockExam').addEventListener('click', () => submitMockExam(false));
+    document.getElementById('showAllMockExplain').addEventListener('click', showAllMockExplain);
 }
 
 /* ============ 作文模板渲染 ============ */
@@ -2165,36 +2646,157 @@ function initPhrases() {
 
 /* ============ 语法技巧模块 ============ */
 const grammarPoints = [
-    { title: '一般现在时', content: '表示经常性、习惯性的动作或状态。<br><strong>结构：</strong>主语 + 动词原形/三单<br><strong>例句：</strong>She reads books every day.<br><strong>考点：</strong>第三人称单数动词变化' },
-    { title: '一般过去时', content: '表示过去某个时间发生的动作或状态。<br><strong>结构：</strong>主语 + 动词过去式<br><strong>例句：</strong>I visited my grandma yesterday.<br><strong>考点：</strong>规则/不规则动词过去式' },
-    { title: '现在进行时', content: '表示正在进行的动作。<br><strong>结构：</strong>主语 + am/is/are + doing<br><strong>例句：</strong>They are playing football now.<br><strong>考点：</strong>be动词与现在分词搭配' },
-    { title: '过去进行时', content: '表示过去某时刻正在进行的动作。<br><strong>结构：</strong>主语 + was/were + doing<br><strong>例句：</strong>I was reading when he came in.<br><strong>考点：</strong>与一般过去时的区别' },
-    { title: '现在完成时', content: '表示过去发生的动作对现在的影响。<br><strong>结构：</strong>主语 + have/has + 过去分词<br><strong>例句：</strong>I have finished my homework.<br><strong>考点：</strong>have been to vs have gone to' },
-    { title: '过去完成时', content: '表示过去某时间之前已完成的动作。<br><strong>结构：</strong>主语 + had + 过去分词<br><strong>例句：</strong>He had left before I arrived.<br><strong>考点：</strong>"过去的过去"' },
-    { title: '一般将来时', content: '表示将来要发生的动作或状态。<br><strong>结构：</strong>主语 + will/be going to + 动词原形<br><strong>例句：</strong>I will go to Beijing tomorrow.<br><strong>考点：</strong>will vs be going to的区别' },
-    { title: '被动语态', content: '主语是动作的承受者。<br><strong>结构：</strong>主语 + be + 过去分词<br><strong>例句：</strong>The book was written by Lu Xun.<br><strong>考点：</strong>各时态的被动语态形式' },
-    { title: '定语从句（关系代词）', content: '用来修饰名词或代词的从句。<br><strong>关系代词：</strong>who, whom, whose, which, that<br><strong>例句：</strong>The book that I bought is interesting.<br><strong>考点：</strong>that与which的区别，限制性vs非限制性' },
-    { title: '定语从句（关系副词）', content: '在定语从句中作状语。<br><strong>关系副词：</strong>when, where, why<br><strong>例句：</strong>This is the house where I was born.<br><strong>考点：</strong>关系副词vs关系代词' },
-    { title: '名词性从句（宾语从句）', content: '在句中作宾语的从句。<br><strong>引导词：</strong>that, whether, if, wh-词<br><strong>例句：</strong>I know that he is honest.<br><strong>考点：</strong>语序、时态、that的省略' },
-    { title: '名词性从句（主语从句）', content: '在句中作主语的从句。<br><strong>引导词：</strong>that, what, whether, wh-词<br><strong>例句：</strong>What he said is true.<br><strong>考点：</strong>it作形式主语' },
-    { title: '名词性从句（表语从句）', content: '在系动词后作表语的从句。<br><strong>引导词：</strong>that, whether, wh-词<br><strong>例句：</strong>The problem is whether we can finish it on time.<br><strong>考点：</strong>that不省略' },
-    { title: '非谓语动词（不定式）', content: '动词不定式作主语、宾语、表语、定语、状语、补语。<br><strong>结构：</strong>to + 动词原形<br><strong>例句：</strong>To learn English is important. / I want to go.<br><strong>考点：</strong>不定式作宾语的动词' },
-    { title: '非谓语动词（动名词）', content: '动词-ing形式作主语、宾语、表语。<br><strong>例句：</strong>Swimming is good exercise. / I enjoy reading.<br><strong>考点：</strong>只能接动名词作宾语的动词' },
-    { title: '非谓语动词（分词）', content: '现在分词和过去分词作定语、表语、补语、状语。<br><strong>例句：</strong>The exciting news made us happy. / I am interested in English.<br><strong>考点：</strong>现在分词vs过去分词的区别' },
-    { title: '虚拟语气（if条件句）', content: '表示与事实相反的假设。<br><strong>结构：</strong>If + 主语 + 过去式/were, 主语 + would/could + 动词原形<br><strong>例句：</strong>If I were you, I would study harder.<br><strong>考点：</strong>与现在/过去/将来事实相反' },
-    { title: '虚拟语气（wish/suggest等）', content: '表示愿望、建议、命令等。<br><strong>结构：</strong>主语 + (should) + 动词原形<br><strong>例句：</strong>I suggest that we (should) go there.<br><strong>考点：</strong>should的省略' },
-    { title: '倒装句（完全倒装）', content: '谓语动词全部放在主语之前。<br><strong>例句：</strong>Here comes the bus. / There goes the bell.<br><strong>考点：</strong>here, there, now, then开头的句子' },
-    { title: '倒装句（部分倒装）', content: '只把助动词/情态动词/be动词放在主语之前。<br><strong>例句：</strong>Never have I seen such a beautiful place.<br><strong>考点：</strong>否定词开头的句子' },
-    { title: '强调句', content: '用来强调句子的某个成分。<br><strong>结构：</strong>It is/was + 被强调部分 + that/who + 其余部分<br><strong>例句：</strong>It was Tom that/who broke the window.<br><strong>考点：</strong>强调主语、宾语、状语' },
-    { title: '主谓一致', content: '主语和谓语在人称和数上要保持一致。<br><strong>原则：</strong>语法一致、意义一致、就近原则<br><strong>例句：</strong>The news is exciting. / Neither he nor I am right.<br><strong>考点：</strong>集合名词、不定代词' },
-    { title: '比较级和最高级', content: '形容词/副词的比较等级。<br><strong>结构：</strong>比较级 + than / the + 最高级<br><strong>例句：</strong>He is taller than me. / She is the most beautiful.<br><strong>考点：</strong>不规则变化、修饰词' },
-    { title: '情态动词', content: '表示能力、义务、推测等。<br><strong>常见：</strong>can, could, may, might, must, should, would<br><strong>例句：</strong>You must finish it today.<br><strong>考点：</strong>must的推测用法、情态动词+have done' },
-    { title: '冠词', content: '定冠词the、不定冠词a/an的用法。<br><strong>例句：</strong>a book, the sun, an hour<br><strong>考点：</strong>零冠词情况、固定搭配' },
-    { title: '介词', content: '表示时间、地点、方式等关系。<br><strong>常见：</strong>in, on, at, by, with, about<br><strong>例句：</strong>in the morning, on Monday, at 5 o\'clock<br><strong>考点：</strong>时间/地点介词的区别' },
-    { title: '连词', content: '连接词、短语或句子的词。<br><strong>并列连词：</strong>and, but, or, so<br><strong>从属连词：</strong>because, although, if, when<br><strong>例句：</strong>I like apples but not oranges.<br><strong>考点：</strong>连词的选择' },
-    { title: '代词', content: '代替名词或名词短语。<br><strong>类型：</strong>人称代词、物主代词、反身代词、指示代词、不定代词<br><strong>例句：</strong>He is my friend. I like him.<br><strong>考点：</strong>it的用法、不定代词' },
-    { title: '数词', content: '表示数目或顺序。<br><strong>基数词：</strong>one, two, three...<br><strong>序数词：</strong>first, second, third...<br><strong>例句：</strong>I have two books. This is my first time.<br><strong>考点：</strong>基数词变序数词规则' },
-    { title: '形容词和副词', content: '形容词修饰名词，副词修饰动词/形容词/副词。<br><strong>例句：</strong>a beautiful girl (形容词) / He runs fast (副词)<br><strong>考点：</strong>形容词/副词的位置、顺序' }
+    { title: '一般现在时', content: '表示经常性、习惯性的动作或状态。<br><strong>结构：</strong>主语 + 动词原形/三单<br><strong>例句：</strong>She reads books every day.<br><strong>考点：</strong>第三人称单数动词变化', quiz: [
+      {q:'She ___ to school every day.',opts:['go', 'goes', 'going', 'gone'],ans:1,explain:'主语She是第三人称单数，动词用goes。'},
+      {q:'___ he like playing football?',opts:['Do', 'Does', 'Is', 'Are'],ans:1,explain:'第三人称单数he的疑问句用Does引导。'},
+      {q:'The earth ___ around the sun.',opts:['move', 'moves', 'moved', 'moving'],ans:1,explain:'客观事实用一般现在时，earth是单数用moves。'}
+    ] },
+    { title: '一般过去时', content: '表示过去某个时间发生的动作或状态。<br><strong>结构：</strong>主语 + 动词过去式<br><strong>例句：</strong>I visited my grandma yesterday.<br><strong>考点：</strong>规则/不规则动词过去式', quiz: [
+      {q:'I ___ my homework last night.',opts:['do', 'does', 'did', 'done'],ans:2,explain:'last night表示过去时间，用一般过去时did。'},
+      {q:'She ___ to Beijing last year.',opts:['go', 'goes', 'went', 'going'],ans:2,explain:'go的过去式是went，last year表示过去。'},
+      {q:'They ___ not ___ the film yesterday.',opts:['do, see', 'did, see', 'did, saw', 'do, saw'],ans:1,explain:'一般过去时的否定用did not + 动词原形。'}
+    ] },
+    { title: '现在进行时', content: '表示正在进行的动作。<br><strong>结构：</strong>主语 + am/is/are + doing<br><strong>例句：</strong>They are playing football now.<br><strong>考点：</strong>be动词与现在分词搭配', quiz: [
+      {q:'Look! The children ___ in the park.',opts:['play', 'plays', 'are playing', 'played'],ans:2,explain:'Look!提示正在进行的动作，用现在进行时are playing。'},
+      {q:'I ___ a book at the moment.',opts:['read', 'reads', 'am reading', 'readed'],ans:2,explain:'at the moment表示此刻正在做，用am reading。'},
+      {q:'___ you ___ TV now?',opts:['Do, watch', 'Are, watching', 'Did, watch', 'Is, watching'],ans:1,explain:'now提示现在进行时，you用Are + watching。'}
+    ] },
+    { title: '过去进行时', content: '表示过去某时刻正在进行的动作。<br><strong>结构：</strong>主语 + was/were + doing<br><strong>例句：</strong>I was reading when he came in.<br><strong>考点：</strong>与一般过去时的区别', quiz: [
+      {q:'I ___ when the phone rang.',opts:['sleep', 'slept', 'was sleeping', 'am sleeping'],ans:2,explain:'when引导的过去时间点，主句用过去进行时was sleeping。'},
+      {q:'They ___ dinner at 7 yesterday evening.',opts:['have', 'had', 'were having', 'are having'],ans:2,explain:'at 7 yesterday evening是过去某时刻，用were having。'},
+      {q:'While she ___, her mother came in.',opts:['reads', 'read', 'was reading', 'is reading'],ans:2,explain:'while引导过去进行时的动作，表示持续性动作。'}
+    ] },
+    { title: '现在完成时', content: '表示过去发生的动作对现在的影响。<br><strong>结构：</strong>主语 + have/has + 过去分词<br><strong>例句：</strong>I have finished my homework.<br><strong>考点：</strong>have been to vs have gone to', quiz: [
+      {q:'I ___ this book already.',opts:['read', 'reads', 'have read', 'am reading'],ans:2,explain:'already是现在完成时的标志词，用have read。'},
+      {q:'He ___ to Shanghai twice.',opts:['goes', 'went', 'has been', 'has gone'],ans:2,explain:'has been to表示去过（已回来），has gone to表示去了（未回来），twice说明去过两次已回来。'},
+      {q:'She ___ lived here ___ 2010.',opts:['has, since', 'has, for', 'have, since', 'have, for'],ans:0,explain:'since + 时间点，she用has，表示从2010年至今。'}
+    ] },
+    { title: '过去完成时', content: '表示过去某时间之前已完成的动作。<br><strong>结构：</strong>主语 + had + 过去分词<br><strong>例句：</strong>He had left before I arrived.<br><strong>考点：</strong>"过去的过去"', quiz: [
+      {q:'By the time he arrived, we ___ already ___.',opts:['have, left', 'had, left', 'have, leave', 'had, leave'],ans:1,explain:'By the time + 过去时，主句用过去完成时had left。'},
+      {q:'He said he ___ the film before.',opts:['saw', 'has seen', 'had seen', 'sees'],ans:2,explain:'said是过去时，\'之前看过\'是\'过去的过去\'，用had seen。'},
+      {q:'After she ___ her homework, she went to bed.',opts:['finishes', 'finished', 'had finished', 'has finished'],ans:2,explain:'after引导的动作先发生，用过去完成时had finished。'}
+    ] },
+    { title: '一般将来时', content: '表示将来要发生的动作或状态。<br><strong>结构：</strong>主语 + will/be going to + 动词原形<br><strong>例句：</strong>I will go to Beijing tomorrow.<br><strong>考点：</strong>will vs be going to的区别', quiz: [
+      {q:'There ___ a meeting tomorrow.',opts:['is', 'was', 'will be', 'would be'],ans:2,explain:'tomorrow表示将来，用will be。'},
+      {q:'Look at the clouds! It ___ rain.',opts:['will', 'is going to', 'would', 'shall'],ans:1,explain:'根据迹象（乌云）判断将要发生的事用be going to。'},
+      {q:'I ___ you as soon as I ___ there.',opts:['will call, get', 'call, will get', 'will call, will get', 'call, get'],ans:0,explain:'主将从现：主句用will call，as soon as从句用一般现在时get。'}
+    ] },
+    { title: '被动语态', content: '主语是动作的承受者。<br><strong>结构：</strong>主语 + be + 过去分词<br><strong>例句：</strong>The book was written by Lu Xun.<br><strong>考点：</strong>各时态的被动语态形式', quiz: [
+      {q:'The window ___ by Tom yesterday.',opts:['broke', 'was broken', 'is broken', 'breaks'],ans:1,explain:'yesterday用过去时的被动语态was broken。'},
+      {q:'English ___ in many countries.',opts:['speaks', 'is spoken', 'spoke', 'has spoken'],ans:1,explain:'English是被说的，用被动语态is spoken。'},
+      {q:'The flowers ___ every day.',opts:['must water', 'must be watered', 'must watered', 'must be watering'],ans:1,explain:'花被浇水，情态动词的被动：must + be + 过去分词。'}
+    ] },
+    { title: '定语从句（关系代词）', content: '用来修饰名词或代词的从句。<br><strong>关系代词：</strong>who, whom, whose, which, that<br><strong>例句：</strong>The book that I bought is interesting.<br><strong>考点：</strong>that与which的区别，限制性vs非限制性', quiz: [
+      {q:'The man ___ is talking to my father is a doctor.',opts:['which', 'who', 'whom', 'whose'],ans:1,explain:'先行词the man是人，在从句中作主语用who。'},
+      {q:'This is the book ___ I bought yesterday.',opts:['who', 'whom', 'which', 'whose'],ans:2,explain:'先行词the book是物，用which或that。'},
+      {q:'The girl ___ father is a teacher studies hard.',opts:['who', 'which', 'whose', 'whom'],ans:2,explain:'表示\'谁的\'用关系代词whose。'},
+      {q:'This is the most interesting book ___ I have ever read.',opts:['which', 'that', 'who', 'what'],ans:1,explain:'先行词被最高级修饰时，关系代词只能用that。'}
+    ] },
+    { title: '定语从句（关系副词）', content: '在定语从句中作状语。<br><strong>关系副词：</strong>when, where, why<br><strong>例句：</strong>This is the house where I was born.<br><strong>考点：</strong>关系副词vs关系代词', quiz: [
+      {q:'This is the house ___ I was born.',opts:['which', 'that', 'where', 'who'],ans:2,explain:'先行词the house表地点，在从句中作地点状语用where。'},
+      {q:'I\'ll never forget the day ___ we first met.',opts:['where', 'when', 'which', 'who'],ans:1,explain:'先行词the day表时间，在从句中作时间状语用when。'},
+      {q:'That is the reason ___ he was late.',opts:['which', 'where', 'why', 'when'],ans:2,explain:'先行词the reason表原因，用why引导。'}
+    ] },
+    { title: '名词性从句（宾语从句）', content: '在句中作宾语的从句。<br><strong>引导词：</strong>that, whether, if, wh-词<br><strong>例句：</strong>I know that he is honest.<br><strong>考点：</strong>语序、时态、that的省略', quiz: [
+      {q:'I don\'t know ___ he will come.',opts:['that', 'whether', 'what', 'which'],ans:1,explain:'表示\'是否\'用whether引导宾语从句。'},
+      {q:'He asked me ___ I had finished my homework.',opts:['that', 'what', 'if', 'which'],ans:2,explain:'asked引导的间接问句，表示\'是否\'用if。'},
+      {q:'I believe ___ he said is true.',opts:['that', 'what', 'which', 'whether'],ans:1,explain:'what在从句中作said的宾语，意为\'他所说的话\'。'}
+    ] },
+    { title: '名词性从句（主语从句）', content: '在句中作主语的从句。<br><strong>引导词：</strong>that, what, whether, wh-词<br><strong>例句：</strong>What he said is true.<br><strong>考点：</strong>it作形式主语', quiz: [
+      {q:'___ he will come is not certain.',opts:['That', 'What', 'Whether', 'Which'],ans:2,explain:'Whether引导主语从句表示\'是否\'，that引导主语从句不表疑问。'},
+      {q:'___ makes the school proud is the students\' achievement.',opts:['That', 'What', 'Which', 'Whether'],ans:1,explain:'what在主语从句中作主语，意为\'使学校骄傲的事\'。'},
+      {q:'It is obvious ___ he is lying.',opts:['what', 'that', 'whether', 'which'],ans:1,explain:'it作形式主语，真正主语是that引导的从句，that不省略。'}
+    ] },
+    { title: '名词性从句（表语从句）', content: '在系动词后作表语的从句。<br><strong>引导词：</strong>that, whether, wh-词<br><strong>例句：</strong>The problem is whether we can finish it on time.<br><strong>考点：</strong>that不省略', quiz: [
+      {q:'The question is ___ we can finish it on time.',opts:['that', 'what', 'whether', 'which'],ans:2,explain:'表语从句表示\'是否\'用whether。'},
+      {q:'That is ___ he was absent.',opts:['what', 'why', 'that', 'which'],ans:1,explain:'why引导表语从句解释原因。'},
+      {q:'The fact is ___ the earth is round.',opts:['what', 'whether', 'that', 'which'],ans:2,explain:'that引导表语从句陈述事实，无实际意义。'}
+    ] },
+    { title: '非谓语动词（不定式）', content: '动词不定式作主语、宾语、表语、定语、状语、补语。<br><strong>结构：</strong>to + 动词原形<br><strong>例句：</strong>To learn English is important. / I want to go.<br><strong>考点：</strong>不定式作宾语的动词', quiz: [
+      {q:'He decided ___ abroad for further study.',opts:['go', 'to go', 'going', 'gone'],ans:1,explain:'decide后接不定式to go作宾语。'},
+      {q:'The teacher asked us ___ in class.',opts:['not talk', 'not to talk', 'don\'t talk', 'no talking'],ans:1,explain:'ask sb. not to do sth.，否定形式在to前加not。'},
+      {q:'___ is important for us to learn English well.',opts:['That', 'What', 'It', 'This'],ans:2,explain:'It作形式主语，真正主语是to learn English well。'}
+    ] },
+    { title: '非谓语动词（动名词）', content: '动词-ing形式作主语、宾语、表语。<br><strong>例句：</strong>Swimming is good exercise. / I enjoy reading.<br><strong>考点：</strong>只能接动名词作宾语的动词', quiz: [
+      {q:'I enjoy ___ English songs.',opts:['listen', 'to listen', 'listening to', 'listen to'],ans:2,explain:'enjoy后接动名词listening to。'},
+      {q:'___ is a good form of exercise.',opts:['Swim', 'Swam', 'Swimming', 'To swimming'],ans:2,explain:'动名词Swimming作主语。'},
+      {q:'He is looking forward to ___ from you.',opts:['hear', 'heard', 'hearing', 'hears'],ans:2,explain:'look forward to中的to是介词，后接动名词hearing。'}
+    ] },
+    { title: '非谓语动词（分词）', content: '现在分词和过去分词作定语、表语、补语、状语。<br><strong>例句：</strong>The exciting news made us happy. / I am interested in English.<br><strong>考点：</strong>现在分词vs过去分词的区别', quiz: [
+      {q:'The ___ news made us all ___.',opts:['exciting, exciting', 'excited, excited', 'exciting, excited', 'excited, exciting'],ans:2,explain:'exciting修饰事物（令人兴奋的），excited修饰人的感受（感到兴奋的）。'},
+      {q:'___ from the hill, the city looks beautiful.',opts:['See', 'Saw', 'Seeing', 'Seen'],ans:3,explain:'城市被看，用过去分词Seen表被动。'},
+      {q:'The boy ___ there is my brother.',opts:['sit', 'sat', 'sitting', 'to sit'],ans:2,explain:'现在分词sitting作后置定语，表示主动、正在进行。'}
+    ] },
+    { title: '虚拟语气（if条件句）', content: '表示与事实相反的假设。<br><strong>结构：</strong>If + 主语 + 过去式/were, 主语 + would/could + 动词原形<br><strong>例句：</strong>If I were you, I would study harder.<br><strong>考点：</strong>与现在/过去/将来事实相反', quiz: [
+      {q:'If I ___ you, I would accept the offer.',opts:['am', 'was', 'were', 'be'],ans:2,explain:'与现在事实相反，if从句用过去式，be动词统一用were。'},
+      {q:'If he ___ harder, he would have passed the exam.',opts:['studied', 'had studied', 'studies', 'would study'],ans:1,explain:'与过去事实相反，if从句用had + 过去分词。'},
+      {q:'If it ___ tomorrow, we would stay at home.',opts:['rains', 'rained', 'would rain', 'should rain'],ans:3,explain:'与将来事实相反，if从句可用should + 动词原形。'}
+    ] },
+    { title: '虚拟语气（wish/suggest等）', content: '表示愿望、建议、命令等。<br><strong>结构：</strong>主语 + (should) + 动词原形<br><strong>例句：</strong>I suggest that we (should) go there.<br><strong>考点：</strong>should的省略', quiz: [
+      {q:'I wish I ___ fly like a bird.',opts:['can', 'could', 'will', 'would'],ans:1,explain:'wish后接与现在相反的虚拟，用过去式could。'},
+      {q:'The doctor suggested that he ___ smoking.',opts:['gives up', 'gave up', 'give up', 'would give up'],ans:2,explain:'suggest后接(should) + 动词原形，should可省略。'},
+      {q:'I wish I ___ to the party last night.',opts:['go', 'went', 'had gone', 'would go'],ans:2,explain:'wish后接与过去相反的虚拟，用had + 过去分词。'}
+    ] },
+    { title: '倒装句（完全倒装）', content: '谓语动词全部放在主语之前。<br><strong>例句：</strong>Here comes the bus. / There goes the bell.<br><strong>考点：</strong>here, there, now, then开头的句子', quiz: [
+      {q:'Here ___.',opts:['comes the bus', 'the bus comes', 'come the bus', 'the bus come'],ans:0,explain:'here开头的完全倒装：Here + 动词 + 主语（名词）。'},
+      {q:'There ___.',opts:['goes the bell', 'the bell goes', 'go the bell', 'the bell go'],ans:0,explain:'there开头的完全倒装，主语是the bell（单数），用goes。'},
+      {q:'On the wall ___ many pictures.',opts:['hang', 'hangs', 'hanging', 'are hanged'],ans:0,explain:'介词短语前置的完全倒装，主语many pictures是复数用hang。'}
+    ] },
+    { title: '倒装句（部分倒装）', content: '只把助动词/情态动词/be动词放在主语之前。<br><strong>例句：</strong>Never have I seen such a beautiful place.<br><strong>考点：</strong>否定词开头的句子', quiz: [
+      {q:'Never ___ such a beautiful place.',opts:['I have seen', 'have I seen', 'I saw', 'did I saw'],ans:1,explain:'否定词Never置于句首，句子部分倒装：Never + have + I + seen。'},
+      {q:'Not only ___ English well, but he also speaks French.',opts:['he speaks', 'does he speak', 'he does speak', 'speaks he'],ans:1,explain:'Not only置于句首，后接部分倒装：does + he + speak。'},
+      {q:'Hardly ___ when it began to rain.',opts:['I had arrived', 'had I arrived', 'I arrived', 'did I arrive'],ans:1,explain:'Hardly置于句首，主句部分倒装：had + I + arrived。'}
+    ] },
+    { title: '强调句', content: '用来强调句子的某个成分。<br><strong>结构：</strong>It is/was + 被强调部分 + that/who + 其余部分<br><strong>例句：</strong>It was Tom that/who broke the window.<br><strong>考点：</strong>强调主语、宾语、状语', quiz: [
+      {q:'It was in 1949 ___ the PRC was founded.',opts:['when', 'that', 'which', 'what'],ans:1,explain:'强调句结构：It is/was + 被强调部分 + that + 其余。'},
+      {q:'It was Tom ___ broke the window.',opts:['which', 'what', 'who/that', 'whom'],ans:2,explain:'强调人时可用who或that。'},
+      {q:'Was it yesterday ___ you met him?',opts:['when', 'that', 'which', 'what'],ans:1,explain:'强调句的疑问形式：Was it + 被强调部分 + that + 其余？'}
+    ] },
+    { title: '主谓一致', content: '主语和谓语在人称和数上要保持一致。<br><strong>原则：</strong>语法一致、意义一致、就近原则<br><strong>例句：</strong>The news is exciting. / Neither he nor I am right.<br><strong>考点：</strong>集合名词、不定代词', quiz: [
+      {q:'The news ___ very exciting.',opts:['is', 'are', 'were', 'have been'],ans:0,explain:'news虽以s结尾但是不可数名词，谓语用单数is。'},
+      {q:'Neither he nor I ___ right.',opts:['is', 'am', 'are', 'was'],ans:1,explain:'neither...nor...遵循就近原则，I靠近谓语用am。'},
+      {q:'Each of the students ___ a dictionary.',opts:['have', 'has', 'having', 'are having'],ans:1,explain:'each of...作主语，谓语用单数has。'}
+    ] },
+    { title: '比较级和最高级', content: '形容词/副词的比较等级。<br><strong>结构：</strong>比较级 + than / the + 最高级<br><strong>例句：</strong>He is taller than me. / She is the most beautiful.<br><strong>考点：</strong>不规则变化、修饰词', quiz: [
+      {q:'She is ___ than her sister.',opts:['tall', 'taller', 'tallest', 'the tallest'],ans:1,explain:'两者比较用比较级taller + than。'},
+      {q:'This is ___ book I have ever read.',opts:['interesting', 'more interesting', 'the most interesting', 'most interesting'],ans:2,explain:'三者及以上比较用最高级the most interesting。'},
+      {q:'The ___ you study, the ___ grades you\'ll get.',opts:['hard, good', 'harder, better', 'hardest, best', 'more hard, more good'],ans:1,explain:'The + 比较级, the + 比较级：越...就越...'}
+    ] },
+    { title: '情态动词', content: '表示能力、义务、推测等。<br><strong>常见：</strong>can, could, may, might, must, should, would<br><strong>例句：</strong>You must finish it today.<br><strong>考点：</strong>must的推测用法、情态动词+have done', quiz: [
+      {q:'You ___ finish your homework before watching TV.',opts:['can', 'may', 'must', 'would'],ans:2,explain:'must表示\'必须\'，强调义务。'},
+      {q:'He ___ be at home. His car is in the garage.',opts:['can', 'must', 'need', 'would'],ans:1,explain:'must表示肯定的推测，\'一定\'。'},
+      {q:'You ___ have told me earlier! Now it\'s too late.',opts:['must', 'should', 'can', 'may'],ans:1,explain:'should have done表示\'本应该做而没做\'。'}
+    ] },
+    { title: '冠词', content: '定冠词the、不定冠词a/an的用法。<br><strong>例句：</strong>a book, the sun, an hour<br><strong>考点：</strong>零冠词情况、固定搭配', quiz: [
+      {q:'He is ___ honest man.',opts:['a', 'an', 'the', '/'],ans:1,explain:'honest的h不发音，以元音音素开头用an。'},
+      {q:'___ sun rises in the east.',opts:['A', 'An', 'The', '/'],ans:2,explain:'世界上独一无二的事物前用the。'},
+      {q:'She plays ___ piano every day.',opts:['a', 'an', 'the', '/'],ans:2,explain:'乐器前用the：play the piano。'}
+    ] },
+    { title: '介词', content: '表示时间、地点、方式等关系。<br><strong>常见：</strong>in, on, at, by, with, about<br><strong>例句：</strong>in the morning, on Monday, at 5 o\'clock<br><strong>考点：</strong>时间/地点介词的区别', quiz: [
+      {q:'I was born ___ July 4th.',opts:['in', 'on', 'at', 'by'],ans:1,explain:'具体某一天前用on。'},
+      {q:'The meeting starts ___ 9 o\'clock.',opts:['in', 'on', 'at', 'by'],ans:2,explain:'具体时刻前用at。'},
+      {q:'She has been waiting ___ two hours.',opts:['since', 'for', 'in', 'at'],ans:1,explain:'for + 时间段，since + 时间点。'}
+    ] },
+    { title: '连词', content: '连接词、短语或句子的词。<br><strong>并列连词：</strong>and, but, or, so<br><strong>从属连词：</strong>because, although, if, when<br><strong>例句：</strong>I like apples but not oranges.<br><strong>考点：</strong>连词的选择', quiz: [
+      {q:'I like coffee ___ my wife prefers tea.',opts:['and', 'but', 'so', 'or'],ans:1,explain:'but表示转折关系。'},
+      {q:'___ it rained heavily, the match was cancelled.',opts:['Although', 'Because', 'But', 'While'],ans:1,explain:'Because引导原因状语从句。'},
+      {q:'Hurry up, ___ you\'ll miss the train.',opts:['and', 'but', 'or', 'so'],ans:2,explain:'祈使句 + or + 陈述句，表示\'否则\'。'}
+    ] },
+    { title: '代词', content: '代替名词或名词短语。<br><strong>类型：</strong>人称代词、物主代词、反身代词、指示代词、不定代词<br><strong>例句：</strong>He is my friend. I like him.<br><strong>考点：</strong>it的用法、不定代词', quiz: [
+      {q:'___ is important to protect the environment.',opts:['This', 'That', 'It', 'There'],ans:2,explain:'It作形式主语，真正主语是to protect the environment。'},
+      {q:'There are many books here. You can take ___.',opts:['some', 'any', 'either', 'every'],ans:2,explain:'两者中任选一个用either。'},
+      {q:'He hurt ___ while playing basketball.',opts:['him', 'his', 'himself', 'he'],ans:2,explain:'主语和宾语是同一人时用反身代词himself。'}
+    ] },
+    { title: '数词', content: '表示数目或顺序。<br><strong>基数词：</strong>one, two, three...<br><strong>序数词：</strong>first, second, third...<br><strong>例句：</strong>I have two books. This is my first time.<br><strong>考点：</strong>基数词变序数词规则', quiz: [
+      {q:'There are ___ students in our school.',opts:['two thousands', 'two thousand', 'two thousands of', 'thousand of'],ans:1,explain:'thousand前有具体数字时不加s：two thousand。'},
+      {q:'My uncle lives on the ___ floor.',opts:['nine', 'ninth', 'nineteen', 'ninety'],ans:1,explain:'第几层用序数词ninth。'},
+      {q:'___ people visited the exhibition last week.',opts:['Hundred', 'Hundreds', 'Hundreds of', 'Hundred of'],ans:2,explain:'hundreds of表示\'数百\'，泛指大量。'}
+    ] },
+    { title: '形容词和副词', content: '形容词修饰名词，副词修饰动词/形容词/副词。<br><strong>例句：</strong>a beautiful girl (形容词) / He runs fast (副词)<br><strong>考点：</strong>形容词/副词的位置、顺序', quiz: [
+      {q:'She sings ___.',opts:['beautiful', 'beautifully', 'beauty', 'more beautiful'],ans:1,explain:'修饰动词sings用副词beautifully。'},
+      {q:'The soup tastes ___.',opts:['good', 'well', 'goodly', 'nicely'],ans:0,explain:'taste是系动词，后接形容词good作表语。'},
+      {q:'He runs ___ than Tom.',opts:['fast', 'faster', 'fastest', 'more fast'],ans:1,explain:'两者比较用比较级faster + than。'}
+    ] },
 ];
 
 function initGrammar() {
@@ -2297,6 +2899,7 @@ renderTasks();
 updateExamProgress();
 initNavigation();
 renderExamTabs(); renderExam(); initExamActions();
+initMockExamActions();
 renderEssayTemplates();
 renderWrongQuestions();
 renderWordbook();
