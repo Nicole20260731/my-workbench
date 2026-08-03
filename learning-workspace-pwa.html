@@ -1796,24 +1796,49 @@ function goToStudy(target, dayNum) {
         renderVocabCard(true);
         showToast('已跳转到第' + dayNum + '天词汇学习', 2000);
     } else if (target === 'phrases') {
-        // 跳转到词组学习页面
+        // 跳转到高频词组页面（notes）
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.querySelector('[data-page="phrases"]').classList.add('active');
+        document.querySelector('[data-page="notes"]').classList.add('active');
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('phrases').classList.add('active');
-        phraseDay = dayNum;
-        phraseIndex = 0;
-        renderPhraseCard(true);
+        document.getElementById('notes').classList.add('active');
+        // 滚动到对应天数的词组（每天10组，第N天从第(N-1)*10个开始）
+        const startIndex = Math.max(0, (dayNum - 1) * 10);
+        setTimeout(() => {
+            const items = document.querySelectorAll('#phraseList .list-item-card');
+            if (items[startIndex]) {
+                items[startIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                items[startIndex].style.background = '#fff0f5';
+                items[startIndex].style.boxShadow = '0 0 10px rgba(255,107,157,0.5)';
+                setTimeout(() => {
+                    items[startIndex].style.background = '';
+                    items[startIndex].style.boxShadow = '';
+                }, 3000);
+            }
+        }, 300);
         showToast('已跳转到第' + dayNum + '天词组学习', 2000);
     } else if (target === 'grammar') {
-        // 跳转到语法学习页面
+        // 跳转到语法技巧页面（books）
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.querySelector('[data-page="grammar"]').classList.add('active');
+        document.querySelector('[data-page="books"]').classList.add('active');
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('grammar').classList.add('active');
-        grammarDay = dayNum;
-        grammarIndex = 0;
-        renderGrammarCard(true);
+        document.getElementById('books').classList.add('active');
+        // 滚动到对应天数的语法点（每天1个）
+        const targetIndex = Math.min(dayNum - 1, grammarPoints.length - 1);
+        setTimeout(() => {
+            const items = document.querySelectorAll('#grammarList .list-item-card');
+            if (items[targetIndex]) {
+                items[targetIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                items[targetIndex].style.background = '#fff0f5';
+                items[targetIndex].style.boxShadow = '0 0 10px rgba(255,107,157,0.5)';
+                // 自动展开详情
+                const detail = items[targetIndex].querySelector('.grammar-detail');
+                if (detail) detail.style.display = 'block';
+                setTimeout(() => {
+                    items[targetIndex].style.background = '';
+                    items[targetIndex].style.boxShadow = '';
+                }, 3000);
+            }
+        }, 300);
         showToast('已跳转到第' + dayNum + '天语法学习', 2000);
     }
 }
