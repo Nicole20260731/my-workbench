@@ -909,10 +909,10 @@ const motivations = [
     { zh: '基础薄弱不可怕，可怕的是不去补。', en: 'Weak foundations can be fixed; not trying cannot.' },
     { zh: '做错的题，是考试前最好的礼物。', en: 'Mistakes before the exam are the best gifts.' },
     { zh: '坚持每天2小时，10月你就是70+。', en: '2 hours a day makes 70+ in October.' },
-    { zh: '语法不难，难的是你没梳理。', en: 'Grammar isn't hard; not organizing it is.' },
+    { zh: '语法不难，难的是你没梳理。', en: "Grammar isn't hard; not organizing it is." },
     { zh: '真题刷三遍，考场稳如山。', en: 'Three rounds of past papers, steady as a mountain.' },
-    { zh: '别怕阅读长，一句句啃就懂了。', en: 'Don't fear long passages; bite off one sentence at a time.' },
-    { zh: '翻译不行？那是因为还没练够。', en: 'Translation weak? You just haven't practiced enough.' },
+    { zh: '别怕阅读长，一句句啃就懂了。', en: "Don't fear long passages; bite off one sentence at a time." },
+    { zh: '翻译不行？那是因为还没练够。', en: "Translation weak? You just haven't practiced enough." },
     { zh: '今天偷的懒，考后流的泪。', en: 'Laziness today, tears after the exam.' },
     { zh: '词汇是地基，地基不牢楼会塌。', en: 'Vocabulary is the foundation; weak foundation, falling building.' },
     { zh: '每一个不确定的选项，都是提分点。', en: 'Every uncertain option is a chance to score.' },
@@ -1115,7 +1115,7 @@ const examBank = {
               explain:'细节题要找到原文对应句逐字比对。排除法最快捷：A/B/D明显与原文矛盾。' },
             { type:'阅读判断', q:'(判断题) 题目: The passage suggests that practice is more important than talent.', opts:['True','False','Not Given'], ans:0,
               explain:'suggests是推断词，原文若有"hard work matters more than natural ability"类表述则选True。' },
-            { type:'阅读选择', q:'(选择题) The author's attitude towards memorizing words is ___.', opts:['negative','positive','neutral','unclear'], ans:1,
+            { type:'阅读选择', q:"(选择题) The author's attitude towards memorizing words is ___.", opts:['negative','positive','neutral','unclear'], ans:1,
               explain:'态度题。注意作者用词：important/useful/helpful是正面，useless/waste是负面。' },
             { type:'阅读判断', q:'(判断题) 题目: Everyone who reads a lot can write well.', opts:['True','False','Not Given'], ans:1,
               explain:'everyone/all这类绝对词出现时，通常选False。原文多半说"helps"而非"guarantees"。' },
@@ -1165,7 +1165,7 @@ const examBank = {
               explain:'前难后能完成，是转折+侥幸，填Fortunately"幸运的是"。注意语义而不只是语法衔接。' },
             { type:'概括补全', q:'(段落大意) 段落: Exercise is important for health. It strengthens your heart and helps you sleep better.', opts:['Health problems','Importance of exercise','Sleeping tips','Heart diseases'], ans:1,
               explain:'段落讲运动对健康的重要性，选B。topic句在段首：Exercise is important。' },
-            { type:'填句补文', q:'(填句) 空格处应填: She wanted to buy the dress. ___, she didn't have enough money.', opts:['So','Because','However','Therefore'], ans:2,
+            { type:'填句补文', q:"(填句) 空格处应填: She wanted to buy the dress. ___, she didn't have enough money.", opts:['So','Because','However','Therefore'], ans:2,
               explain:'想买vs没钱，转折关系，填However。注意However后通常加逗号。' },
             { type:'概括补全', q:'(补全句子) The main idea of the passage is that ___.', opts:['reading is difficult','practice leads to improvement','English is easy','exams are useless'], ans:1,
               explain:'补全句子题。原文若有"the more you practice, the better you become"类表述，选B。' },
@@ -1919,7 +1919,7 @@ const highFrequencyPhrases = [
     { phrase: 'on the contrary', meaning: '相反' },
     { phrase: 'in detail', meaning: '详细地' },
     { phrase: 'make a difference', meaning: '有影响，起作用' },
-    { phrase: 'do one's best', meaning: '尽力' },
+    { phrase: "do one's best", meaning: '尽力' },
     { phrase: 'in the end', meaning: '最后，终于' },
     { phrase: 'as a result', meaning: '结果，因此' },
     { phrase: 'for instance', meaning: '例如' },
@@ -1944,7 +1944,7 @@ const highFrequencyPhrases = [
     { phrase: 'with regard to', meaning: '关于' },
     { phrase: 'in terms of', meaning: '就...而言' },
     { phrase: 'as far as', meaning: '就...而言，远至' },
-    { phrase: 'make up one's mind', meaning: '下定决心' }
+    { phrase: "make up one's mind", meaning: '下定决心' }
 ];
 
 function initPhrases() {
@@ -2621,7 +2621,7 @@ function renderVocabList() {
             '<div class="task-check ' + (learned ? 'done' : '') + '" style="width:18px;height:18px;"></div>' +
             '<div style="flex:1;">' +
             '<span style="font-size:14px;font-weight:bold;color:#333;">' + w.word + '</span>' +
-            '<span onclick="speakText('' + w.word + '')" title="播放读音" style="cursor:pointer;margin-left:6px;font-size:13px;">🔊</span>' +
+            '<span onclick="speakText(\'' + w.word + '\')" title="播放读音" style="cursor:pointer;margin-left:6px;font-size:13px;">🔊</span>' +
             '<span style="font-size:12px;color:#999;margin-left:6px;">' + w.phonetic + '</span>' +
             '<span style="font-size:13px;color:#666;margin-left:8px;">' + w.meaning + '</span>' +
             '</div></div>';
