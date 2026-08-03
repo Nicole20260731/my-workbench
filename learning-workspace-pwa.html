@@ -1774,6 +1774,9 @@ function renderEssayTemplates() {
 }
 
 /* ============ 每日学习打卡模块 ============ */
+// 提前声明词汇模块变量，避免与DOM元素ID冲突
+var vocabIndex, vocabDay, vocabShowMeaning;
+
 function initCheckin() {
     renderCheckinTasks();
     updateCheckinProgress();
